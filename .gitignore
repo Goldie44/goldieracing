@@ -1,6 +1,10 @@
 # Turbo
 .turbo
 
+# Electron
+dist/
+release/
+
 # Logs
 logs
 *.log

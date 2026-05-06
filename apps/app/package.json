@@ -1,0 +1,25 @@
+{
+  "name": "@f1-manager/app",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Electron shell for the F1 Manager web app",
+  "main": "dist/main.js",
+  "scripts": {
+    "dev": "concurrently -k -n tsc,electron -c blue,magenta \"pnpm run dev:tsc\" \"pnpm run dev:electron\"",
+    "dev:tsc": "tsc -p tsconfig.json --watch --preserveWatchOutput",
+    "dev:electron": "wait-on tcp:5173 dist/main.js && electron .",
+    "build": "tsc -p tsconfig.json",
+    "start": "electron .",
+    "package": "electron-builder",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "devDependencies": {
+    "@f1-manager/typescript": "workspace:*",
+    "@types/node": "^22.13.5",
+    "concurrently": "^9.1.2",
+    "electron": "^33.2.1",
+    "electron-builder": "^25.1.8",
+    "typescript": "^5.8.2",
+    "wait-on": "^8.0.1"
+  }
+}
