@@ -1,39 +1,90 @@
-**Welcome to your Base44 project** 
+# 🏎️ F1 Manager — Fantasy Formula 1 Team Manager
 
-**About**
+> Fantasy Formula 1 management game. Run your own constructor across a full season — manage the budget, hire staff, drive R&D, juggle stock, plan the calendar, and chase performance race after race.
 
-View and Edit  your app on [Base44.com](http://Base44.com) 
+This repository is a [Turborepo](https://turborepo.com/) + [pnpm](https://pnpm.io/) monorepo. The current generation of F1 Manager is a single-page web app built with React 18, Vite, TypeScript, [shadcn/ui](https://ui.shadcn.com/) and Tailwind CSS, with shared workspace packages for tooling.
 
-This project contains everything you need to run your app locally.
+## 📚 Table of Contents
 
-**Edit the code in your local development environment**
+- [✨ What it does](#-what-it-does)
+- [🗂️ Repository Structure](#️-repository-structure)
+- [🧱 Tech Stack](#-tech-stack)
+- [🚀 Quickstart](#-quickstart)
+- [🛠️ Development](#️-development)
 
-Any change pushed to the repo will also be reflected in the Base44 Builder.
+## ✨ What it does
 
-**Prerequisites:** 
+- 🏁 **Race weekends** — season calendar, race sessions, and live performance tracking
+- 💰 **Budget cap** — sponsor income, expenditure breakdown, and cost-cap monitoring
+- 👥 **Staff management** — drivers, engineers and mechanics with hiring, firing and contracts
+- 🔬 **R&D** — research tree for chassis, power unit, aero and reliability upgrades
+- 📦 **Stock** — parts inventory and consumption across the season
+- 📊 **Dashboard** — at-a-glance KPIs powered by [Recharts](https://recharts.org/)
+- 🗺️ **Circuits** — interactive track maps via [React Leaflet](https://react-leaflet.js.org/)
+- 🔐 **Auth & protected routes** — context-based session handling with route guards
+- 💳 **Stripe** — payment integration for premium features
+- 📄 **Exports** — race reports and standings as PDF (`jspdf` + `html2canvas`)
 
-1. Clone the repository using the project's Git URL 
-2. Navigate to the project directory
-3. Install dependencies: `npm install`
-4. Create an `.env.local` file and set the right environment variables
+## 🗂️ Repository Structure
 
 ```
-VITE_BASE44_APP_ID=your_app_id
-VITE_BASE44_APP_BASE_URL=your_backend_url
+apps/
+  web/             # React 18 + Vite + TypeScript SPA — operator console
+                   #   shadcn/ui • Tailwind • TanStack Query • React Router v6
 
-e.g.
-VITE_BASE44_APP_ID=cbef744a8545c389ef439ea6
-VITE_BASE44_APP_BASE_URL=https://my-to-do-list-81bfaad7.base44.app
+packages/
+  eslint/          # @f1-manager/eslint     — shared ESLint config
+  typescript/      # @f1-manager/typescript — shared tsconfig presets
 ```
 
-Run the app: `npm run dev`
+## 🧱 Tech Stack
 
-**Publish your changes**
+| Layer            | Choice                                                |
+| ---------------- | ----------------------------------------------------- |
+| Build & monorepo | pnpm workspaces • Turborepo                           |
+| Frontend         | React 18 • Vite 6 • TypeScript 5                      |
+| UI               | shadcn/ui (Radix primitives) • Tailwind CSS • Lucide  |
+| State & data     | TanStack Query • React Context • `react-hook-form`   |
+| Validation       | Zod                                                   |
+| Routing          | React Router v6                                       |
+| Visualisation    | Recharts • Three.js • Framer Motion • Embla Carousel  |
+| Maps             | React Leaflet                                         |
+| Payments         | Stripe (`@stripe/react-stripe-js`)                    |
 
-Open [Base44.com](http://Base44.com) and click on Publish.
+## 🚀 Quickstart
 
-**Docs & Support**
+```bash
+git clone <repository-url>
+cd f1-manager
+pnpm install
+```
 
-Documentation: [https://docs.base44.com/Integrations/Using-GitHub](https://docs.base44.com/Integrations/Using-GitHub)
+Start the web app:
 
-Support: [https://app.base44.com/support](https://app.base44.com/support)
+```bash
+pnpm --filter @f1-manager/web dev
+```
+
+The dev server starts on the port reported by Vite (default `http://localhost:5173`).
+
+## 🛠️ Development
+
+Scripts exposed by the `@f1-manager/web` workspace:
+
+| Command                                     | Description                    |
+| ------------------------------------------- | ------------------------------ |
+| `pnpm --filter @f1-manager/web dev`         | Start the Vite dev server      |
+| `pnpm --filter @f1-manager/web build`       | Production build               |
+| `pnpm --filter @f1-manager/web preview`     | Preview the production build   |
+| `pnpm --filter @f1-manager/web lint`        | Run ESLint                     |
+| `pnpm --filter @f1-manager/web lint:fix`    | Run ESLint with autofix        |
+| `pnpm --filter @f1-manager/web typecheck`   | Type-check with `tsc --noEmit` |
+
+Turborepo tasks (run from the repo root, applied across all workspaces):
+
+```bash
+turbo run dev      # parallel dev across apps
+turbo run build    # build everything (cached)
+turbo run lint     # lint everything
+turbo run format   # format everything
+```

@@ -1,0 +1,51 @@
+{
+    "$schema": "https://turborepo.com/schema.json",
+    "ui": "tui",
+    "globalEnv": [
+        "*"
+    ],
+    "tasks": {
+        "dev": {
+            "cache": false,
+            "persistent": true
+        },
+        "start": {
+            "dependsOn": [
+                "^start"
+            ],
+            "outputs": [
+                "dist/**"
+            ],
+            "cache": false,
+            "persistent": true
+        },
+        "build": {
+            "dependsOn": [
+                "^build"
+            ],
+            "outputs": [
+                "dist/**",
+                ".next/**",
+                "env.d.ts",
+                ".output/**",
+                "out/**"
+            ]
+        },
+        "lint": {
+            "dependsOn": [
+                "^lint"
+            ],
+            "outputs": [
+                "eslint.config.mjs"
+            ]
+        },
+        "format": {
+            "dependsOn": [
+                "^format"
+            ],
+            "outputs": [
+                "**/*.{ts,tsx,md}"
+            ]
+        }
+    }
+}
