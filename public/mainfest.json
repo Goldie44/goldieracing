@@ -1,0 +1,18 @@
+{
+  "name": "Goldie F1 2023",
+  "short_name": "Goldie F1",
+  "description": "Système de gestion d'équipe de Formule 1 - Saison 2023",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0f1118",
+  "theme_color": "#0f1118",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
