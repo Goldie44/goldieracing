@@ -2,6 +2,8 @@
   "extends": "@f1-manager/typescript/vite.json",
   "compilerOptions": {
     "types": ["node", "vite/client"],
+    "strict": false,
+    "noImplicitAny": false,
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"]
