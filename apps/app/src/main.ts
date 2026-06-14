@@ -1,11 +1,20 @@
 import path from 'node:path';
-import { app, BrowserWindow, shell } from 'electron';
+import { app, BrowserWindow, ipcMain, shell } from 'electron';
+import { createBudgetSpentTotalStorage, type BudgetSpentTotalStorage } from './storage';
 
 const isDev = !app.isPackaged;
 const DEV_URL = process.env.WEB_DEV_URL ?? 'http://localhost:5173';
 const PROD_INDEX = path.resolve(__dirname, '../../web/dist/index.html');
 
 let mainWindow: BrowserWindow | null = null;
+let budgetSpentTotalStorage: BudgetSpentTotalStorage | null = null;
+
+function registerBudgetSpentTotalHandlers(storage: BudgetSpentTotalStorage): void {
+  ipcMain.handle('budget-spent-totals:load', () => storage.load());
+  ipcMain.handle('budget-spent-totals:save', (_event, values: Record<string, number>) => {
+    storage.save(values);
+  });
+}
 
 function createWindow(): void {
   mainWindow = new BrowserWindow({
@@ -42,6 +51,11 @@ function createWindow(): void {
 }
 
 app.whenReady().then(() => {
+  budgetSpentTotalStorage = createBudgetSpentTotalStorage(
+    path.join(app.getPath('userData'), 'goldie-racing.sqlite'),
+  );
+  registerBudgetSpentTotalHandlers(budgetSpentTotalStorage);
+
   createWindow();
 
   app.on('activate', () => {
@@ -51,4 +65,9 @@ app.whenReady().then(() => {
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') app.quit();
+});
+
+app.on('before-quit', () => {
+  budgetSpentTotalStorage?.close();
+  budgetSpentTotalStorage = null;
 });

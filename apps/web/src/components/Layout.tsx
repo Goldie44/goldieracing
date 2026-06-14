@@ -1,16 +1,25 @@
 import { Outlet, Link, useLocation } from "react-router-dom";
-import { LayoutDashboard, Calendar, Package, Gauge, Users, Wallet, Menu, X, Flag, FlaskConical } from "lucide-react";
+import {
+  Bars3Icon,
+  BeakerIcon,
+  CalendarDaysIcon,
+  ChartBarIcon,
+  CubeIcon,
+  FlagIcon,
+  Squares2X2Icon,
+  WalletIcon,
+  XMarkIcon,
+} from "@heroicons/react/24/outline";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 const navItems = [
-  { path: "/", icon: LayoutDashboard, label: "Dashboard" },
-  { path: "/calendar", icon: Calendar, label: "Calendrier" },
-  { path: "/stock", icon: Package, label: "Stock Pièces" },
-  { path: "/performance", icon: Gauge, label: "Performance" },
-  { path: "/staff", icon: Users, label: "Personnel" },
-  { path: "/budget", icon: Wallet, label: "Budget" },
-  { path: "/rd", icon: FlaskConical, label: "R&D" },
+  { path: "/", icon: Squares2X2Icon, label: "Dashboard" },
+  { path: "/calendar", icon: CalendarDaysIcon, label: "Calendrier" },
+  { path: "/stock", icon: CubeIcon, label: "Stock Pièces" },
+  { path: "/performance", icon: ChartBarIcon, label: "Performance" },
+  { path: "/budget", icon: WalletIcon, label: "Budget" },
+  { path: "/rd", icon: BeakerIcon, label: "R&D" },
 ];
 
 export default function Layout() {
@@ -24,11 +33,11 @@ export default function Layout() {
         <div className="p-6 border-b border-border">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
-              <Flag className="w-5 h-5 text-primary" />
+              <FlagIcon className="w-5 h-5 text-primary" />
             </div>
             <div>
-              <h1 className="text-lg font-bold text-primary tracking-tight">GOLDIE</h1>
-              <p className="text-xs text-muted-foreground font-mono">F1 · 2023</p>
+              <h1 className="text-lg font-bold text-primary tracking-tight">F1 Manager</h1>
+              <p className="text-xs text-muted-foreground font-mono"></p>
             </div>
           </div>
         </div>
@@ -56,7 +65,7 @@ export default function Layout() {
         </nav>
         <div className="p-4 border-t border-border">
           <div className="text-xs text-muted-foreground font-mono text-center">
-            Saison 2023 · 23 Courses
+            // nom dev 
           </div>
         </div>
       </aside>
@@ -65,11 +74,11 @@ export default function Layout() {
       <div className="lg:hidden fixed top-0 left-0 right-0 z-40 bg-card/95 backdrop-blur-xl border-b border-border">
         <div className="flex items-center justify-between p-4">
           <div className="flex items-center gap-2">
-            <Flag className="w-5 h-5 text-primary" />
+            <FlagIcon className="w-5 h-5 text-primary" />
             <span className="font-bold text-primary">GOLDIE F1</span>
           </div>
           <button onClick={() => setMobileOpen(!mobileOpen)} className="p-2 text-foreground">
-            {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            {mobileOpen ? <XMarkIcon className="w-5 h-5" /> : <Bars3Icon className="w-5 h-5" />}
           </button>
         </div>
       </div>

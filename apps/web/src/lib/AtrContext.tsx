@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 
 const initialSections = [
   {
@@ -28,15 +28,55 @@ const initialSections = [
   },
 ];
 
-const defaultData = initialSections.map(s => ({
+const ATR_STORAGE_KEY = "goldie-racing:atr-data";
+
+const createDefaultData = () => initialSections.map(s => ({
   ...s,
   rows: s.rows.map(r => ({ ...r, v1: "", moyenne: "", delta: "", cd: "", deltaCD: "" })),
 }));
 
+const loadStoredAtrData = () => {
+  if (typeof window === "undefined") return createDefaultData();
+
+  try {
+    const stored = window.localStorage.getItem(ATR_STORAGE_KEY);
+    if (!stored) return createDefaultData();
+
+    const parsed = JSON.parse(stored);
+    if (!Array.isArray(parsed)) return createDefaultData();
+
+    return createDefaultData().map((section, sectionIndex) => {
+      const savedSection = parsed[sectionIndex];
+      if (!savedSection || !Array.isArray(savedSection.rows)) return section;
+
+      return {
+        ...section,
+        rows: section.rows.map((row, rowIndex) => ({
+          ...row,
+          ...savedSection.rows[rowIndex],
+          label: row.label,
+        })),
+      };
+    });
+  } catch (error) {
+    console.error("Unable to load ATR table values", error);
+    return createDefaultData();
+  }
+};
+
 const AtrContext = createContext(null);
 
 export function AtrProvider({ children }) {
-  const [atrData, setAtrData] = useState(defaultData);
+  const [atrData, setAtrData] = useState(loadStoredAtrData);
+
+  useEffect(() => {
+    try {
+      window.localStorage.setItem(ATR_STORAGE_KEY, JSON.stringify(atrData));
+    } catch (error) {
+      console.error("Unable to save ATR table values", error);
+    }
+  }, [atrData]);
+
   return (
     <AtrContext.Provider value={{ atrData, setAtrData, initialSections }}>
       {children}

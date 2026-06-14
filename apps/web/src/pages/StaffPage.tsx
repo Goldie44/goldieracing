@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
-import { User, Star } from "lucide-react";
+import { UserIcon } from "@heroicons/react/24/outline";
+import { StarIcon } from "@heroicons/react/24/solid";
 import PageHeader from "../components/PageHeader";
 import { staff } from "../lib/f1Data";
 
@@ -45,12 +46,12 @@ export default function StaffPage() {
               <div className="flex items-start justify-between mb-4">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
-                    <User className="w-5 h-5 text-primary" />
+                    <UserIcon className="w-5 h-5 text-primary" />
                   </div>
                   <div>
                     <h3 className="text-sm font-semibold">{member.role}</h3>
                     <div className="flex items-center gap-1 mt-0.5">
-                      <Star className="w-3 h-3 text-primary fill-primary" />
+                      <StarIcon className="w-3 h-3 text-primary" />
                       <span className="text-xs text-muted-foreground">Moy. {avgSkill}</span>
                     </div>
                   </div>

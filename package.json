@@ -7,10 +7,18 @@
   "scripts": {
     "dev": "turbo dev"
   },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "better-sqlite3"
+    ]
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "turbo": "^2.9.9"
+  },
+  "dependencies": {
+    "xlsx": "^0.18.5"
   }
 }

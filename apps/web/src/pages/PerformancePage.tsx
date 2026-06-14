@@ -1,10 +1,18 @@
 import { motion } from "framer-motion";
-import { Gauge, Zap, Wind, RotateCcw, Plus } from "lucide-react";
+import {
+  ArrowPathIcon,
+  BoltIcon,
+  ChartBarIcon,
+  CloudIcon,
+  PlusIcon,
+  TrashIcon,
+} from "@heroicons/react/24/outline";
 import { useState } from "react";
 import { useAtr } from "../lib/AtrContext";
 import PageHeader from "../components/PageHeader";
 import StatCard from "../components/StatCard";
 import { developmentUpdates } from "../lib/f1Data";
+import { initialSections } from "../lib/AtrContext";
 
 const radarData = [
   { subject: "Vitesse Max", value: 78 },
@@ -32,6 +40,10 @@ export default function PerformancePage() {
   const [projects, setProjects] = useState(developmentUpdates);
   const [showNewProject, setShowNewProject] = useState(false);
   const [newProject, setNewProject] = useState({ atr: "", race: "", parts: "" });
+
+  const removeProject = (projectIndex) => {
+    setProjects(prev => prev.filter((_, index) => index !== projectIndex));
+  };
 
   const avg = (sectionIndex) => {
     const rows = atrData[sectionIndex]?.rows || [];
@@ -63,9 +75,9 @@ export default function PerformancePage() {
 
       {/* BOP Stats */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-        <StatCard label="Vélocité" value={avg(0)} icon={Zap} competitor={avgComp(0)} />
-        <StatCard label="Virage" value={avg(1)} icon={Wind} competitor={avgComp(1)} />
-        <StatCard label="Composants" value={avg(2)} icon={Gauge} competitor={avgComp(2)} />
+        <StatCard label="Vélocité" value={avg(0)} icon={BoltIcon} competitor={avgComp(0)} />
+        <StatCard label="Virage" value={avg(1)} icon={CloudIcon} competitor={avgComp(1)} />
+        <StatCard label="Composants" value={avg(2)} icon={ChartBarIcon} competitor={avgComp(2)} />
 
       </div>
 
@@ -86,7 +98,7 @@ export default function PerformancePage() {
           <div className="space-y-6">
             {projects.map((update, i) => (
               <motion.div
-                key={update.atr}
+                key={`${update.atr}-${i}`}
                 initial={{ opacity: 0, x: -10 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.3 + i * 0.05 }}
@@ -96,9 +108,20 @@ export default function PerformancePage() {
                   <span className="text-xs font-bold font-mono text-primary">{i + 1}</span>
                 </div>
                 <div className="flex-1 pb-2">
-                  <div className="flex items-center gap-2">
-                    <span className="text-sm font-semibold">{update.atr}</span>
-                    <span className="text-xs text-muted-foreground">· {update.race}</span>
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="flex min-w-0 flex-wrap items-center gap-2">
+                      <span className="text-sm font-semibold">{update.atr}</span>
+                      <span className="text-xs text-muted-foreground">· {update.race}</span>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => removeProject(i)}
+                      aria-label={`Supprimer ${update.atr}`}
+                      title={`Supprimer ${update.atr}`}
+                      className="shrink-0 rounded-md p-1 text-muted-foreground transition-colors hover:bg-red-500/10 hover:text-red-400 focus:outline-none focus:ring-2 focus:ring-red-500/40"
+                    >
+                      <TrashIcon className="h-4 w-4" />
+                    </button>
                   </div>
                   <div className="flex flex-wrap gap-1.5 mt-2">
                     {update.parts.map(part => (
@@ -120,7 +143,7 @@ export default function PerformancePage() {
           onClick={() => setShowNewProject(v => !v)}
           className="flex items-center gap-1.5 text-xs bg-primary/10 text-primary hover:bg-primary/20 transition-colors px-3 py-1.5 rounded-lg font-medium"
         >
-          <Plus className="w-3 h-3" />
+          <PlusIcon className="w-3 h-3" />
           Nouveau projet
         </button>
         {showNewProject && (
@@ -162,34 +185,6 @@ export default function PerformancePage() {
   );
 }
 
-const initialSections = [
-  {
-    label: "Vélocité",
-    rows: [
-      { label: "Vitesse max" },
-      { label: "Accélération" },
-      { label: "Efficacité du DRS" },
-    ],
-  },
-  {
-    label: "Virage",
-    rows: [
-      { label: "Faible vitesse" },
-      { label: "Vitesse moyenne" },
-      { label: "Grande vitesse" },
-      { label: "Tolérance Dirty air" },
-    ],
-  },
-  {
-    label: "Composants",
-    rows: [
-      { label: "Préservation des pneus" },
-      { label: "Refroidissement du moteur" },
-      { label: "Poids excédentaire totale" },
-    ],
-  },
-];
-
 function AtrCalTable({ data, setData, title = "Calibration ATR" }) {
   const reset = () => setData(initialSections.map(s => ({
     ...s,
@@ -229,7 +224,7 @@ function AtrCalTable({ data, setData, title = "Calibration ATR" }) {
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-sm font-semibold">{title}</h3>
         <button onClick={reset} className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-red-400 transition-colors">
-          <RotateCcw className="w-3 h-3" />
+          <ArrowPathIcon className="w-3 h-3" />
           Remettre à zéro
         </button>
       </div>

@@ -1,13 +1,38 @@
 import { motion } from "framer-motion";
-import { useState } from "react";
-import { AlertTriangle, CheckCircle } from "lucide-react";
+import { useEffect, useState } from "react";
+import { CheckCircleIcon, ExclamationTriangleIcon } from "@heroicons/react/24/outline";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
 import PageHeader from "../components/PageHeader";
 import { stock } from "../lib/f1Data";
 
+const STOCK_COUNTS_KEY = "goldie-racing:stock-counts";
+const STOCK_COSTS_KEY = "goldie-racing:stock-costs";
+
 export default function StockPage() {
-  const [counts, setCounts] = useState(() => Object.fromEntries(stock.map(s => [s.piece, s.count])));
-  const [costs, setCosts] = useState(() => Object.fromEntries(stock.map(s => [s.piece, s.costUnit])));
+  const [counts, setCounts] = useState<Record<string, number>>(() => {
+    try {
+      const stored = window.localStorage.getItem(STOCK_COUNTS_KEY);
+      if (stored) return JSON.parse(stored);
+    } catch {}
+    return Object.fromEntries(stock.map(s => [s.piece, s.count]));
+  });
+
+  const [costs, setCosts] = useState<Record<string, number>>(() => {
+    try {
+      const stored = window.localStorage.getItem(STOCK_COSTS_KEY);
+      if (stored) return JSON.parse(stored);
+    } catch {}
+    return Object.fromEntries(stock.map(s => [s.piece, s.costUnit]));
+  });
+
+  useEffect(() => {
+    try { window.localStorage.setItem(STOCK_COUNTS_KEY, JSON.stringify(counts)); } catch {}
+  }, [counts]);
+
+  useEffect(() => {
+    try { window.localStorage.setItem(STOCK_COSTS_KEY, JSON.stringify(costs)); } catch {}
+  }, [costs]);
+
   const totalCost = stock.reduce((a, b) => a + (costs[b.piece] * b.capacity || 0), 0);
 
   const chartData = stock.map(s => ({
@@ -60,11 +85,11 @@ export default function StockPage() {
                   <span className="text-xs text-muted-foreground">{item.daysToMake}j de fabrication</span>
                 </div>
                 {health === "good" ? (
-                  <CheckCircle className="w-4 h-4 text-green-400" />
+                  <CheckCircleIcon className="w-4 h-4 text-green-400" />
                 ) : health === "warning" ? (
-                  <AlertTriangle className="w-4 h-4 text-yellow-400" />
+                  <ExclamationTriangleIcon className="w-4 h-4 text-yellow-400" />
                 ) : (
-                  <AlertTriangle className="w-4 h-4 text-red-400" />
+                  <ExclamationTriangleIcon className="w-4 h-4 text-red-400" />
                 )}
               </div>
 

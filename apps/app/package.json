@@ -11,15 +11,20 @@
     "build": "tsc -p tsconfig.json",
     "start": "electron .",
     "package": "electron-builder",
+    "test": "node --test test/*.test.cjs",
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "devDependencies": {
     "@f1-manager/typescript": "workspace:*",
+    "@types/better-sqlite3": "^7.6.13",
     "@types/node": "^22.13.5",
     "concurrently": "^9.1.2",
-    "electron": "^33.2.1",
+    "electron": "^42.0.0",
     "electron-builder": "^25.1.8",
     "typescript": "^5.8.2",
     "wait-on": "^8.0.1"
+  },
+  "dependencies": {
+    "better-sqlite3": "^12.9.0"
   }
 }

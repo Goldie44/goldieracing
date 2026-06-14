@@ -8,7 +8,6 @@ import Dashboard from './pages/Dashboard';
 import CalendarPage from './pages/CalendarPage';
 import StockPage from './pages/StockPage';
 import PerformancePage from './pages/PerformancePage';
-import StaffPage from './pages/StaffPage';
 import BudgetPage from './pages/BudgetPage';
 import { BudgetProvider } from './lib/BudgetContext';
 import { AtrProvider } from './lib/AtrContext';
@@ -28,7 +27,6 @@ function App() {
                   <Route path="/calendar" element={<CalendarPage />} />
                   <Route path="/stock" element={<StockPage />} />
                   <Route path="/performance" element={<PerformancePage />} />
-                  <Route path="/staff" element={<StaffPage />} />
                   <Route path="/budget" element={<BudgetPage />} />
                   <Route path="/rd" element={<RDPage />} />
                   <Route path="*" element={<PageNotFound />} />

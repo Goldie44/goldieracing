@@ -1,6 +1,14 @@
 import { motion } from "framer-motion";
-import { Package, Gauge, Wallet, Flag, AlertTriangle, CheckCircle, RotateCcw } from "lucide-react";
-import { PieChart, Pie, Cell, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip } from "recharts";
+import {
+  ArrowPathIcon,
+  ChartBarIcon,
+  CheckCircleIcon,
+  CubeIcon,
+  ExclamationTriangleIcon,
+  FlagIcon,
+  WalletIcon,
+} from "@heroicons/react/24/outline";
+import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
 import StatCard from "../components/StatCard";
 import { calendar, circuitTypes, stock } from "../lib/f1Data";
 import { useBudget } from "../lib/BudgetContext";
@@ -13,16 +21,6 @@ const pieData = Object.entries(circuitTypes).map(([key, val]) => ({
   name: val.label,
   value: val.count,
 }));
-
-const stockData = stock.map(s => ({
-  name: s.piece.replace("Aileron ", "A."),
-  stock: s.count,
-  needed: Math.ceil(24 / s.racesPerPiece),
-}));
-
-const nextRace = calendar
-  .filter(r => r.type !== "Test")
-  .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())[0];
 
 const TOTAL_RACES = 23;
 const fabricationNeeds = stock.map(item => {
@@ -46,31 +44,28 @@ export default function Dashboard() {
   const sortedRaces = calendar.filter(r => r.type !== "Test").sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
   const nextRaceUnchecked = sortedRaces.find(r => !done[r.id]);
   const budgetPercent = ctxTotalBudget ? ((ctxSpent / ctxTotalBudget) * 100).toFixed(1) : "0.0";
-  const totalPieces = stock.reduce((a, b) => a + b.count, 0);
-
   return (
     <div>
       <div className="flex items-start justify-between mb-8">
         <div>
           <h1 className="text-2xl md:text-3xl font-bold text-foreground tracking-tight">Dashboard</h1>
-          <p className="text-sm text-muted-foreground mt-1">Vue d'ensemble · Goldie F1 2023</p>
+          
           <div className="h-1 w-12 bg-primary rounded-full mt-3" />
         </div>
         <button
           onClick={resetBudget}
           className="flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-medium text-muted-foreground hover:text-foreground hover:bg-secondary border border-border transition-colors"
         >
-          <RotateCcw className="w-3.5 h-3.5" />
+          <ArrowPathIcon className="w-3.5 h-3.5" />
           Reset Budget
         </button>
       </div>
 
       {/* Stats Row */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-        <StatCard label="Courses" value="23" icon={Flag} />
-        <StatCard label="Pièces en stock" value={totalPieces} icon={Package} />
-        <StatCard label="Budget utilisé" value={budgetPercent + "%"} icon={Wallet} />
-        <StatCard label="Écart de performance" value={perfEcart} icon={Gauge} />
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+        <StatCard label="Courses" value="23" icon={FlagIcon} />
+        <StatCard label="Budget utilisé" value={budgetPercent + "%"} icon={WalletIcon} />
+        <StatCard label="Écart de performance" value={perfEcart} icon={ChartBarIcon} />
       </div>
 
       {/* Next Race Banner */}
@@ -107,7 +102,7 @@ export default function Dashboard() {
         className="bg-card border border-border rounded-xl p-6 mb-8"
       >
         <div className="flex items-center gap-2 mb-4">
-          <Package className="w-4 h-4 text-primary" />
+          <CubeIcon className="w-4 h-4 text-primary" />
           <h3 className="text-sm font-semibold text-foreground">Planification Fabrication · Saison 2023</h3>
           <span className="ml-auto text-xs text-muted-foreground font-mono">{TOTAL_RACES} courses</span>
         </div>
@@ -124,8 +119,8 @@ export default function Dashboard() {
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-xs text-muted-foreground truncate">{item.piece}</span>
                   {ok
-                    ? <CheckCircle className="w-3.5 h-3.5 text-green-400 flex-shrink-0" />
-                    : <AlertTriangle className="w-3.5 h-3.5 text-accent flex-shrink-0" />}
+                    ? <CheckCircleIcon className="w-3.5 h-3.5 text-green-400 flex-shrink-0" />
+                    : <ExclamationTriangleIcon className="w-3.5 h-3.5 text-accent flex-shrink-0" />}
                 </div>
                 <div className="text-lg font-bold font-mono text-foreground">{item.count}<span className="text-xs text-muted-foreground">/{item.needed}</span></div>
                 <div className="text-xs mt-1">
@@ -143,7 +138,7 @@ export default function Dashboard() {
       </motion.div>
 
       {/* Charts Row */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+      <div className="grid grid-cols-1 gap-6 mb-8">
         {/* Circuit Types */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -184,28 +179,6 @@ export default function Dashboard() {
               ))}
             </div>
           </div>
-        </motion.div>
-
-        {/* Stock Overview */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
-          className="bg-card border border-border rounded-xl p-6"
-        >
-          <h3 className="text-sm font-semibold text-foreground mb-4">Stock vs Besoin</h3>
-          <ResponsiveContainer height={160}>
-            <BarChart data={stockData} barGap={4}>
-              <XAxis dataKey="name" tick={{ fontSize: 10, fill: "hsl(220, 10%, 50%)" }} axisLine={false} tickLine={false} />
-              <YAxis tick={{ fontSize: 10, fill: "hsl(220, 10%, 50%)" }} axisLine={false} tickLine={false} />
-              <Tooltip
-                contentStyle={{ background: "hsl(220, 14%, 9%)", border: "1px solid hsl(220, 12%, 16%)", borderRadius: "8px", fontSize: "12px" }}
-                labelStyle={{ color: "hsl(40, 20%, 95%)" }}
-              />
-              <Bar dataKey="stock" fill="hsl(43, 96%, 56%)" radius={[4, 4, 0, 0]} name="En stock" />
-              <Bar dataKey="needed" fill="hsl(220, 12%, 25%)" radius={[4, 4, 0, 0]} name="Besoin saison" />
-            </BarChart>
-          </ResponsiveContainer>
         </motion.div>
       </div>
 

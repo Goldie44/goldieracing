@@ -1,3 +1,55 @@
+// Tableau de réglementation extrait d'Excel
+export const reglementation = [
+  {
+    section: "Châssis",
+    items: [
+      "Réduction traînée",
+      "Delta DRS",
+      "Refroidissement moteur",
+      "Débit d'air milieu"
+    ]
+  },
+  {
+    section: "Aileron avant",
+    items: [
+      "Préservation des pneus",
+      "Sensibilité du débit d'air",
+      "Débit d'air avant"
+    ]
+  },
+  {
+    section: "Aileron arrière",
+    items: [
+      "Réduction traînée",
+      "Delta DRS",
+      "Sensibilité du débit d'air"
+    ]
+  },
+  {
+    section: "Flancs",
+    items: [
+      "Réduction traînée",
+      "Refroidissement moteur",
+      "Débit d'air avant",
+      "Débit d'air milieu"
+    ]
+  },
+  {
+    section: "Fond plat",
+    items: [
+      "Réduction traînée",
+      "Sensibilité du débit d'air"
+    ]
+  },
+  {
+    section: "Suspension",
+    items: [
+      "Réduction traînée",
+      "Préservation des pneus",
+      "Débit d'air avant"
+    ]
+  }
+];
 // Goldie F1 2023 - Static data extracted from Excel
 
 export const calendar = [
@@ -75,7 +127,7 @@ export const budgetSections = [
     allocatedTotal: 45302506,
   },
   {
-    section: "Recherche de pièces",
+    section: "R&D",
     color: "hsl(210, 60%, 50%)",
     items: [
       { label: "Châssis", spent: null, allocated: null },
@@ -92,42 +144,42 @@ export const budgetSections = [
     section: "Salaires du personnel",
     color: "hsl(150, 60%, 45%)",
     items: [],
-    spentTotal: 3534506,
+    spentTotal: 0,
     allocatedTotal: 9862500,
   },
   {
     section: "\u00c9quipe d'ingénierie",
     color: "hsl(280, 60%, 55%)",
     items: [],
-    spentTotal: 792000,
+    spentTotal: 0,
     allocatedTotal: null,
   },
   {
     section: "\u00c9quipe de prospection",
     color: "hsl(30, 80%, 55%)",
     items: [],
-    spentTotal: 126000,
+    spentTotal: 0,
     allocatedTotal: 16900000,
   },
   {
     section: "\u00c9quipe des stands",
     color: "hsl(0, 72%, 51%)",
     items: [],
-    spentTotal: 600000,
+    spentTotal: 0,
     allocatedTotal: 2816667,
   },
   {
     section: "Achats d'urgence",
     color: "hsl(15, 80%, 55%)",
     items: [],
-    spentTotal: 23600000,
+    spentTotal: 0,
     allocatedTotal: null,
   },
   {
     section: "Installations",
     color: "hsl(200, 60%, 50%)",
     items: [],
-    spentTotal: 16650000,
+    spentTotal: 0,
     allocatedTotal: null,
   },
 ];
@@ -193,7 +245,7 @@ export const staff = [
 export const tireStrategy = {
   soft: { avgTime: 79.37, laps: 37, degradation: 0.09, color: "#ef4444" },
   medium: { avgTime: 79.96, laps: 52, degradation: 0.06, color: "#eab308" },
-  hard: { avgTime: 80.00, laps: 60, degradation: 0.05, color: "#f8fafc" },
+  hard: { avgTime: 80.00, laps: 60, degradation: 0.05, color: "#f8fafc" },  
 };
 
 export const developmentUpdates = [
