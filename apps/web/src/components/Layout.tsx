@@ -6,12 +6,15 @@ import {
   ChartBarIcon,
   CubeIcon,
   FlagIcon,
+  PencilIcon,
   Squares2X2Icon,
   WalletIcon,
   XMarkIcon,
 } from "@heroicons/react/24/outline";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useNavOrder } from "@/lib/NavOrderContext";
+import NavList from "@/components/NavList";
 
 const navItems = [
   { path: "/", icon: Squares2X2Icon, label: "Dashboard" },
@@ -25,6 +28,8 @@ const navItems = [
 export default function Layout() {
   const location = useLocation();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [isEditMode, setIsEditMode] = useState(false);
+  const { orderedItems, reorder } = useNavOrder();
 
   return (
     <div className="min-h-screen flex bg-background">
@@ -42,30 +47,29 @@ export default function Layout() {
           </div>
         </div>
         <nav className="flex-1 p-4 space-y-1">
-          {navItems.map(item => {
-            const isActive = location.pathname === item.path;
-            return (
-              <Link
-                key={item.path}
-                to={item.path}
-                className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 ${
-                  isActive
-                    ? "bg-primary/10 text-primary"
-                    : "text-muted-foreground hover:text-foreground hover:bg-secondary"
-                }`}
-              >
-                <item.icon className="w-4 h-4" />
-                {item.label}
-                {isActive && (
-                  <div className="ml-auto w-1.5 h-1.5 rounded-full bg-primary" />
-                )}
-              </Link>
-            );
-          })}
+          <NavList
+            items={orderedItems}
+            activePath={location.pathname}
+            isEditMode={isEditMode}
+            droppableId="desktop-nav"
+            onReorder={reorder}
+            onItemClick={undefined}
+          />
         </nav>
-        <div className="p-4 border-t border-border">
+        <div className="p-4 border-t border-border space-y-2">
+          <button
+            onClick={() => setIsEditMode(prev => !prev)}
+            className={`w-full flex items-center justify-center gap-2 px-3 py-2 rounded-lg text-xs font-medium transition-all ${
+              isEditMode
+                ? "bg-primary/10 text-primary"
+                : "text-muted-foreground hover:text-foreground hover:bg-secondary"
+            }`}
+          >
+            <PencilIcon className="w-3.5 h-3.5" />
+            {isEditMode ? "Terminer" : "Modifier l'ordre"}
+          </button>
           <div className="text-xs text-muted-foreground font-mono text-center">
-            // nom dev 
+            // nom dev
           </div>
         </div>
       </aside>
