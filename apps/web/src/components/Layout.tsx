@@ -1,14 +1,8 @@
-import { Outlet, Link, useLocation } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import {
   Bars3Icon,
-  BeakerIcon,
-  CalendarDaysIcon,
-  ChartBarIcon,
-  CubeIcon,
   FlagIcon,
   PencilIcon,
-  Squares2X2Icon,
-  WalletIcon,
   XMarkIcon,
 } from "@heroicons/react/24/outline";
 import { useState } from "react";
@@ -16,19 +10,11 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useNavOrder } from "@/lib/NavOrderContext";
 import NavList from "@/components/NavList";
 
-const navItems = [
-  { path: "/", icon: Squares2X2Icon, label: "Dashboard" },
-  { path: "/calendar", icon: CalendarDaysIcon, label: "Calendrier" },
-  { path: "/stock", icon: CubeIcon, label: "Stock Pièces" },
-  { path: "/performance", icon: ChartBarIcon, label: "Performance" },
-  { path: "/budget", icon: WalletIcon, label: "Budget" },
-  { path: "/rd", icon: BeakerIcon, label: "R&D" },
-];
-
 export default function Layout() {
   const location = useLocation();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
+  const [isMobileEditMode, setIsMobileEditMode] = useState(false);
   const { orderedItems, reorder } = useNavOrder();
 
   return (
@@ -102,27 +88,30 @@ export default function Layout() {
               animate={{ x: 0 }}
               exit={{ x: -280 }}
               transition={{ type: "spring", damping: 25 }}
-              className="w-64 h-full bg-card border-r border-border p-4 pt-20 space-y-1"
+              className="w-64 h-full bg-card border-r border-border p-4 pt-20 flex flex-col"
               onClick={e => e.stopPropagation()}
             >
-              {navItems.map(item => {
-                const isActive = location.pathname === item.path;
-                return (
-                  <Link
-                    key={item.path}
-                    to={item.path}
-                    onClick={() => setMobileOpen(false)}
-                    className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all ${
-                      isActive
-                        ? "bg-primary/10 text-primary"
-                        : "text-muted-foreground hover:text-foreground hover:bg-secondary"
-                    }`}
-                  >
-                    <item.icon className="w-4 h-4" />
-                    {item.label}
-                  </Link>
-                );
-              })}
+              <div className="flex-1 space-y-1">
+                <NavList
+                  items={orderedItems}
+                  activePath={location.pathname}
+                  isEditMode={isMobileEditMode}
+                  droppableId="mobile-nav"
+                  onReorder={reorder}
+                  onItemClick={() => setMobileOpen(false)}
+                />
+              </div>
+              <button
+                onClick={() => setIsMobileEditMode(prev => !prev)}
+                className={`flex items-center justify-center gap-2 px-3 py-2 rounded-lg text-xs font-medium transition-all ${
+                  isMobileEditMode
+                    ? "bg-primary/10 text-primary"
+                    : "text-muted-foreground hover:text-foreground hover:bg-secondary"
+                }`}
+              >
+                <PencilIcon className="w-3.5 h-3.5" />
+                {isMobileEditMode ? "Terminer" : "Modifier l'ordre"}
+              </button>
             </motion.nav>
           </motion.div>
         )}
