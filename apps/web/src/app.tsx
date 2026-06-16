@@ -12,32 +12,35 @@ import BudgetPage from './pages/BudgetPage';
 import { BudgetProvider } from './lib/BudgetContext';
 import { AtrProvider } from './lib/AtrContext';
 import { RaceProvider } from './lib/RaceContext';
+import { NavOrderProvider } from './lib/NavOrderContext';
 import RDPage from './pages/RDPage';
 
 function App() {
   return (
-    <RaceProvider>
-      <BudgetProvider>
-        <AtrProvider>
-          <QueryClientProvider client={queryClientInstance}>
-            <Router>
-              <Routes>
-                <Route element={<Layout />}>
-                  <Route path="/" element={<Dashboard />} />
-                  <Route path="/calendar" element={<CalendarPage />} />
-                  <Route path="/stock" element={<StockPage />} />
-                  <Route path="/performance" element={<PerformancePage />} />
-                  <Route path="/budget" element={<BudgetPage />} />
-                  <Route path="/rd" element={<RDPage />} />
-                  <Route path="*" element={<PageNotFound />} />
-                </Route>
-              </Routes>
-            </Router>
-            <Toaster />
-          </QueryClientProvider>
-        </AtrProvider>
-      </BudgetProvider>
-    </RaceProvider>
+    <NavOrderProvider>
+      <RaceProvider>
+        <BudgetProvider>
+          <AtrProvider>
+            <QueryClientProvider client={queryClientInstance}>
+              <Router>
+                <Routes>
+                  <Route element={<Layout />}>
+                    <Route path="/" element={<Dashboard />} />
+                    <Route path="/calendar" element={<CalendarPage />} />
+                    <Route path="/stock" element={<StockPage />} />
+                    <Route path="/performance" element={<PerformancePage />} />
+                    <Route path="/budget" element={<BudgetPage />} />
+                    <Route path="/rd" element={<RDPage />} />
+                    <Route path="*" element={<PageNotFound />} />
+                  </Route>
+                </Routes>
+              </Router>
+              <Toaster />
+            </QueryClientProvider>
+          </AtrProvider>
+        </BudgetProvider>
+      </RaceProvider>
+    </NavOrderProvider>
   )
 }
 
