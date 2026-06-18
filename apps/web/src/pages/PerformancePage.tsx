@@ -7,12 +7,29 @@ import {
   PlusIcon,
   TrashIcon,
 } from "@heroicons/react/24/outline";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAtr } from "../lib/AtrContext";
 import PageHeader from "../components/PageHeader";
 import StatCard from "../components/StatCard";
 import { developmentUpdates } from "../lib/f1Data";
 import { initialSections } from "../lib/AtrContext";
+
+const PROJECTS_STORAGE_KEY = "goldie-racing:dev-projects";
+
+const loadProjects = () => {
+  try {
+    const stored = window.localStorage.getItem(PROJECTS_STORAGE_KEY);
+    if (stored) return JSON.parse(stored);
+  } catch {}
+  return developmentUpdates;
+};
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../components/ui/select";
 
 const radarData = [
   { subject: "Vitesse Max", value: 78 },
@@ -35,13 +52,95 @@ const degradationData = [
   { lap: 60, soft: 5.4, medium: 3.6, hard: 2.4 },
 ];
 
+const PARTS_LIST = [
+  "Châssis",
+  "Aileron avant",
+  "Aileron arrière",
+  "Flancs",
+  "Fond plat",
+  "Suspension",
+];
+
 export default function PerformancePage() {
   const { atrData, setAtrData } = useAtr();
-  const [projects, setProjects] = useState(developmentUpdates);
+  const [projects, setProjects] = useState(loadProjects);
+
+  useEffect(() => {
+    try {
+      window.localStorage.setItem(PROJECTS_STORAGE_KEY, JSON.stringify(projects));
+    } catch {}
+  }, [projects]);
   const [showNewProject, setShowNewProject] = useState(false);
-  const [newProject, setNewProject] = useState({ atr: "", race: "", parts: "" });
+  const [newProject, setNewProject] = useState({
+    atr: "",
+    part: "",
+    vitesseMax: "",
+    acceleration: "",
+    drs: "",
+    faibleVitesse: "",
+    vitesseMoyenne: "",
+    grandeVitesse: "",
+    dirtyAir: "",
+    preservation: "",
+    refroidissement: "",
+    poids: "",
+  });
+
+  const addProjectGains = (project) => {
+    const gainUpdates = [
+      { si: 0, ri: 0, val: project.vitesseMax },
+      { si: 0, ri: 1, val: project.acceleration },
+      { si: 0, ri: 2, val: project.drs },
+      { si: 1, ri: 0, val: project.faibleVitesse },
+      { si: 1, ri: 1, val: project.vitesseMoyenne },
+      { si: 1, ri: 2, val: project.grandeVitesse },
+      { si: 1, ri: 3, val: project.dirtyAir },
+      { si: 2, ri: 0, val: project.preservation },
+      { si: 2, ri: 1, val: project.refroidissement },
+      { si: 2, ri: 2, val: project.poids },
+    ];
+
+    setAtrData(prev => prev.map((section, si) => ({
+      ...section,
+      rows: section.rows.map((row, ri) => {
+        const update = gainUpdates.find(u => u.si === si && u.ri === ri);
+        if (!update || !update.val) return row;
+        const current = parseFloat(row.gainsAttendus) || 0;
+        const delta = parseFloat(update.val) || 0;
+        return { ...row, gainsAttendus: (current + delta).toString() };
+      }),
+    })));
+  };
+
+  const subtractProjectGains = (project) => {
+    const gainUpdates = [
+      { si: 0, ri: 0, val: project.vitesseMax },
+      { si: 0, ri: 1, val: project.acceleration },
+      { si: 0, ri: 2, val: project.drs },
+      { si: 1, ri: 0, val: project.faibleVitesse },
+      { si: 1, ri: 1, val: project.vitesseMoyenne },
+      { si: 1, ri: 2, val: project.grandeVitesse },
+      { si: 1, ri: 3, val: project.dirtyAir },
+      { si: 2, ri: 0, val: project.preservation },
+      { si: 2, ri: 1, val: project.refroidissement },
+      { si: 2, ri: 2, val: project.poids },
+    ];
+
+    setAtrData(prev => prev.map((section, si) => ({
+      ...section,
+      rows: section.rows.map((row, ri) => {
+        const update = gainUpdates.find(u => u.si === si && u.ri === ri);
+        if (!update || !update.val) return row;
+        const current = parseFloat(row.gainsAttendus) || 0;
+        const delta = parseFloat(update.val) || 0;
+        return { ...row, gainsAttendus: (current - delta).toString() };
+      }),
+    })));
+  };
 
   const removeProject = (projectIndex) => {
+    const project = projects[projectIndex];
+    subtractProjectGains(project);
     setProjects(prev => prev.filter((_, index) => index !== projectIndex));
   };
 
@@ -85,6 +184,101 @@ export default function PerformancePage() {
 
       <AtrCalTable data={atrData} setData={setAtrData} />
 
+      {/* Nouveau Projet */}
+      <div className="my-6 flex flex-col items-start gap-4">
+        <button
+          onClick={() => setShowNewProject(v => !v)}
+          className="flex items-center gap-1.5 text-xs bg-primary/10 text-primary hover:bg-primary/20 transition-colors px-3 py-1.5 rounded-lg font-medium"
+        >
+          <PlusIcon className="w-3 h-3" />
+          Nouveau projet
+        </button>
+        {showNewProject && (
+          <div className="w-full p-4 rounded-lg border border-border bg-card flex flex-col gap-3">
+            <div>
+              <label className="text-xs text-muted-foreground mb-1 block">ATR</label>
+              <input value={newProject.atr} onChange={e => setNewProject(p => ({...p, atr: e.target.value}))} className="w-full text-xs bg-background border border-border rounded px-2 py-1.5 outline-none focus:border-primary text-foreground" placeholder="ex: ATR-08" />
+            </div>
+            <div>
+              <label className="text-xs text-muted-foreground mb-1 block">Pièces</label>
+              <Select value={newProject.part} onValueChange={(value) => setNewProject(p => ({...p, part: value}))}>
+                <SelectTrigger className="w-full text-xs h-9">
+                  <SelectValue placeholder="Sélectionner une pièce" />
+                </SelectTrigger>
+                <SelectContent>
+                  {PARTS_LIST.map((part) => (
+                    <SelectItem key={part} value={part}>
+                      {part}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="border-t border-border pt-3">
+              <label className="text-xs text-muted-foreground mb-2 block font-semibold">Gains Attendus</label>
+              <div className="grid grid-cols-2 gap-2">
+                <div>
+                  <label className="text-xs text-muted-foreground mb-1 block">Vitesse max</label>
+                  <input type="number" value={newProject.vitesseMax} onChange={e => setNewProject(p => ({...p, vitesseMax: e.target.value}))} className="w-full text-xs bg-background border border-border rounded px-2 py-1.5 outline-none focus:border-primary text-foreground" placeholder="0" />
+                </div>
+                <div>
+                  <label className="text-xs text-muted-foreground mb-1 block">Accélération</label>
+                  <input type="number" value={newProject.acceleration} onChange={e => setNewProject(p => ({...p, acceleration: e.target.value}))} className="w-full text-xs bg-background border border-border rounded px-2 py-1.5 outline-none focus:border-primary text-foreground" placeholder="0" />
+                </div>
+                <div>
+                  <label className="text-xs text-muted-foreground mb-1 block">Efficacité du DRS</label>
+                  <input type="number" value={newProject.drs} onChange={e => setNewProject(p => ({...p, drs: e.target.value}))} className="w-full text-xs bg-background border border-border rounded px-2 py-1.5 outline-none focus:border-primary text-foreground" placeholder="0" />
+                </div>
+                <div>
+                  <label className="text-xs text-muted-foreground mb-1 block">Faible vitesse</label>
+                  <input type="number" value={newProject.faibleVitesse} onChange={e => setNewProject(p => ({...p, faibleVitesse: e.target.value}))} className="w-full text-xs bg-background border border-border rounded px-2 py-1.5 outline-none focus:border-primary text-foreground" placeholder="0" />
+                </div>
+                <div>
+                  <label className="text-xs text-muted-foreground mb-1 block">Vitesse moyenne</label>
+                  <input type="number" value={newProject.vitesseMoyenne} onChange={e => setNewProject(p => ({...p, vitesseMoyenne: e.target.value}))} className="w-full text-xs bg-background border border-border rounded px-2 py-1.5 outline-none focus:border-primary text-foreground" placeholder="0" />
+                </div>
+                <div>
+                  <label className="text-xs text-muted-foreground mb-1 block">Grande vitesse</label>
+                  <input type="number" value={newProject.grandeVitesse} onChange={e => setNewProject(p => ({...p, grandeVitesse: e.target.value}))} className="w-full text-xs bg-background border border-border rounded px-2 py-1.5 outline-none focus:border-primary text-foreground" placeholder="0" />
+                </div>
+                <div>
+                  <label className="text-xs text-muted-foreground mb-1 block">Tolérance Dirty air</label>
+                  <input type="number" value={newProject.dirtyAir} onChange={e => setNewProject(p => ({...p, dirtyAir: e.target.value}))} className="w-full text-xs bg-background border border-border rounded px-2 py-1.5 outline-none focus:border-primary text-foreground" placeholder="0" />
+                </div>
+                <div>
+                  <label className="text-xs text-muted-foreground mb-1 block">Préservation des pneus</label>
+                  <input type="number" value={newProject.preservation} onChange={e => setNewProject(p => ({...p, preservation: e.target.value}))} className="w-full text-xs bg-background border border-border rounded px-2 py-1.5 outline-none focus:border-primary text-foreground" placeholder="0" />
+                </div>
+                <div>
+                  <label className="text-xs text-muted-foreground mb-1 block">Refroidissement du moteur</label>
+                  <input type="number" value={newProject.refroidissement} onChange={e => setNewProject(p => ({...p, refroidissement: e.target.value}))} className="w-full text-xs bg-background border border-border rounded px-2 py-1.5 outline-none focus:border-primary text-foreground" placeholder="0" />
+                </div>
+                <div>
+                  <label className="text-xs text-muted-foreground mb-1 block">Poids excédentaire totale</label>
+                  <input type="number" value={newProject.poids} onChange={e => setNewProject(p => ({...p, poids: e.target.value}))} className="w-full text-xs bg-background border border-border rounded px-2 py-1.5 outline-none focus:border-primary text-foreground" placeholder="0" />
+                </div>
+              </div>
+            </div>
+            <div className="flex gap-2 justify-end">
+              <button onClick={() => setShowNewProject(false)} className="text-xs text-muted-foreground hover:text-foreground px-3 py-1.5">Annuler</button>
+              <button
+                onClick={() => {
+                  if (!newProject.atr) return;
+                  const projectData = { atr: newProject.atr, part: newProject.part, vitesseMax: newProject.vitesseMax, acceleration: newProject.acceleration, drs: newProject.drs, faibleVitesse: newProject.faibleVitesse, vitesseMoyenne: newProject.vitesseMoyenne, grandeVitesse: newProject.grandeVitesse, dirtyAir: newProject.dirtyAir, preservation: newProject.preservation, refroidissement: newProject.refroidissement, poids: newProject.poids };
+                  setProjects(prev => [...prev, projectData]);
+                  addProjectGains(projectData);
+                  setNewProject({ atr: "", part: "", vitesseMax: "", acceleration: "", drs: "", faibleVitesse: "", vitesseMoyenne: "", grandeVitesse: "", dirtyAir: "", preservation: "", refroidissement: "", poids: "" });
+                  setShowNewProject(false);
+                }}
+                className="text-xs bg-primary text-primary-foreground px-3 py-1.5 rounded-lg font-medium hover:bg-primary/90 transition-colors"
+              >
+                Ajouter
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
+
       {/* Development Timeline */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -124,63 +318,56 @@ export default function PerformancePage() {
                     </button>
                   </div>
                   <div className="flex flex-wrap gap-1.5 mt-2">
-                    {update.parts.map(part => (
+                    {(Array.isArray(update.parts) ? update.parts : [update.part]).map(part => (
                       <span key={part} className="text-xs px-2 py-0.5 rounded bg-secondary text-secondary-foreground">
                         {part}
                       </span>
                     ))}
                   </div>
+                  {(() => {
+                    const gainsAttendus = (
+                      (parseFloat(update.vitesseMax) || 0) +
+                      (parseFloat(update.acceleration) || 0) +
+                      (parseFloat(update.drs) || 0) +
+                      (parseFloat(update.faibleVitesse) || 0) +
+                      (parseFloat(update.vitesseMoyenne) || 0) +
+                      (parseFloat(update.grandeVitesse) || 0) +
+                      (parseFloat(update.dirtyAir) || 0) +
+                      (parseFloat(update.preservation) || 0) +
+                      (parseFloat(update.refroidissement) || 0) +
+                      (parseFloat(update.poids) || 0)
+                    ).toFixed(2);
+                    return (
+                      <div className="mt-3 relative group">
+                        <div className="p-2 rounded bg-green-500/10 border border-green-500/30 cursor-pointer">
+                          <div className="text-xs text-muted-foreground mb-1">Gains attendus</div>
+                          <div className="text-lg font-bold text-green-400">{gainsAttendus}</div>
+                        </div>
+                        {/* Tooltip */}
+                        <div className="absolute left-0 bottom-full mb-2 w-64 p-3 rounded-lg bg-card border border-border shadow-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none group-hover:pointer-events-auto z-50">
+                          <div className="text-xs font-semibold text-muted-foreground mb-2">Détail des gains</div>
+                          <div className="space-y-1 text-xs">
+                            {update.vitesseMax && <div className="flex justify-between"><span>Vitesse max:</span><span className="text-green-400">{update.vitesseMax}</span></div>}
+                            {update.acceleration && <div className="flex justify-between"><span>Accélération:</span><span className="text-green-400">{update.acceleration}</span></div>}
+                            {update.drs && <div className="flex justify-between"><span>Efficacité DRS:</span><span className="text-green-400">{update.drs}</span></div>}
+                            {update.faibleVitesse && <div className="flex justify-between"><span>Faible vitesse:</span><span className="text-green-400">{update.faibleVitesse}</span></div>}
+                            {update.vitesseMoyenne && <div className="flex justify-between"><span>Vitesse moyenne:</span><span className="text-green-400">{update.vitesseMoyenne}</span></div>}
+                            {update.grandeVitesse && <div className="flex justify-between"><span>Grande vitesse:</span><span className="text-green-400">{update.grandeVitesse}</span></div>}
+                            {update.dirtyAir && <div className="flex justify-between"><span>Dirty air:</span><span className="text-green-400">{update.dirtyAir}</span></div>}
+                            {update.preservation && <div className="flex justify-between"><span>Préservation pneus:</span><span className="text-green-400">{update.preservation}</span></div>}
+                            {update.refroidissement && <div className="flex justify-between"><span>Refroidissement:</span><span className="text-green-400">{update.refroidissement}</span></div>}
+                            {update.poids && <div className="flex justify-between"><span>Poids excédentaire:</span><span className="text-green-400">{update.poids}</span></div>}
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })()}
                 </div>
               </motion.div>
             ))}
           </div>
         </div>
       </motion.div>
-
-      {/* Nouveau Projet */}
-      <div className="my-6 flex flex-col items-start gap-4">
-        <button
-          onClick={() => setShowNewProject(v => !v)}
-          className="flex items-center gap-1.5 text-xs bg-primary/10 text-primary hover:bg-primary/20 transition-colors px-3 py-1.5 rounded-lg font-medium"
-        >
-          <PlusIcon className="w-3 h-3" />
-          Nouveau projet
-        </button>
-        {showNewProject && (
-          <div className="w-full p-4 rounded-lg border border-border bg-card flex flex-col gap-3">
-            <div className="grid grid-cols-2 gap-3">
-              <div>
-                <label className="text-xs text-muted-foreground mb-1 block">ATR</label>
-                <input value={newProject.atr} onChange={e => setNewProject(p => ({...p, atr: e.target.value}))} className="w-full text-xs bg-background border border-border rounded px-2 py-1.5 outline-none focus:border-primary text-foreground" placeholder="ex: ATR-08" />
-              </div>
-              <div>
-                <label className="text-xs text-muted-foreground mb-1 block">Course</label>
-                <input value={newProject.race} onChange={e => setNewProject(p => ({...p, race: e.target.value}))} className="w-full text-xs bg-background border border-border rounded px-2 py-1.5 outline-none focus:border-primary text-foreground" placeholder="ex: Monaco" />
-              </div>
-            </div>
-            <div>
-              <label className="text-xs text-muted-foreground mb-1 block">Pièces (séparées par des virgules)</label>
-              <input value={newProject.parts} onChange={e => setNewProject(p => ({...p, parts: e.target.value}))} className="w-full text-xs bg-background border border-border rounded px-2 py-1.5 outline-none focus:border-primary text-foreground" placeholder="ex: Fond plat, Aileron avant" />
-            </div>
-            <div className="flex gap-2 justify-end">
-              <button onClick={() => setShowNewProject(false)} className="text-xs text-muted-foreground hover:text-foreground px-3 py-1.5">Annuler</button>
-              <button
-                onClick={() => {
-                  if (!newProject.atr) return;
-                  setProjects(prev => [...prev, { atr: newProject.atr, race: newProject.race, parts: newProject.parts.split(",").map(p => p.trim()).filter(Boolean) }]);
-                  setNewProject({ atr: "", race: "", parts: "" });
-                  setShowNewProject(false);
-                }}
-                className="text-xs bg-primary text-primary-foreground px-3 py-1.5 rounded-lg font-medium hover:bg-primary/90 transition-colors"
-              >
-                Ajouter
-              </button>
-            </div>
-          </div>
-        )}
-      </div>
-
-      <AtrCalTable data={atrData} setData={setAtrData} title="Prédiction Performance" />
     </div>
   );
 }
@@ -188,7 +375,7 @@ export default function PerformancePage() {
 function AtrCalTable({ data, setData, title = "Calibration ATR" }) {
   const reset = () => setData(initialSections.map(s => ({
     ...s,
-    rows: s.rows.map(r => ({ ...r, v1: "", moyenne: "", delta: "", cd: "", deltaCD: "" })),
+    rows: s.rows.map(r => ({ ...r, v1: "", moyenne: "", delta: "", cd: "", deltaCD: "", gainsAttendus: "" })),
   })));
 
   const update = (si, ri, field, val) => {
@@ -200,15 +387,15 @@ function AtrCalTable({ data, setData, title = "Calibration ATR" }) {
 
   const cellCls = "w-full text-center text-xs font-mono bg-transparent border border-transparent focus:border-primary rounded px-1 py-1 outline-none transition-colors text-foreground";
 
-  const calcDelta = (v1, moyenne) => {
-    const a = parseFloat(v1), b = parseFloat(moyenne);
-    if (isNaN(a) || isNaN(b)) return "";
-    return (a - b).toFixed(3);
+  const calcDelta = (v1, gainsAttendus, moyenne) => {
+    const a = parseFloat(v1) || 0, b = parseFloat(gainsAttendus) || 0, c = parseFloat(moyenne);
+    if (isNaN(c)) return "";
+    return (a + b - c).toFixed(3);
   };
 
   // Compute all deltas and find the 3 smallest values
   const allDeltas = data.flatMap(s => s.rows.map(r => {
-    const d = calcDelta(r.v1, r.moyenne);
+    const d = calcDelta(r.v1, r.gainsAttendus, r.moyenne);
     return d !== "" ? parseFloat(d) : null;
   })).filter(v => v !== null);
   allDeltas.sort((a, b) => a - b);
@@ -232,7 +419,7 @@ function AtrCalTable({ data, setData, title = "Calibration ATR" }) {
       {threshold3 !== null && (() => {
         const worst = [];
         data.forEach(s => s.rows.forEach(r => {
-          const d = calcDelta(r.v1, r.moyenne);
+          const d = calcDelta(r.v1, r.gainsAttendus, r.moyenne);
           if (d !== "") worst.push({ label: r.label, delta: parseFloat(d) });
         }));
         worst.sort((a, b) => a.delta - b.delta);
@@ -255,11 +442,10 @@ function AtrCalTable({ data, setData, title = "Calibration ATR" }) {
         <thead>
           <tr className="text-muted-foreground">
             <th className="text-left py-2 px-2 font-medium w-48"></th>
-            <th className="py-2 px-2 font-medium">V1</th>
+            <th className="py-2 px-2 font-medium">Monoplace</th>
+            <th className="py-2 px-2 font-medium text-green-400">Gains Attendus</th>
             <th className="py-2 px-2 font-medium">Concurrent Direct</th>
             <th className="py-2 px-2 font-medium text-yellow-400">Δ Déficit</th>
-
-
           </tr>
         </thead>
         <tbody>
@@ -273,20 +459,36 @@ function AtrCalTable({ data, setData, title = "Calibration ATR" }) {
               {section.rows.map((row, ri) => (
                 <tr key={row.label} className="hover:bg-secondary/30 transition-colors">
                   <td className="py-1.5 px-2 text-muted-foreground">{row.label}</td>
-                  {["v1", "moyenne"].map(field => (
-                    <td key={field} className="py-1 px-1">
-                      <input
-                        type="number"
-                        value={row[field]}
-                        onChange={e => update(si, ri, field, e.target.value)}
-                        className={cellCls}
-                        placeholder="0"
-                      />
-                    </td>
-                  ))}
+                  <td className="py-1 px-1">
+                    <input
+                      type="number"
+                      value={row.v1}
+                      onChange={e => update(si, ri, "v1", e.target.value)}
+                      className={cellCls}
+                      placeholder="0"
+                    />
+                  </td>
+                  <td className="py-1 px-1">
+                    <input
+                      type="number"
+                      value={row.gainsAttendus}
+                      onChange={e => update(si, ri, "gainsAttendus", e.target.value)}
+                      className={cellCls}
+                      placeholder="0"
+                    />
+                  </td>
+                  <td className="py-1 px-1">
+                    <input
+                      type="number"
+                      value={row.moyenne}
+                      onChange={e => update(si, ri, "moyenne", e.target.value)}
+                      className={cellCls}
+                      placeholder="0"
+                    />
+                  </td>
                   <td className="py-1 px-2">
                     {(() => {
-                      const delta = calcDelta(row.v1, row.moyenne);
+                      const delta = calcDelta(row.v1, row.gainsAttendus, row.moyenne);
                       if (delta === "") return null;
                       const val = parseFloat(delta);
                       const isNeg = val < 0;
@@ -306,8 +508,6 @@ function AtrCalTable({ data, setData, title = "Calibration ATR" }) {
                       );
                     })()}
                   </td>
-
-
                 </tr>
               ))}
             </>

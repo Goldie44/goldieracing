@@ -1,3 +1,12 @@
+
+
+
+
+
+
+
+
+
 import { createContext, useContext, useEffect, useState } from "react";
 import { budgetSections, totalBudget as initialTotalBudget } from "./f1Data";
 

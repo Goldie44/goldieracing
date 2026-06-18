@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(timeout 20 curl -sI https://registry.npmjs.org)",
+      "Bash(timeout 120 npx -y playwright install chromium --with-deps)",
+      "Bash(npx -y playwright@latest node __verify_nav_order.cjs)",
+      "Bash(node -e \"require.resolve\\('playwright'\\)\")",
+      "Bash(mkdir -p /tmp/pw-runner)",
+      "Read(//tmp/**)",
+      "Bash(npm init *)",
+      "Bash(npm install *)",
+      "Bash(cp \"e:/Documents/Projet perso/goldie-racing/apps/web/__verify_nav_order.cjs\" /tmp/pw-runner/verify.cjs)",
+      "Bash(node verify.cjs)",
+      "Bash(npx playwright *)"
+    ]
+  }
+}

@@ -32,7 +32,7 @@ const ATR_STORAGE_KEY = "goldie-racing:atr-data";
 
 const createDefaultData = () => initialSections.map(s => ({
   ...s,
-  rows: s.rows.map(r => ({ ...r, v1: "", moyenne: "", delta: "", cd: "", deltaCD: "" })),
+  rows: s.rows.map(r => ({ ...r, v1: "", moyenne: "", delta: "", cd: "", deltaCD: "", gainsAttendus: "" })),
 }));
 
 const loadStoredAtrData = () => {
