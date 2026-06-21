@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import {
   MapPinIcon,
   BoltIcon,
@@ -297,8 +297,10 @@ export default function StrategyPage() {
   const [store, setStore] = useState<StrategyStore>(loadStore);
   const [selectedId, setSelectedId] = useState<number | null>(null);
   const [showPanel, setShowPanel] = useState(false); // mobile only
+  const isMounted = useRef(false);
 
   useEffect(() => {
+    if (!isMounted.current) { isMounted.current = true; return; }
     try {
       window.localStorage.setItem(STORAGE_KEY, JSON.stringify(store));
     } catch (error) {
