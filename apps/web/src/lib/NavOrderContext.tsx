@@ -3,6 +3,7 @@ import {
   BeakerIcon,
   CalendarDaysIcon,
   ChartBarIcon,
+  Cog6ToothIcon,
   CubeIcon,
   FlagIcon,
   Squares2X2Icon,
@@ -10,6 +11,12 @@ import {
 } from "@heroicons/react/24/outline";
 
 const NAV_ORDER_STORAGE_KEY = "goldie-racing:nav-order";
+
+export const settingsNavItem = {
+  path: "/settings",
+  icon: Cog6ToothIcon,
+  label: "Paramètres",
+};
 
 const navItemsSource = [
   { path: "/", icon: Squares2X2Icon, label: "Dashboard" },
@@ -60,7 +67,13 @@ const loadStoredOrder = () => {
   }
 };
 
-const NavOrderContext = createContext(null);
+type NavOrderContextValue = {
+  orderedItems: typeof navItemsSource;
+  reorder: (from: number, to: number) => void;
+  settingsItem: typeof settingsNavItem;
+};
+
+const NavOrderContext = createContext<NavOrderContextValue>(null!);
 
 export function NavOrderProvider({ children }) {
   const [orderedItems, setOrderedItems] = useState(loadStoredOrder);
@@ -96,7 +109,7 @@ export function NavOrderProvider({ children }) {
   };
 
   return (
-    <NavOrderContext.Provider value={{ orderedItems, reorder }}>
+    <NavOrderContext.Provider value={{ orderedItems, reorder, settingsItem: settingsNavItem }}>
       {children}
     </NavOrderContext.Provider>
   );

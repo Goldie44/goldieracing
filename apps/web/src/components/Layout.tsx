@@ -1,21 +1,20 @@
-import { Outlet, useLocation } from "react-router-dom";
+import { Link, Outlet, useLocation } from "react-router-dom";
 import {
   Bars3Icon,
   FlagIcon,
-  PencilIcon,
   XMarkIcon,
 } from "@heroicons/react/24/outline";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavOrder } from "@/lib/NavOrderContext";
+import { useProfile } from "@/lib/ProfileContext";
 import NavList from "@/components/NavList";
 
 export default function Layout() {
   const location = useLocation();
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [isEditMode, setIsEditMode] = useState(false);
-  const [isMobileEditMode, setIsMobileEditMode] = useState(false);
-  const { orderedItems, reorder } = useNavOrder();
+  const { orderedItems, reorder, settingsItem } = useNavOrder();
+  const { teamName } = useProfile();
 
   return (
     <div className="min-h-screen flex bg-background">
@@ -28,7 +27,7 @@ export default function Layout() {
             </div>
             <div>
               <h1 className="text-lg font-bold text-primary tracking-tight">F1 Manager</h1>
-              <p className="text-xs text-muted-foreground font-mono"></p>
+              <p className="text-xs text-muted-foreground font-mono">{teamName}</p>
             </div>
           </div>
         </div>
@@ -36,26 +35,29 @@ export default function Layout() {
           <NavList
             items={orderedItems}
             activePath={location.pathname}
-            isEditMode={isEditMode}
+            isEditMode={false}
             droppableId="desktop-nav"
             onReorder={reorder}
             onItemClick={undefined}
           />
         </nav>
         <div className="p-4 border-t border-border space-y-2">
-          <button
-            onClick={() => setIsEditMode(prev => !prev)}
-            className={`w-full flex items-center justify-center gap-2 px-3 py-2 rounded-lg text-xs font-medium transition-all ${
-              isEditMode
+          <Link
+            to={settingsItem.path}
+            className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 ${
+              location.pathname === settingsItem.path
                 ? "bg-primary/10 text-primary"
                 : "text-muted-foreground hover:text-foreground hover:bg-secondary"
             }`}
           >
-            <PencilIcon className="w-3.5 h-3.5" />
-            {isEditMode ? "Terminer" : "Modifier l'ordre"}
-          </button>
+            <settingsItem.icon className="w-4 h-4" />
+            {settingsItem.label}
+            {location.pathname === settingsItem.path && (
+              <div className="ml-auto w-1.5 h-1.5 rounded-full bg-primary" />
+            )}
+          </Link>
           <div className="text-xs text-muted-foreground font-mono text-center">
-            // nom dev
+            <p>Version 1.0.0</p>
           </div>
         </div>
       </aside>
@@ -95,23 +97,24 @@ export default function Layout() {
                 <NavList
                   items={orderedItems}
                   activePath={location.pathname}
-                  isEditMode={isMobileEditMode}
+                  isEditMode={false}
                   droppableId="mobile-nav"
                   onReorder={reorder}
                   onItemClick={() => setMobileOpen(false)}
                 />
+                <Link
+                  to={settingsItem.path}
+                  onClick={() => setMobileOpen(false)}
+                  className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 ${
+                    location.pathname === settingsItem.path
+                      ? "bg-primary/10 text-primary"
+                      : "text-muted-foreground hover:text-foreground hover:bg-secondary"
+                  }`}
+                >
+                  <settingsItem.icon className="w-4 h-4" />
+                  {settingsItem.label}
+                </Link>
               </div>
-              <button
-                onClick={() => setIsMobileEditMode(prev => !prev)}
-                className={`flex items-center justify-center gap-2 px-3 py-2 rounded-lg text-xs font-medium transition-all ${
-                  isMobileEditMode
-                    ? "bg-primary/10 text-primary"
-                    : "text-muted-foreground hover:text-foreground hover:bg-secondary"
-                }`}
-              >
-                <PencilIcon className="w-3.5 h-3.5" />
-                {isMobileEditMode ? "Terminer" : "Modifier l'ordre"}
-              </button>
             </motion.nav>
           </motion.div>
         )}
