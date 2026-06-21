@@ -8,40 +8,43 @@
   :root {
     --font-inter: 'Inter', sans-serif;
     --font-mono: 'JetBrains Mono', monospace;
+    --app-font-family: 'Inter', sans-serif;
+    --app-font-size: 15px;
 
-    --background: 220 15% 6%;
-    --foreground: 40 20% 95%;
-    --card: 220 14% 9%;
-    --card-foreground: 40 20% 95%;
-    --popover: 220 14% 9%;
-    --popover-foreground: 40 20% 95%;
-    --primary: 43 96% 56%;
-    --primary-foreground: 220 15% 6%;
-    --secondary: 220 12% 14%;
-    --secondary-foreground: 40 20% 90%;
-    --muted: 220 12% 14%;
-    --muted-foreground: 220 10% 50%;
+    /* Light theme */
+    --background: 0 0% 97%;
+    --foreground: 220 15% 10%;
+    --card: 0 0% 100%;
+    --card-foreground: 220 15% 10%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 15% 10%;
+    --primary: 43 96% 45%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 220 12% 90%;
+    --secondary-foreground: 220 15% 20%;
+    --muted: 220 12% 92%;
+    --muted-foreground: 220 10% 45%;
     --accent: 0 72% 51%;
     --accent-foreground: 0 0% 100%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
-    --border: 220 12% 16%;
-    --input: 220 12% 16%;
-    --ring: 43 96% 56%;
-    --chart-1: 43 96% 56%;
+    --border: 220 12% 84%;
+    --input: 220 12% 84%;
+    --ring: 43 96% 45%;
+    --chart-1: 43 96% 45%;
     --chart-2: 0 72% 51%;
     --chart-3: 210 60% 50%;
     --chart-4: 150 60% 45%;
     --chart-5: 280 60% 55%;
     --radius: 0.75rem;
-    --sidebar-background: 220 14% 9%;
-    --sidebar-foreground: 40 20% 90%;
-    --sidebar-primary: 43 96% 56%;
-    --sidebar-primary-foreground: 220 15% 6%;
-    --sidebar-accent: 220 12% 14%;
-    --sidebar-accent-foreground: 40 20% 90%;
-    --sidebar-border: 220 12% 16%;
-    --sidebar-ring: 43 96% 56%;
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 220 15% 20%;
+    --sidebar-primary: 43 96% 45%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 220 12% 90%;
+    --sidebar-accent-foreground: 220 15% 20%;
+    --sidebar-border: 220 12% 84%;
+    --sidebar-ring: 43 96% 45%;
   }
 
   .dark {
@@ -77,6 +80,8 @@
     --sidebar-accent-foreground: 40 20% 90%;
     --sidebar-border: 220 12% 16%;
     --sidebar-ring: 43 96% 56%;
+    --app-font-family: 'Inter', sans-serif;
+    --app-font-size: 15px;
   }
 }
 
@@ -85,7 +90,9 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground font-inter;
+    @apply bg-background text-foreground;
+    font-family: var(--app-font-family);
+    font-size: var(--app-font-size);
   }
 }
 
