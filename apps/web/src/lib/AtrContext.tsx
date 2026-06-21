@@ -69,6 +69,8 @@ const AtrContext = createContext(null);
 export function AtrProvider({ children }) {
   const [atrData, setAtrData] = useState(loadStoredAtrData);
 
+  const reset = () => setAtrData(createDefaultData());
+
   useEffect(() => {
     try {
       window.localStorage.setItem(ATR_STORAGE_KEY, JSON.stringify(atrData));
@@ -78,7 +80,7 @@ export function AtrProvider({ children }) {
   }, [atrData]);
 
   return (
-    <AtrContext.Provider value={{ atrData, setAtrData, initialSections }}>
+    <AtrContext.Provider value={{ atrData, setAtrData, initialSections, reset }}>
       {children}
     </AtrContext.Provider>
   );

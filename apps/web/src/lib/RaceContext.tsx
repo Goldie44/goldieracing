@@ -5,6 +5,7 @@ type RaceState = Record<string, boolean>;
 type RaceContextValue = {
   done: RaceState;
   toggle: (id: string | number) => void;
+  reset: () => void;
 };
 
 const RACE_STORAGE_KEY = "goldie-racing:race-done";
@@ -12,6 +13,7 @@ const RACE_STORAGE_KEY = "goldie-racing:race-done";
 const RaceContext = createContext<RaceContextValue>({
   done: {},
   toggle: () => undefined,
+  reset: () => undefined,
 });
 
 export function RaceProvider({ children }: { children: ReactNode }) {
@@ -26,6 +28,8 @@ export function RaceProvider({ children }: { children: ReactNode }) {
   const toggle = (id: string | number) =>
     setDone(prev => ({ ...prev, [String(id)]: !prev[String(id)] }));
 
+  const reset = () => setDone({});
+
   useEffect(() => {
     try {
       window.localStorage.setItem(RACE_STORAGE_KEY, JSON.stringify(done));
@@ -33,7 +37,7 @@ export function RaceProvider({ children }: { children: ReactNode }) {
   }, [done]);
 
   return (
-    <RaceContext.Provider value={{ done, toggle }}>
+    <RaceContext.Provider value={{ done, toggle, reset }}>
       {children}
     </RaceContext.Provider>
   );
