@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState, ReactNode } from "react";
 
 const initialSections = [
   {
@@ -35,6 +35,13 @@ const createDefaultData = () => initialSections.map(s => ({
   rows: s.rows.map(r => ({ ...r, v1: "", moyenne: "", delta: "", cd: "", deltaCD: "", gainsAttendus: "" })),
 }));
 
+type AtrContextValue = {
+  atrData: ReturnType<typeof createDefaultData>;
+  setAtrData: (data: ReturnType<typeof createDefaultData>) => void;
+  initialSections: typeof initialSections;
+  reset: () => void;
+};
+
 const loadStoredAtrData = () => {
   if (typeof window === "undefined") return createDefaultData();
 
@@ -64,9 +71,9 @@ const loadStoredAtrData = () => {
   }
 };
 
-const AtrContext = createContext(null);
+const AtrContext = createContext<AtrContextValue | null>(null);
 
-export function AtrProvider({ children }) {
+export function AtrProvider({ children }: { children: ReactNode }) {
   const [atrData, setAtrData] = useState(loadStoredAtrData);
 
   const reset = () => setAtrData(createDefaultData());
@@ -86,8 +93,10 @@ export function AtrProvider({ children }) {
   );
 }
 
-export function useAtr() {
-  return useContext(AtrContext);
+export function useAtr(): AtrContextValue {
+  const context = useContext(AtrContext);
+  if (!context) throw new Error("useAtr must be used within AtrProvider");
+  return context;
 }
 
 export { initialSections };
