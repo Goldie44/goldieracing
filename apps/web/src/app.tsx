@@ -14,7 +14,6 @@ import { AtrProvider } from './lib/AtrContext';
 import { RaceProvider } from './lib/RaceContext';
 import { NavOrderProvider } from './lib/NavOrderContext';
 import RDPage from './pages/RDPage';
-import StrategyPage from './pages/StrategyPage';
 
 function App() {
   return (
@@ -32,7 +31,6 @@ function App() {
                     <Route path="/performance" element={<PerformancePage />} />
                     <Route path="/budget" element={<BudgetPage />} />
                     <Route path="/rd" element={<RDPage />} />
-                    <Route path="/strategy" element={<StrategyPage />} />
                     <Route path="*" element={<PageNotFound />} />
                   </Route>
                 </Routes>
