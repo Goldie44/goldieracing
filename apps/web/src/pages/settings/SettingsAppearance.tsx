@@ -54,6 +54,7 @@ export default function SettingsAppearance() {
     accentHex, setAccentHex,
     fontFamily, setFontFamily,
     fontSize, setFontSize,
+    fontColor, setFontColor,
     bgImage, setBgImage,
     bgOpacity, setBgOpacity,
     bgBlur, setBgBlur,
@@ -125,8 +126,17 @@ export default function SettingsAppearance() {
               <option key={s.value} value={s.value}>{s.label}</option>
             ))}
           </select>
+          <label className="flex items-center gap-2 cursor-pointer" title="Couleur du texte">
+            <span className="text-xs text-muted-foreground">Couleur</span>
+            <input
+              type="color"
+              value={`#${fontColor}`}
+              onChange={(e) => setFontColor(e.target.value.slice(1))}
+              className="w-8 h-8 rounded cursor-pointer border border-border bg-transparent p-0.5"
+            />
+          </label>
         </div>
-        <p className="mt-3 text-muted-foreground" style={{ fontFamily, fontSize }}>
+        <p className="mt-3" style={{ fontFamily, fontSize, color: `#${fontColor}` }}>
           Aperçu — F1 Manager 2023 · Goldie Racing
         </p>
       </div>

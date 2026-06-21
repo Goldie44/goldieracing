@@ -3,6 +3,7 @@ import { createContext, useContext, useEffect, useState, type ReactNode } from "
 const ACCENT_KEY = "goldie-racing:accent-color";
 const FONT_FAMILY_KEY = "goldie-racing:font-family";
 const FONT_SIZE_KEY = "goldie-racing:font-size";
+const FONT_COLOR_KEY = "goldie-racing:font-color";
 const BG_IMAGE_KEY = "goldie-racing:bg-image";
 const BG_OPACITY_KEY = "goldie-racing:bg-opacity";
 const BG_BLUR_KEY = "goldie-racing:bg-blur";
@@ -14,6 +15,8 @@ type AppearanceContextValue = {
   setFontFamily: (f: string) => void;
   fontSize: string;
   setFontSize: (s: string) => void;
+  fontColor: string;
+  setFontColor: (hex: string) => void;
   bgImage: string | null;
   setBgImage: (img: string | null) => void;
   bgOpacity: number;
@@ -56,6 +59,10 @@ function applyFont(family: string, size: string) {
   root.style.setProperty("--app-font-size", size);
 }
 
+function applyFontColor(hex: string) {
+  document.documentElement.style.setProperty("--foreground", hexToHsl(hex));
+}
+
 export function AppearanceProvider({ children }: { children: ReactNode }) {
   const [accentHex, setAccentHexState] = useState(() =>
     localStorage.getItem(ACCENT_KEY) ?? "f59e0b"
@@ -65,6 +72,9 @@ export function AppearanceProvider({ children }: { children: ReactNode }) {
   );
   const [fontSize, setFontSizeState] = useState(() =>
     localStorage.getItem(FONT_SIZE_KEY) ?? "15px"
+  );
+  const [fontColor, setFontColorState] = useState(() =>
+    localStorage.getItem(FONT_COLOR_KEY) ?? "e2e8f0"
   );
   const [bgImage, setBgImageState] = useState<string | null>(() =>
     localStorage.getItem(BG_IMAGE_KEY)
@@ -78,6 +88,7 @@ export function AppearanceProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => { applyAccent(accentHex); }, [accentHex]);
   useEffect(() => { applyFont(fontFamily, fontSize); }, [fontFamily, fontSize]);
+  useEffect(() => { applyFontColor(fontColor); }, [fontColor]);
 
   const setAccentHex = (hex: string) => {
     setAccentHexState(hex);
@@ -90,6 +101,10 @@ export function AppearanceProvider({ children }: { children: ReactNode }) {
   const setFontSize = (s: string) => {
     setFontSizeState(s);
     try { localStorage.setItem(FONT_SIZE_KEY, s); } catch {}
+  };
+  const setFontColor = (hex: string) => {
+    setFontColorState(hex);
+    try { localStorage.setItem(FONT_COLOR_KEY, hex); } catch {}
   };
   const setBgImage = (img: string | null) => {
     setBgImageState(img);
@@ -112,6 +127,7 @@ export function AppearanceProvider({ children }: { children: ReactNode }) {
       accentHex, setAccentHex,
       fontFamily, setFontFamily,
       fontSize, setFontSize,
+      fontColor, setFontColor,
       bgImage, setBgImage,
       bgOpacity, setBgOpacity,
       bgBlur, setBgBlur,
