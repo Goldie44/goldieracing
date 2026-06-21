@@ -4,6 +4,7 @@ import {
   CalendarDaysIcon,
   ChartBarIcon,
   CubeIcon,
+  FlagIcon,
   Squares2X2Icon,
   WalletIcon,
 } from "@heroicons/react/24/outline";
@@ -17,6 +18,7 @@ const navItemsSource = [
   { path: "/performance", icon: ChartBarIcon, label: "Performance" },
   { path: "/budget", icon: WalletIcon, label: "Budget" },
   { path: "/rd", icon: BeakerIcon, label: "R&D" },
+  { path: "/strategy", icon: FlagIcon, label: "Stratégie" },
 ];
 
 const mergeOrder = savedPaths => {
