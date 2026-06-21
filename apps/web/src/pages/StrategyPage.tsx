@@ -1,5 +1,16 @@
 import { useState, useMemo } from "react";
+import { ArrowPathIcon } from "@heroicons/react/24/outline";
 import PageHeader from "../components/PageHeader";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+  DialogClose,
+} from "../components/ui/dialog";
+import { Button } from "../components/ui/button";
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -230,9 +241,17 @@ function NumInput({
   );
 }
 
+const ZERO_PARAMS: RaceParams = { totalLaps: 0, pitDelta: 0 };
+const ZERO_TIRE_DATA: Record<Compound, TireData> = {
+  soft:   { baseLapTime: 0, degradation: 0, maxLaps: 0 },
+  medium: { baseLapTime: 0, degradation: 0, maxLaps: 0 },
+  hard:   { baseLapTime: 0, degradation: 0, maxLaps: 0 },
+};
+
 export default function StrategyPage() {
-  const [params, setParams] = useState<RaceParams>(DEFAULT_PARAMS);
-  const [tireData, setTireData] = useState<Record<Compound, TireData>>(DEFAULT_TIRE_DATA);
+  const [params, setParams] = useState<RaceParams>(ZERO_PARAMS);
+  const [tireData, setTireData] = useState<Record<Compound, TireData>>(ZERO_TIRE_DATA);
+  const [resetDialogOpen, setResetDialogOpen] = useState(false);
 
   const setParam = <K extends keyof RaceParams>(k: K, v: RaceParams[K]) =>
     setParams((p) => ({ ...p, [k]: v }));
@@ -246,6 +265,36 @@ export default function StrategyPage() {
   return (
     <div>
       <PageHeader title="Stratégie" subtitle="Optimisation pneumatique" />
+
+      <div className="flex justify-end mt-6 mb-2">
+        <Button
+          variant="destructive"
+          className="flex items-center gap-1.5"
+          onClick={() => setResetDialogOpen(true)}
+        >
+          <ArrowPathIcon className="w-4 h-4" />
+          Tout réinitialiser
+        </Button>
+      </div>
+
+      <Dialog open={resetDialogOpen} onOpenChange={setResetDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Réinitialiser la Stratégie ?</DialogTitle>
+            <DialogDescription>
+              Cette action remettra tous les paramètres de course et les données pneus à zéro. Cette action est irréversible.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button variant="destructive" onClick={() => { setParams(ZERO_PARAMS); setTireData(ZERO_TIRE_DATA); setResetDialogOpen(false); }}>
+              Confirmer la réinitialisation
+            </Button>
+            <DialogClose asChild>
+              <Button type="button" variant="secondary">Annuler</Button>
+            </DialogClose>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       {/* Paramètres */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
