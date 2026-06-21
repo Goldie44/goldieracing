@@ -2,6 +2,7 @@ import { useRef, useState } from "react";
 import { useBudget } from "@/lib/BudgetContext";
 import { useRace } from "@/lib/RaceContext";
 import { useAtr } from "@/lib/AtrContext";
+import { useProfile } from "@/lib/ProfileContext";
 import SaveSlot, { type SaveSlotData } from "@/components/SaveSlot";
 import {
   AlertDialog, AlertDialogAction, AlertDialogCancel,
@@ -25,6 +26,7 @@ function persistSlots(slots: SaveSlotData[]) {
 }
 
 export default function SettingsData() {
+  const { teamName, setTeamName } = useProfile();
   const { sections, totalBudget, setSections, setTotalBudget, reset: resetBudget } = useBudget();
   const { done, reset: resetRace } = useRace();
   const { atrData, setAtrData, reset: resetAtr } = useAtr();
@@ -43,6 +45,7 @@ export default function SettingsData() {
       name: `Sauvegarde ${new Date().toLocaleDateString("fr-FR")}`,
       createdAt: new Date().toISOString(),
       data: {
+        teamName,
         budget: { sections: structuredClone(sections), totalBudget },
         race: { done: structuredClone(done) },
         atr: structuredClone(atrData),
@@ -52,6 +55,7 @@ export default function SettingsData() {
   };
 
   const handleLoad = (slot: SaveSlotData) => {
+    if (slot.data.teamName) setTeamName(slot.data.teamName);
     setSections(slot.data.budget.sections as typeof sections);
     setTotalBudget(slot.data.budget.totalBudget);
     localStorage.setItem("goldie-racing:race-done", JSON.stringify(slot.data.race.done));

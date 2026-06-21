@@ -22,7 +22,12 @@
       "Bash(git pull *)",
       "Bash(git stash *)",
       "Bash(git merge *)",
-      "Bash(python -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\(json.dumps\\(d.get\\('build', 'no build config'\\), indent=2\\)\\)\")"
+      "Bash(python -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\(json.dumps\\(d.get\\('build', 'no build config'\\), indent=2\\)\\)\")",
+      "Bash(python3 -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\(d.get\\('scripts',{}\\).get\\('install','none'\\)\\); print\\(d.get\\('binary','none'\\)\\)\")",
+      "Bash(node -e \"const d=require\\('./apps/app/node_modules/better-sqlite3/package.json'\\); console.log\\(JSON.stringify\\({install: d.scripts?.install, binary: d.binary}, null, 2\\)\\)\")",
+      "PowerShell($electronPath = \"E:\\\\Documents\\\\Projet perso\\\\goldie-racing\\\\node_modules\\\\.pnpm\\\\electron@42.0.0\\\\node_modules\\\\electron\\\\dist\\\\electron.exe\"; & $electronPath --version 2>&1)",
+      "Bash(cd /e/Documents && ls -la \"Projet perso/goldie-racing\")",
+      "Read(//e/Documents/**)"
     ]
   }
 }

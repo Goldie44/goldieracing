@@ -69,7 +69,7 @@ export default function Layout() {
             )}
           </Link>
           <div className="text-xs text-muted-foreground font-mono text-center">
-            <p>Version 1.0.0</p>
+            <p>Beta Version 1.5.0</p>
           </div>
         </div>
       </aside>

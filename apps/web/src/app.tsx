@@ -1,7 +1,7 @@
 import { Toaster } from "@/components/ui/toaster"
 import { QueryClientProvider } from '@tanstack/react-query'
 import { queryClientInstance } from '@/lib/query-client'
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { HashRouter as Router, Route, Routes } from 'react-router-dom';
 import PageNotFound from './lib/PageNotFound';
 import Layout from './components/Layout';
 import Dashboard from './pages/Dashboard';
@@ -19,6 +19,7 @@ import { ProfileProvider } from './lib/ProfileContext';
 import RDPage from './pages/RDPage';
 import StrategyPage from './pages/StrategyPage';
 import SettingsPage from './pages/SettingsPage';
+import WelcomeDialog from './components/WelcomeDialog';
 
 function App() {
   return (
@@ -46,6 +47,7 @@ function App() {
                       </Routes>
                     </Router>
                     <Toaster />
+                    <WelcomeDialog />
                   </QueryClientProvider>
                 </AtrProvider>
               </BudgetProvider>

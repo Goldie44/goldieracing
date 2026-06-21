@@ -6,6 +6,7 @@ export type SaveSlotData = {
   name: string;
   createdAt: string; // ISO string
   data: {
+    teamName: string;
     budget: { sections: unknown[]; totalBudget: number };
     race: { done: Record<string, boolean> };
     atr: unknown[];

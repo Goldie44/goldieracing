@@ -4,7 +4,7 @@ import { createBudgetStorage, type BudgetStorage } from './storage';
 
 const isDev = !app.isPackaged;
 const DEV_URL = process.env.WEB_DEV_URL ?? 'http://localhost:5173';
-const PROD_INDEX = path.resolve(__dirname, '../../web/dist/index.html');
+const PROD_INDEX = path.resolve(__dirname, '../../web/index.html');
 
 let mainWindow: BrowserWindow | null = null;
 let budgetStorage: BudgetStorage | null = null;
