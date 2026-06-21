@@ -10,11 +10,12 @@ import {
   ArrowLeftIcon,
 } from "@heroicons/react/24/outline";
 import PageHeader from "../components/PageHeader";
-import { calendar } from "../lib/f1Data";
+import { calendar, tireStrategy } from "../lib/f1Data";
 
 type Compound = "soft" | "medium" | "hard";
 
 type Stint = {
+  id: number;
   compound: Compound;
   lapIn: number;
 };
@@ -30,9 +31,9 @@ type StrategyStore = Record<string, RaceStrategy>;
 const STORAGE_KEY = "goldie-racing:tire-strategy";
 
 const COMPOUND_COLORS: Record<Compound, string> = {
-  soft: "#ef4444",
-  medium: "#eab308",
-  hard: "#e2e8f0",
+  soft: tireStrategy.soft.color,
+  medium: tireStrategy.medium.color,
+  hard: tireStrategy.hard.color,
 };
 
 const COMPOUND_LABELS: Record<Compound, string> = {
@@ -80,7 +81,7 @@ function EditPanel({
   const TypeIcon = typeConf?.icon;
 
   const addStint = () =>
-    onUpdate({ stints: [...strategy.stints, { compound: "medium", lapIn: 0 }] });
+    onUpdate({ stints: [...strategy.stints, { id: Date.now() + Math.random(), compound: "medium", lapIn: 0 }] });
 
   const removeStint = (idx: number) =>
     onUpdate({ stints: strategy.stints.filter((_, i) => i !== idx) });
@@ -159,7 +160,7 @@ function EditPanel({
         <div className="space-y-2">
           {strategy.stints.map((stint, idx) => (
             <div
-              key={idx}
+              key={stint.id}
               className="flex items-center gap-3 bg-muted/20 border border-border rounded-lg px-3 py-2"
             >
               <span className="text-xs text-muted-foreground w-6 font-mono">{idx + 1}.</span>
@@ -300,7 +301,9 @@ export default function StrategyPage() {
   useEffect(() => {
     try {
       window.localStorage.setItem(STORAGE_KEY, JSON.stringify(store));
-    } catch {}
+    } catch (error) {
+      console.error("Unable to save tire strategy", error);
+    }
   }, [store]);
 
   const getStrategy = (id: number): RaceStrategy =>
@@ -309,7 +312,7 @@ export default function StrategyPage() {
   const updateStrategy = (id: number, patch: Partial<RaceStrategy>) => {
     setStore((prev) => ({
       ...prev,
-      [String(id)]: { ...getStrategy(id), ...patch },
+      [String(id)]: { ...(prev[String(id)] ?? defaultStrategy()), ...patch },
     }));
   };
 
