@@ -1,0 +1,175 @@
+<h2>Page Paramètres — Apparence (v7)</h2>
+<p class="subtitle">Zone de drop réduite, sliders en dessous.</p>
+
+<div class="mockup" style="max-width:900px;margin:0 auto;">
+  <div class="mockup-header">⚙️ Paramètres</div>
+  <div class="mockup-body" style="padding:0;">
+
+    <div style="display:flex;border-bottom:1px solid #2a2a3a;background:#13131f;">
+      <div style="padding:12px 20px;font-size:13px;font-weight:600;color:#e040fb;border-bottom:2px solid #e040fb;">🎨 Apparence</div>
+      <div style="padding:12px 20px;font-size:13px;font-weight:500;color:#555;">🏎️ Profil</div>
+      <div style="padding:12px 20px;font-size:13px;font-weight:500;color:#555;">💾 Données</div>
+      <div style="padding:12px 20px;font-size:13px;font-weight:500;color:#555;">🧭 Navigation</div>
+    </div>
+
+    <div style="padding:24px;display:flex;flex-direction:column;gap:32px;">
+
+      <!-- Thème -->
+      <div>
+        <div class="label" style="margin-bottom:10px;">Thème</div>
+        <div style="display:flex;gap:10px;">
+          <div style="padding:8px 20px;border-radius:8px;background:#1e1e2e;border:2px solid #e040fb;font-size:13px;color:#e040fb;">🌙 Sombre</div>
+          <div style="padding:8px 20px;border-radius:8px;background:#1e1e2e;border:1px solid #2a2a3a;font-size:13px;color:#888;">☀️ Clair</div>
+          <div style="padding:8px 20px;border-radius:8px;background:#1e1e2e;border:1px solid #2a2a3a;font-size:13px;color:#888;">💻 Système</div>
+        </div>
+      </div>
+
+      <!-- Couleur d'accent -->
+      <div>
+        <div class="label" style="margin-bottom:14px;">Couleur d'accent</div>
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+          <div id="preview-swatch" style="width:40px;height:40px;border-radius:10px;background:#e040fb;border:2px solid rgba(255,255,255,0.15);flex-shrink:0;"></div>
+          <div>
+            <div style="font-size:13px;color:#e0e0e0;font-weight:600;" id="preview-label">Violet F1</div>
+            <div style="font-size:11px;color:#555;font-family:monospace;" id="preview-hex">#e040fb</div>
+          </div>
+        </div>
+        <div style="width:50%;">
+          <div style="position:relative;margin-bottom:10px;">
+            <div id="rainbow-bar" style="width:100%;height:28px;border-radius:14px;background:linear-gradient(to right,hsl(0,100%,50%),hsl(30,100%,50%),hsl(60,100%,50%),hsl(90,100%,50%),hsl(120,100%,50%),hsl(150,100%,50%),hsl(180,100%,50%),hsl(210,100%,50%),hsl(240,100%,50%),hsl(270,100%,50%),hsl(300,100%,50%),hsl(330,100%,50%),hsl(360,100%,50%));cursor:crosshair;border:1px solid #2a2a3a;position:relative;" onclick="pickColor(event)">
+              <div id="rainbow-cursor" style="position:absolute;top:50%;left:73%;transform:translate(-50%,-50%);width:22px;height:22px;border-radius:50%;border:3px solid white;box-shadow:0 0 0 1px rgba(0,0,0,.4),0 2px 6px rgba(0,0,0,.6);background:#e040fb;pointer-events:none;"></div>
+            </div>
+          </div>
+          <div style="position:relative;">
+            <div id="brightness-bar" style="width:100%;height:14px;border-radius:7px;background:linear-gradient(to right,#000,hsl(270,100%,50%),#fff);cursor:crosshair;border:1px solid #2a2a3a;position:relative;" onclick="pickBrightness(event)">
+              <div id="brightness-cursor" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:14px;height:14px;border-radius:50%;border:2px solid white;box-shadow:0 0 0 1px rgba(0,0,0,.4);pointer-events:none;"></div>
+            </div>
+            <div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#555;">Sombre</span><span style="font-size:10px;color:#555;">Lumineux</span></div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;margin-top:14px;width:25%;">
+          <div style="display:flex;align-items:center;border:1px solid #2a2a3a;border-radius:8px;background:#1e1e2e;overflow:hidden;flex:1;">
+            <span style="padding:0 8px;color:#555;font-size:12px;font-family:monospace;">#</span>
+            <input id="hex-input" style="background:transparent;border:none;outline:none;color:#e0e0e0;font-family:monospace;font-size:12px;width:100%;padding:8px 0;" placeholder="e040fb" value="e040fb" maxlength="6" oninput="onHexInput(this.value)"/>
+          </div>
+          <div onclick="applyHex()" style="padding:8px 12px;border-radius:8px;background:#e040fb22;color:#e040fb;font-size:11px;font-weight:600;cursor:pointer;border:1px solid #e040fb44;white-space:nowrap;">OK</div>
+        </div>
+      </div>
+
+      <!-- Image de fond -->
+      <div>
+        <div class="label" style="margin-bottom:14px;">Image de fond</div>
+
+        <!-- Zone de drop (hauteur réduite de 50% : 55px) -->
+        <div id="bg-preview" style="
+          width:180px;height:55px;border-radius:10px;
+          border:2px dashed #2a2a3a;background:#13131f;
+          display:flex;align-items:center;justify-content:center;
+          gap:8px;cursor:pointer;position:relative;overflow:hidden;
+          transition:border-color .2s;margin-bottom:16px;
+        " onclick="document.getElementById('file-input').click()"
+           onmouseenter="this.style.borderColor='#e040fb44'"
+           onmouseleave="this.style.borderColor='#2a2a3a'">
+          <div id="bg-img" style="display:none;position:absolute;inset:0;background-size:cover;background-position:center;border-radius:8px;opacity:0.4;"></div>
+          <div id="bg-placeholder" style="display:flex;align-items:center;gap:8px;position:relative;z-index:1;">
+            <span style="font-size:16px;">🖼️</span>
+            <span style="font-size:11px;color:#555;">Clique ou glisse une image</span>
+          </div>
+          <div id="bg-overlay" style="display:none;position:absolute;inset:0;border-radius:8px;background:rgba(0,0,0,0.45);z-index:2;align-items:center;justify-content:center;">
+            <span style="font-size:10px;color:#ccc;">Changer</span>
+          </div>
+          <input id="file-input" type="file" accept="image/*" style="display:none" onchange="loadImage(event)"/>
+        </div>
+
+        <!-- Sliders en dessous, alignés sur la largeur de la zone de drop -->
+        <div style="width:180px;display:flex;flex-direction:column;gap:14px;">
+
+          <!-- Opacité -->
+          <div>
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+              <span style="font-size:11px;color:#aaa;font-weight:500;">Opacité</span>
+              <span id="opacity-val" style="font-size:11px;color:#e040fb;font-family:monospace;font-weight:600;">40%</span>
+            </div>
+            <div style="position:relative;height:6px;border-radius:3px;background:#1e1e2e;border:1px solid #2a2a3a;cursor:pointer;" onclick="setSlider('opacity',event)">
+              <div id="opacity-track" style="position:absolute;left:0;top:0;height:100%;width:40%;background:linear-gradient(to right,#e040fb44,#e040fb);border-radius:3px;"></div>
+              <div id="opacity-thumb" style="position:absolute;top:50%;left:40%;transform:translate(-50%,-50%);width:13px;height:13px;border-radius:50%;background:#e040fb;border:2px solid white;box-shadow:0 0 0 1px rgba(0,0,0,.3);"></div>
+            </div>
+          </div>
+
+          <!-- Flou -->
+          <div>
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+              <span style="font-size:11px;color:#aaa;font-weight:500;">Flou</span>
+              <span id="blur-val" style="font-size:11px;color:#e040fb;font-family:monospace;font-weight:600;">32%</span>
+            </div>
+            <div style="position:relative;height:6px;border-radius:3px;background:#1e1e2e;border:1px solid #2a2a3a;cursor:pointer;" onclick="setSlider('blur',event)">
+              <div id="blur-track" style="position:absolute;left:0;top:0;height:100%;width:32%;background:linear-gradient(to right,#e040fb44,#e040fb);border-radius:3px;"></div>
+              <div id="blur-thumb" style="position:absolute;top:50%;left:32%;transform:translate(-50%,-50%);width:13px;height:13px;border-radius:50%;background:#e040fb;border:2px solid white;box-shadow:0 0 0 1px rgba(0,0,0,.3);"></div>
+            </div>
+          </div>
+
+          <!-- Supprimer -->
+          <div id="remove-btn" style="display:none;">
+            <div onclick="removeImage()" style="display:inline-flex;align-items:center;gap:6px;padding:5px 10px;border-radius:7px;background:#f4433611;color:#f44336;font-size:11px;font-weight:600;cursor:pointer;border:1px solid #f4433633;">
+              🗑️ Supprimer
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+let currentHue=270,currentL=50;
+function hslToHex(h,s,l){s/=100;l/=100;const a=s*Math.min(l,1-l);const f=n=>{const k=(n+h/30)%12,c=l-a*Math.max(Math.min(k-3,9-k,1),-1);return Math.round(255*c).toString(16).padStart(2,'0')};return f(0)+f(8)+f(4)}
+function updatePreview(hex){document.getElementById('preview-swatch').style.background='#'+hex;document.getElementById('rainbow-cursor').style.background='#'+hex;document.getElementById('preview-hex').textContent='#'+hex;document.getElementById('hex-input').value=hex;document.getElementById('preview-label').textContent='Personnalisé'}
+function pickColor(e){const bar=document.getElementById('rainbow-bar');const rect=bar.getBoundingClientRect();const pct=Math.max(0,Math.min(1,(e.clientX-rect.left)/rect.width));currentHue=Math.round(pct*360);document.getElementById('rainbow-cursor').style.left=(pct*100)+'%';document.getElementById('brightness-bar').style.background=`linear-gradient(to right,#000,hsl(${currentHue},100%,50%),#fff)`;updatePreview(hslToHex(currentHue,100,currentL))}
+function pickBrightness(e){const bar=document.getElementById('brightness-bar');const rect=bar.getBoundingClientRect();const pct=Math.max(0,Math.min(1,(e.clientX-rect.left)/rect.width));currentL=Math.round(10+pct*80);document.getElementById('brightness-cursor').style.left=(pct*100)+'%';updatePreview(hslToHex(currentHue,100,currentL))}
+function onHexInput(val){if(val.length===6&&/^[0-9a-fA-F]{6}$/.test(val)){document.getElementById('preview-swatch').style.background='#'+val;document.getElementById('preview-hex').textContent='#'+val;document.getElementById('rainbow-cursor').style.background='#'+val}}
+function applyHex(){const val=document.getElementById('hex-input').value;if(/^[0-9a-fA-F]{6}$/.test(val))updatePreview(val)}
+
+let opacityPct=40,blurPct=32;
+function setSlider(type,e){
+  const rect=e.currentTarget.getBoundingClientRect();
+  const pct=Math.round(Math.max(0,Math.min(1,(e.clientX-rect.left)/rect.width))*100);
+  if(type==='opacity'){
+    opacityPct=pct;
+    document.getElementById('opacity-val').textContent=pct+'%';
+    document.getElementById('opacity-track').style.width=pct+'%';
+    document.getElementById('opacity-thumb').style.left=pct+'%';
+    const img=document.getElementById('bg-img');
+    if(img.style.display!=='none')img.style.opacity=pct/100;
+  } else {
+    blurPct=pct;
+    document.getElementById('blur-val').textContent=pct+'%';
+    document.getElementById('blur-track').style.width=pct+'%';
+    document.getElementById('blur-thumb').style.left=pct+'%';
+    const img=document.getElementById('bg-img');
+    if(img.style.display!=='none')img.style.filter=`blur(${pct/100*20}px)`;
+  }
+}
+function loadImage(e){
+  const file=e.target.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=ev=>{
+    const img=document.getElementById('bg-img');
+    img.style.backgroundImage=`url(${ev.target.result})`;
+    img.style.display='block';
+    img.style.opacity=opacityPct/100;
+    img.style.filter=`blur(${blurPct/100*20}px)`;
+    document.getElementById('bg-placeholder').style.display='none';
+    document.getElementById('bg-overlay').style.display='flex';
+    document.getElementById('remove-btn').style.display='block';
+  };
+  reader.readAsDataURL(file);
+}
+function removeImage(){
+  document.getElementById('bg-img').style.display='none';
+  document.getElementById('bg-placeholder').style.display='flex';
+  document.getElementById('bg-overlay').style.display='none';
+  document.getElementById('remove-btn').style.display='none';
+  document.getElementById('file-input').value='';
+}
+</script>

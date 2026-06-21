@@ -1,0 +1,174 @@
+<h2>Page Paramètres — Apparence (v4)</h2>
+<p class="subtitle">Barres réduites à 50%.</p>
+
+<div class="mockup" style="max-width:900px;margin:0 auto;">
+  <div class="mockup-header">⚙️ Paramètres</div>
+  <div class="mockup-body" style="padding:0;">
+
+    <!-- Tabs -->
+    <div style="display:flex;border-bottom:1px solid #2a2a3a;background:#13131f;">
+      <div style="padding:12px 20px;font-size:13px;font-weight:600;color:#e040fb;border-bottom:2px solid #e040fb;">🎨 Apparence</div>
+      <div style="padding:12px 20px;font-size:13px;font-weight:500;color:#555;">🏎️ Profil</div>
+      <div style="padding:12px 20px;font-size:13px;font-weight:500;color:#555;">💾 Données</div>
+      <div style="padding:12px 20px;font-size:13px;font-weight:500;color:#555;">🧭 Navigation</div>
+    </div>
+
+    <div style="padding:24px;display:flex;flex-direction:column;gap:28px;">
+
+      <!-- Thème -->
+      <div>
+        <div class="label" style="margin-bottom:10px;">Thème</div>
+        <div style="display:flex;gap:10px;">
+          <div style="padding:8px 20px;border-radius:8px;background:#1e1e2e;border:2px solid #e040fb;font-size:13px;color:#e040fb;">🌙 Sombre</div>
+          <div style="padding:8px 20px;border-radius:8px;background:#1e1e2e;border:1px solid #2a2a3a;font-size:13px;color:#888;">☀️ Clair</div>
+          <div style="padding:8px 20px;border-radius:8px;background:#1e1e2e;border:1px solid #2a2a3a;font-size:13px;color:#888;">💻 Système</div>
+        </div>
+      </div>
+
+      <!-- Couleur d'accent -->
+      <div>
+        <div class="label" style="margin-bottom:14px;">Couleur d'accent</div>
+
+        <!-- Aperçu -->
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+          <div id="preview-swatch" style="width:40px;height:40px;border-radius:10px;background:#e040fb;border:2px solid rgba(255,255,255,0.15);flex-shrink:0;"></div>
+          <div>
+            <div style="font-size:13px;color:#e0e0e0;font-weight:600;" id="preview-label">Violet F1</div>
+            <div style="font-size:11px;color:#555;font-family:monospace;" id="preview-hex">#e040fb</div>
+          </div>
+        </div>
+
+        <!-- Barres à 50% de largeur -->
+        <div style="width:50%;">
+
+          <!-- Barre arc-en-ciel -->
+          <div style="position:relative;margin-bottom:10px;">
+            <div
+              id="rainbow-bar"
+              style="
+                width:100%;
+                height:28px;
+                border-radius:14px;
+                background: linear-gradient(to right,
+                  hsl(0,100%,50%), hsl(30,100%,50%), hsl(60,100%,50%),
+                  hsl(90,100%,50%), hsl(120,100%,50%), hsl(150,100%,50%),
+                  hsl(180,100%,50%), hsl(210,100%,50%), hsl(240,100%,50%),
+                  hsl(270,100%,50%), hsl(300,100%,50%), hsl(330,100%,50%),
+                  hsl(360,100%,50%)
+                );
+                cursor:crosshair;
+                border:1px solid #2a2a3a;
+                position:relative;
+              "
+              onclick="pickColor(event)"
+            >
+              <div id="rainbow-cursor" style="
+                position:absolute;top:50%;left:73%;
+                transform:translate(-50%,-50%);
+                width:22px;height:22px;border-radius:50%;
+                border:3px solid white;
+                box-shadow:0 0 0 1px rgba(0,0,0,.4),0 2px 6px rgba(0,0,0,.6);
+                background:#e040fb;pointer-events:none;
+              "></div>
+            </div>
+          </div>
+
+          <!-- Barre luminosité -->
+          <div style="position:relative;">
+            <div
+              id="brightness-bar"
+              style="
+                width:100%;height:14px;border-radius:7px;
+                background: linear-gradient(to right, #000, hsl(270,100%,50%), #fff);
+                cursor:crosshair;border:1px solid #2a2a3a;position:relative;
+              "
+              onclick="pickBrightness(event)"
+            >
+              <div id="brightness-cursor" style="
+                position:absolute;top:50%;left:50%;
+                transform:translate(-50%,-50%);
+                width:14px;height:14px;border-radius:50%;
+                border:2px solid white;
+                box-shadow:0 0 0 1px rgba(0,0,0,.4);
+                pointer-events:none;
+              "></div>
+            </div>
+            <div style="display:flex;justify-content:space-between;margin-top:3px;">
+              <span style="font-size:10px;color:#555;">Sombre</span>
+              <span style="font-size:10px;color:#555;">Lumineux</span>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Champ hex -->
+        <div style="display:flex;align-items:center;gap:10px;margin-top:14px;width:50%;">
+          <div style="display:flex;align-items:center;border:1px solid #2a2a3a;border-radius:8px;background:#1e1e2e;overflow:hidden;flex:1;">
+            <span style="padding:0 10px;color:#555;font-size:13px;font-family:monospace;">#</span>
+            <input
+              id="hex-input"
+              style="background:transparent;border:none;outline:none;color:#e0e0e0;font-family:monospace;font-size:13px;width:100%;padding:9px 0;"
+              placeholder="e040fb" value="e040fb" maxlength="6"
+              oninput="onHexInput(this.value)"
+            />
+          </div>
+          <div onclick="applyHex()" style="padding:9px 18px;border-radius:8px;background:#e040fb22;color:#e040fb;font-size:12px;font-weight:600;cursor:pointer;border:1px solid #e040fb44;white-space:nowrap;">Appliquer</div>
+        </div>
+        <div style="margin-top:6px;font-size:11px;color:#555;">Clique sur la barre ou entre un code hex.</div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+let currentHue = 270, currentL = 50;
+
+function hslToHex(h, s, l) {
+  s /= 100; l /= 100;
+  const a = s * Math.min(l, 1 - l);
+  const f = n => { const k=(n+h/30)%12, c=l-a*Math.max(Math.min(k-3,9-k,1),-1); return Math.round(255*c).toString(16).padStart(2,'0'); };
+  return f(0)+f(8)+f(4);
+}
+
+function updatePreview(hex) {
+  document.getElementById('preview-swatch').style.background = '#'+hex;
+  document.getElementById('rainbow-cursor').style.background = '#'+hex;
+  document.getElementById('preview-hex').textContent = '#'+hex;
+  document.getElementById('hex-input').value = hex;
+  document.getElementById('preview-label').textContent = 'Personnalisé';
+}
+
+function pickColor(e) {
+  const bar = document.getElementById('rainbow-bar');
+  const rect = bar.getBoundingClientRect();
+  const pct = Math.max(0, Math.min(1, (e.clientX-rect.left)/rect.width));
+  currentHue = Math.round(pct*360);
+  document.getElementById('rainbow-cursor').style.left = (pct*100)+'%';
+  document.getElementById('brightness-bar').style.background =
+    `linear-gradient(to right, #000, hsl(${currentHue},100%,50%), #fff)`;
+  updatePreview(hslToHex(currentHue, 100, currentL));
+}
+
+function pickBrightness(e) {
+  const bar = document.getElementById('brightness-bar');
+  const rect = bar.getBoundingClientRect();
+  const pct = Math.max(0, Math.min(1, (e.clientX-rect.left)/rect.width));
+  currentL = Math.round(10 + pct*80);
+  document.getElementById('brightness-cursor').style.left = (pct*100)+'%';
+  updatePreview(hslToHex(currentHue, 100, currentL));
+}
+
+function onHexInput(val) {
+  if (val.length===6 && /^[0-9a-fA-F]{6}$/.test(val)) {
+    document.getElementById('preview-swatch').style.background = '#'+val;
+    document.getElementById('preview-hex').textContent = '#'+val;
+    document.getElementById('rainbow-cursor').style.background = '#'+val;
+  }
+}
+
+function applyHex() {
+  const val = document.getElementById('hex-input').value;
+  if (/^[0-9a-fA-F]{6}$/.test(val)) updatePreview(val);
+}
+</script>
