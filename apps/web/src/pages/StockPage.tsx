@@ -1,12 +1,23 @@
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
-import { CheckCircleIcon, ExclamationTriangleIcon } from "@heroicons/react/24/outline";
+import { ArrowPathIcon, CheckCircleIcon, ExclamationTriangleIcon } from "@heroicons/react/24/outline";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
 import PageHeader from "../components/PageHeader";
 import { stock } from "../lib/f1Data";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+  DialogClose,
+} from "../components/ui/dialog";
+import { Button } from "../components/ui/button";
 
 const STOCK_COUNTS_KEY = "goldie-racing:stock-counts";
 const STOCK_COSTS_KEY = "goldie-racing:stock-costs";
+const STOCK_LIFESPANS_KEY = "goldie-racing:stock-lifespans";
 
 export default function StockPage() {
   const [counts, setCounts] = useState<Record<string, number>>(() => {
@@ -14,7 +25,7 @@ export default function StockPage() {
       const stored = window.localStorage.getItem(STOCK_COUNTS_KEY);
       if (stored) return JSON.parse(stored);
     } catch {}
-    return Object.fromEntries(stock.map(s => [s.piece, s.count]));
+    return Object.fromEntries(stock.map(s => [s.piece, 0]));
   });
 
   const [costs, setCosts] = useState<Record<string, number>>(() => {
@@ -22,7 +33,15 @@ export default function StockPage() {
       const stored = window.localStorage.getItem(STOCK_COSTS_KEY);
       if (stored) return JSON.parse(stored);
     } catch {}
-    return Object.fromEntries(stock.map(s => [s.piece, s.costUnit]));
+    return Object.fromEntries(stock.map(s => [s.piece, 0]));
+  });
+
+  const [lifespans, setLifespans] = useState<Record<string, number>>(() => {
+    try {
+      const stored = window.localStorage.getItem(STOCK_LIFESPANS_KEY);
+      if (stored) return JSON.parse(stored);
+    } catch {}
+    return Object.fromEntries(stock.map(s => [s.piece, 0]));
   });
 
   useEffect(() => {
@@ -33,11 +52,24 @@ export default function StockPage() {
     try { window.localStorage.setItem(STOCK_COSTS_KEY, JSON.stringify(costs)); } catch {}
   }, [costs]);
 
-  const totalCost = stock.reduce((a, b) => a + (costs[b.piece] * b.capacity || 0), 0);
+  useEffect(() => {
+    try { window.localStorage.setItem(STOCK_LIFESPANS_KEY, JSON.stringify(lifespans)); } catch {}
+  }, [lifespans]);
+
+  const [resetDialogOpen, setResetDialogOpen] = useState(false);
+
+  const resetAll = () => {
+    setCounts(Object.fromEntries(stock.map(s => [s.piece, 0])));
+    setCosts(Object.fromEntries(stock.map(s => [s.piece, 0])));
+    setLifespans(Object.fromEntries(stock.map(s => [s.piece, 0])));
+    setResetDialogOpen(false);
+  };
+
+  const totalCost = stock.reduce((a, b) => a + (costs[b.piece] * counts[b.piece] * lifespans[b.piece] || 0), 0);
 
   const chartData = stock.map(s => ({
     name: s.piece,
-    capacité: s.capacity,
+    capacité: counts[s.piece] * lifespans[s.piece],
     stock: counts[s.piece],
   }));
 
@@ -45,13 +77,41 @@ export default function StockPage() {
     <div>
       <PageHeader title="Stock Pièces" subtitle="Inventaire et gestion des composants" />
 
+      <div className="flex justify-end mt-6 mb-2">
+        <Button
+          variant="destructive"
+          className="flex items-center gap-1.5"
+          onClick={() => setResetDialogOpen(true)}
+        >
+          <ArrowPathIcon className="w-4 h-4" />
+          Tout réinitialiser
+        </Button>
+      </div>
+
+      <Dialog open={resetDialogOpen} onOpenChange={setResetDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Réinitialiser le Stock ?</DialogTitle>
+            <DialogDescription>
+              Cette action remettra toutes les quantités, durées de vie et coûts unitaires à leurs valeurs initiales. Cette action est irréversible.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button variant="destructive" onClick={resetAll}>Confirmer la réinitialisation</Button>
+            <DialogClose asChild>
+              <Button type="button" variant="secondary">Annuler</Button>
+            </DialogClose>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
       {/* Chart */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         className="bg-card border border-border rounded-xl p-6 mb-8"
       >
-        <h3 className="text-sm font-semibold mb-4">Capacité vs Stock actuel</h3>
+        <h3 className="text-sm font-semibold mb-4">Couverture saison par pièce</h3>
         <ResponsiveContainer height={200}>
           <BarChart data={chartData} barGap={4}>
             <XAxis dataKey="name" tick={{ fontSize: 10, fill: "hsl(220, 10%, 50%)" }} axisLine={false} tickLine={false} />
@@ -69,7 +129,9 @@ export default function StockPage() {
       {/* Pieces Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {stock.map((item, i) => {
-          const health = item.count >= Math.ceil(24 / item.racesPerPiece) ? "good" : item.understock <= 1 ? "warning" : "critical";
+          const lifespan = lifespans[item.piece] ?? item.racesPerPiece;
+          const capacity = counts[item.piece] * lifespan;
+          const health = capacity >= 24 ? "good" : item.understock <= 1 ? "warning" : "critical";
 
           return (
             <motion.div
@@ -89,7 +151,7 @@ export default function StockPage() {
                 ) : health === "warning" ? (
                   <ExclamationTriangleIcon className="w-4 h-4 text-yellow-400" />
                 ) : (
-                  <ExclamationTriangleIcon className="w-4 h-4 text-red-400" />
+                  <ExclamationTriangleIcon className="w-4 h-4 text-white" />
                 )}
               </div>
 
@@ -106,14 +168,23 @@ export default function StockPage() {
                 </div>
                 <div className="bg-secondary/50 rounded-lg p-3">
                   <div className="text-xs text-muted-foreground">Durée de vie</div>
-                  <div className="text-lg font-bold font-mono">{item.racesPerPiece}<span className="text-xs text-muted-foreground ml-1">courses</span></div>
+                  <div className="flex items-baseline gap-1">
+                    <input
+                      type="number"
+                      min={1}
+                      value={lifespans[item.piece]}
+                      onChange={e => setLifespans(prev => ({ ...prev, [item.piece]: Number(e.target.value) }))}
+                      className="text-lg font-bold font-mono bg-transparent w-full outline-none border-b border-transparent focus:border-primary transition-colors"
+                    />
+                    <span className="text-xs text-muted-foreground">courses</span>
+                  </div>
                 </div>
               </div>
 
               <div className="space-y-2">
                 <div className="flex justify-between text-xs">
                   <span className="text-muted-foreground">Capacité saison</span>
-                  <span className="font-mono">{item.capacity}</span>
+                  <span className="font-mono">{capacity}</span>
                 </div>
 
                 <div className="flex justify-between text-xs items-center">

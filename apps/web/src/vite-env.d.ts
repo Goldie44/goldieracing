@@ -1,6 +1,6 @@
 /// <reference types="vite/client" />
 
-type BudgetSpentTotals = Record<string, number>;
+type BudgetValues = Record<string, number>;
 
 interface Window {
   app?: {
@@ -11,8 +11,16 @@ interface Window {
       node: string;
     };
     budgetSpentTotals?: {
-      load: () => Promise<BudgetSpentTotals>;
-      save: (values: BudgetSpentTotals) => Promise<void>;
+      load: () => Promise<BudgetValues>;
+      save: (values: BudgetValues) => Promise<void>;
+    };
+    budgetAllocatedTotals?: {
+      load: () => Promise<BudgetValues>;
+      save: (values: BudgetValues) => Promise<void>;
+    };
+    budgetTotalBudget?: {
+      load: () => Promise<number | null>;
+      save: (value: number) => Promise<void>;
     };
   };
 }

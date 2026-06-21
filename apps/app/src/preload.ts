@@ -11,4 +11,12 @@ contextBridge.exposeInMainWorld('app', {
     load: () => ipcRenderer.invoke('budget-spent-totals:load'),
     save: (values: Record<string, number>) => ipcRenderer.invoke('budget-spent-totals:save', values),
   },
+  budgetAllocatedTotals: {
+    load: () => ipcRenderer.invoke('budget-allocated-totals:load'),
+    save: (values: Record<string, number>) => ipcRenderer.invoke('budget-allocated-totals:save', values),
+  },
+  budgetTotalBudget: {
+    load: () => ipcRenderer.invoke('budget-total-budget:load'),
+    save: (value: number) => ipcRenderer.invoke('budget-total-budget:save', value),
+  },
 });

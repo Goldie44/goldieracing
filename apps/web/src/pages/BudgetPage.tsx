@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import {
   ArrowTrendingUpIcon,
+  ArrowPathIcon,
   ChevronDownIcon,
   ChevronRightIcon,
   ExclamationCircleIcon,
@@ -13,13 +14,24 @@ import StatCard from "../components/StatCard";
 import { useState } from "react";
 import { useBudget } from "../lib/BudgetContext";
 import { formatMoneyInMillions } from "../lib/utils";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+  DialogClose,
+} from "../components/ui/dialog";
+import { Button } from "../components/ui/button";
 
 const fmt = (v) => v != null ? formatMoneyInMillions(v, 2) : "—";
 const fmtPct = (v, total) => total ? `${((v / total) * 100).toFixed(1)}%` : "—";
 
 export default function BudgetPage() {
-  const { sections, setSections, totalBudget, setTotalBudget } = useBudget();
+  const { sections, setSections, totalBudget, setTotalBudget, reset } = useBudget();
   const [expanded, setExpanded] = useState({});
+  const [resetDialogOpen, setResetDialogOpen] = useState(false);
   const [editingBudget, setEditingBudget] = useState(false);
   const [budgetInput, setBudgetInput] = useState<string | number>(totalBudget / 1000000);
   const [editingAllocation, setEditingAllocation] = useState<number | null>(null);
@@ -45,6 +57,34 @@ export default function BudgetPage() {
   return (
     <div>
       <PageHeader title="Budget" subtitle="Répartition du plafond budgétaire" />
+
+      <div className="flex justify-end mt-6 mb-2">
+        <Button
+          variant="destructive"
+          className="flex items-center gap-1.5"
+          onClick={() => setResetDialogOpen(true)}
+        >
+          <ArrowPathIcon className="w-4 h-4" />
+          Tout réinitialiser
+        </Button>
+      </div>
+
+      <Dialog open={resetDialogOpen} onOpenChange={setResetDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Réinitialiser le Budget ?</DialogTitle>
+            <DialogDescription>
+              Cette action remettra toutes les dépenses, allocations et le plafond budgétaire à leurs valeurs initiales. Cette action est irréversible.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button variant="destructive" onClick={() => { reset(); setResetDialogOpen(false); }}>Confirmer la réinitialisation</Button>
+            <DialogClose asChild>
+              <Button type="button" variant="secondary">Annuler</Button>
+            </DialogClose>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       {/* Stats */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">

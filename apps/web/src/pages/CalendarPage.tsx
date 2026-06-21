@@ -86,7 +86,7 @@ export default function CalendarPage() {
   return (
     <div>
       <PageHeader title="Calendrier " subtitle="Roadmap complète de la saison" />
-      <div className="mb-6 text-sm text-muted-foreground">Glisser-déposer une course pour modifier son ordre. L’ordre est conservé localement.</div>
+      <div className="mb-6 text-sm text-muted-foreground">Glisser-déposer une course pour modifier son ordre.</div>
 
       <div className="space-y-3">
         {races.map((race, i) => {

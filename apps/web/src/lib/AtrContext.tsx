@@ -4,9 +4,9 @@ const initialSections = [
   {
     label: "Vélocité",
     rows: [
-      { label: "Vitesse max" },
+      { label: "Vitesse max (km/h)" },
       { label: "Accélération" },
-      { label: "Efficacité du DRS" },
+      { label: "Efficacité du DRS (%)" },
     ],
   },
   {
@@ -15,7 +15,7 @@ const initialSections = [
       { label: "Faible vitesse" },
       { label: "Vitesse moyenne" },
       { label: "Grande vitesse" },
-      { label: "Tolérance Dirty air" },
+      { label: "Tolérance Dirty air (%)" },
     ],
   },
   {
@@ -23,7 +23,7 @@ const initialSections = [
     rows: [
       { label: "Préservation des pneus" },
       { label: "Refroidissement du moteur" },
-      { label: "Poids excédentaire totale" },
+      { label: "Poids excédentaire totale (Kg)" },
     ],
   },
 ];

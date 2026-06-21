@@ -11,7 +11,17 @@
       "Bash(npm install *)",
       "Bash(cp \"e:/Documents/Projet perso/goldie-racing/apps/web/__verify_nav_order.cjs\" /tmp/pw-runner/verify.cjs)",
       "Bash(node verify.cjs)",
-      "Bash(npx playwright *)"
+      "Bash(npx playwright *)",
+      "Bash(git commit -m ' *)",
+      "Bash(git commit *)",
+      "Bash(npx tsc *)",
+      "Skill(code-review)",
+      "Skill(code-review:*)",
+      "Read(//c/Users/naelj/.claude/**)",
+      "Bash(node node_modules/typescript/bin/tsc --noEmit)",
+      "Bash(git pull *)",
+      "Bash(git stash *)",
+      "Bash(git merge *)"
     ]
   }
 }

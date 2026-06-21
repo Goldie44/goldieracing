@@ -30,6 +30,16 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../components/ui/select";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+  DialogClose,
+} from "../components/ui/dialog";
+import { Button } from "../components/ui/button";
 
 const radarData = [
   { subject: "Vitesse Max", value: 78 },
@@ -71,6 +81,7 @@ export default function PerformancePage() {
     } catch {}
   }, [projects]);
   const [showNewProject, setShowNewProject] = useState(false);
+  const [resetDialogOpen, setResetDialogOpen] = useState(false);
   const [newProject, setNewProject] = useState({
     atr: "",
     part: "",
@@ -138,6 +149,15 @@ export default function PerformancePage() {
     })));
   };
 
+  const resetAll = () => {
+    setProjects([]);
+    setAtrData(initialSections.map(s => ({
+      ...s,
+      rows: s.rows.map(r => ({ ...r, v1: "", moyenne: "", delta: "", cd: "", deltaCD: "", gainsAttendus: "" })),
+    })));
+    setResetDialogOpen(false);
+  };
+
   const removeProject = (projectIndex) => {
     const project = projects[projectIndex];
     subtractProjectGains(project);
@@ -186,13 +206,40 @@ export default function PerformancePage() {
 
       {/* Nouveau Projet */}
       <div className="my-6 flex flex-col items-start gap-4">
-        <button
-          onClick={() => setShowNewProject(v => !v)}
-          className="flex items-center gap-1.5 text-xs bg-primary/10 text-primary hover:bg-primary/20 transition-colors px-3 py-1.5 rounded-lg font-medium"
-        >
-          <PlusIcon className="w-3 h-3" />
-          Nouveau projet
-        </button>
+        <div className="flex items-center gap-3 w-full">
+          <button
+            onClick={() => setShowNewProject(v => !v)}
+            className="flex items-center gap-1.5 text-xs bg-primary/10 text-primary hover:bg-primary/20 transition-colors px-3 py-1.5 rounded-lg font-medium"
+          >
+            <PlusIcon className="w-3 h-3" />
+            Nouveau projet
+          </button>
+          <Button
+            variant="destructive"
+            className="ml-auto flex items-center gap-1.5 text-xs h-7 px-3"
+            onClick={() => setResetDialogOpen(true)}
+          >
+            <ArrowPathIcon className="w-3.5 h-3.5" />
+            Tout réinitialiser
+          </Button>
+        </div>
+
+        <Dialog open={resetDialogOpen} onOpenChange={setResetDialogOpen}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Réinitialiser la Performance ?</DialogTitle>
+              <DialogDescription>
+                Cette action supprimera tous les projets et remettra toutes les valeurs du tableau ATR à zéro. Cette action est irréversible.
+              </DialogDescription>
+            </DialogHeader>
+            <DialogFooter>
+              <Button variant="destructive" onClick={resetAll}>Confirmer la réinitialisation</Button>
+              <DialogClose asChild>
+                <Button type="button" variant="secondary">Annuler</Button>
+              </DialogClose>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
         {showNewProject && (
           <div className="w-full p-4 rounded-lg border border-border bg-card flex flex-col gap-3">
             <div>

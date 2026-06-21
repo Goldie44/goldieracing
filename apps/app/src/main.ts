@@ -1,18 +1,26 @@
 import path from 'node:path';
 import { app, BrowserWindow, ipcMain, shell } from 'electron';
-import { createBudgetSpentTotalStorage, type BudgetSpentTotalStorage } from './storage';
+import { createBudgetStorage, type BudgetStorage } from './storage';
 
 const isDev = !app.isPackaged;
 const DEV_URL = process.env.WEB_DEV_URL ?? 'http://localhost:5173';
 const PROD_INDEX = path.resolve(__dirname, '../../web/dist/index.html');
 
 let mainWindow: BrowserWindow | null = null;
-let budgetSpentTotalStorage: BudgetSpentTotalStorage | null = null;
+let budgetStorage: BudgetStorage | null = null;
 
-function registerBudgetSpentTotalHandlers(storage: BudgetSpentTotalStorage): void {
-  ipcMain.handle('budget-spent-totals:load', () => storage.load());
+function registerBudgetHandlers(storage: BudgetStorage): void {
+  ipcMain.handle('budget-spent-totals:load', () => storage.loadSpentTotals());
   ipcMain.handle('budget-spent-totals:save', (_event, values: Record<string, number>) => {
-    storage.save(values);
+    storage.saveSpentTotals(values);
+  });
+  ipcMain.handle('budget-allocated-totals:load', () => storage.loadAllocatedTotals());
+  ipcMain.handle('budget-allocated-totals:save', (_event, values: Record<string, number>) => {
+    storage.saveAllocatedTotals(values);
+  });
+  ipcMain.handle('budget-total-budget:load', () => storage.loadTotalBudget());
+  ipcMain.handle('budget-total-budget:save', (_event, value: number) => {
+    storage.saveTotalBudget(value);
   });
 }
 
@@ -51,10 +59,10 @@ function createWindow(): void {
 }
 
 app.whenReady().then(() => {
-  budgetSpentTotalStorage = createBudgetSpentTotalStorage(
+  budgetStorage = createBudgetStorage(
     path.join(app.getPath('userData'), 'goldie-racing.sqlite'),
   );
-  registerBudgetSpentTotalHandlers(budgetSpentTotalStorage);
+  registerBudgetHandlers(budgetStorage);
 
   createWindow();
 
@@ -68,6 +76,6 @@ app.on('window-all-closed', () => {
 });
 
 app.on('before-quit', () => {
-  budgetSpentTotalStorage?.close();
-  budgetSpentTotalStorage = null;
+  budgetStorage?.close();
+  budgetStorage = null;
 });
