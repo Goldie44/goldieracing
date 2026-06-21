@@ -8,6 +8,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavOrder } from "@/lib/NavOrderContext";
 import { useProfile } from "@/lib/ProfileContext";
+import { useAppearance } from "@/lib/AppearanceContext";
 import NavList from "@/components/NavList";
 
 export default function Layout() {
@@ -15,9 +16,20 @@ export default function Layout() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const { orderedItems, reorder, settingsItem } = useNavOrder();
   const { teamName } = useProfile();
+  const { bgImage, bgOpacity, bgBlur } = useAppearance();
 
   return (
-    <div className="min-h-screen flex bg-background">
+    <div className="min-h-screen flex bg-background relative">
+      {bgImage && (
+        <div
+          className="fixed inset-0 z-0 bg-cover bg-center pointer-events-none"
+          style={{
+            backgroundImage: `url(${bgImage})`,
+            opacity: bgOpacity / 100,
+            filter: `blur(${(bgBlur / 100) * 20}px)`,
+          }}
+        />
+      )}
       {/* Desktop Sidebar */}
       <aside className="hidden lg:flex flex-col w-64 border-r border-border bg-card fixed inset-y-0 z-30">
         <div className="p-6 border-b border-border">
