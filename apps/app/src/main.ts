@@ -1,5 +1,5 @@
 import path from 'node:path';
-import { app, BrowserWindow, ipcMain, shell } from 'electron';
+import { app, BrowserWindow, ipcMain, Menu, shell } from 'electron';
 import { createBudgetStorage, type BudgetStorage } from './storage';
 
 const isDev = !app.isPackaged;
@@ -59,6 +59,8 @@ function createWindow(): void {
 }
 
 app.whenReady().then(() => {
+  Menu.setApplicationMenu(null);
+
   budgetStorage = createBudgetStorage(
     path.join(app.getPath('userData'), 'goldie-racing.sqlite'),
   );

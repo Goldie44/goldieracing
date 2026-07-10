@@ -27,7 +27,9 @@
       "Bash(node -e \"const d=require\\('./apps/app/node_modules/better-sqlite3/package.json'\\); console.log\\(JSON.stringify\\({install: d.scripts?.install, binary: d.binary}, null, 2\\)\\)\")",
       "PowerShell($electronPath = \"E:\\\\Documents\\\\Projet perso\\\\goldie-racing\\\\node_modules\\\\.pnpm\\\\electron@42.0.0\\\\node_modules\\\\electron\\\\dist\\\\electron.exe\"; & $electronPath --version 2>&1)",
       "Bash(cd /e/Documents && ls -la \"Projet perso/goldie-racing\")",
-      "Read(//e/Documents/**)"
+      "Read(//e/Documents/**)",
+      "Bash(find apps/web/src/lib -iname \"*context*\" -o -iname \"*store*\")",
+      "Bash(grep -rli \"i18n\\\\|react-intl\\\\|formatjs\\\\|translation\" apps/web/src apps/app/src apps/web/package.json apps/app/package.json)"
     ]
   }
 }
