@@ -1,1 +1,24 @@
-{}
+{
+  "title": "Performance",
+  "subtitle": "Analyse des métriques de performance véhicule",
+  "velocity": "Vélocité",
+  "cornering": "Virage",
+  "components": "Composants",
+  "newProject": "Nouveau projet",
+  "resetAll": "Tout réinitialiser",
+  "resetTitle": "Réinitialiser la Performance ?",
+  "resetDescription": "Cette action supprimera tous les projets et remettra toutes les valeurs du tableau ATR à zéro. Cette action est irréversible.",
+  "confirmReset": "Confirmer la réinitialisation",
+  "cancel": "Annuler",
+  "add": "Ajouter",
+  "developmentPlan": "Plan de Développement",
+  "expectedGains": "Gains attendus",
+  "gainsDetail": "Détail des gains",
+  "resetToZero": "Remettre à zéro",
+  "topDeficits": "⚠ 3 plus grands déficits",
+  "tableMonoplace": "Monoplace",
+  "tableGains": "Gains Attendus",
+  "tableCompetitor": "Concurrent Direct",
+  "tableDeficit": "Δ Déficit",
+  "calibrationTitle": "Calibration ATR"
+}
