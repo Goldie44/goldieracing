@@ -1,1 +1,27 @@
-{}
+{
+  "title": "Strategy",
+  "subtitle": "Tire strategy optimization",
+  "resetAll": "Reset All",
+  "resetTitle": "Reset Strategy?",
+  "resetDescription": "This will reset all race parameters and tire data to zero. This action is irreversible.",
+  "confirmReset": "Confirm Reset",
+  "cancel": "Cancel",
+  "raceParams": "Race parameters",
+  "lapCount": "Number of laps",
+  "pitLoss": "Pit loss (s)",
+  "tireData": "Tire data",
+  "baseTime": "Base time (s)",
+  "degradation": "Degradation (s/lap)",
+  "maxLaps": "Max laps",
+  "optimalStrategy": "★ Optimal strategy",
+  "pitStop": "→ stop L{{lap}}",
+  "ranking": "Strategy ranking ({{count}})",
+  "noStrategy": "No viable strategy with these parameters.",
+  "rank": "Rank",
+  "strategyColumn": "Strategy",
+  "visualization": "Visualization",
+  "stops": "Stops",
+  "totalTime": "Total time",
+  "gap": "Gap",
+  "stintTooltip": "{{compound}} — {{laps}} laps"
+}
