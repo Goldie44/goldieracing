@@ -1,1 +1,5 @@
-{}
+{
+  "title": "Page Not Found",
+  "description": "The page \"{{page}}\" could not be found in this application.",
+  "goHome": "Go Home"
+}

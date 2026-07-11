@@ -1,1 +1,5 @@
-{}
+{
+  "title": "Page introuvable",
+  "description": "La page \"{{page}}\" est introuvable dans cette application.",
+  "goHome": "Retour à l'accueil"
+}

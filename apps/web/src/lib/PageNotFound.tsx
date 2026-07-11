@@ -1,9 +1,11 @@
 import { useLocation } from 'react-router-dom';
 import { HomeIcon } from '@heroicons/react/24/outline';
+import { useTranslation } from 'react-i18next';
 
 export default function PageNotFound() {
     const location = useLocation();
     const pageName = location.pathname.substring(1);
+    const { t } = useTranslation("notfound");
 
     return (
         <div className="min-h-screen flex items-center justify-center p-6 bg-slate-50">
@@ -16,10 +18,10 @@ export default function PageNotFound() {
 
                     <div className="space-y-3">
                         <h2 className="text-2xl font-medium text-slate-800">
-                            Page Not Found
+                            {t("title")}
                         </h2>
                         <p className="text-slate-600 leading-relaxed">
-                            The page <span className="font-medium text-slate-700">"{pageName}"</span> could not be found in this application.
+                            {t("description", { page: pageName })}
                         </p>
                     </div>
 
@@ -29,7 +31,7 @@ export default function PageNotFound() {
                             className="inline-flex items-center px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 hover:border-slate-300 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-500"
                         >
                             <HomeIcon className="w-4 h-4 mr-2" />
-                            Go Home
+                            {t("goHome")}
                         </button>
                     </div>
                 </div>
