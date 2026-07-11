@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { TrashIcon, ArrowPathIcon, PencilIcon, CheckIcon } from "@heroicons/react/24/outline";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import PageHeader from "../components/PageHeader";
 import { formatMoneyInMillions } from "../lib/utils";
@@ -224,6 +225,7 @@ function NumCell({
 // ── Component ──────────────────────────────────────────────────────────────────
 
 export default function RDPage() {
+  const { t } = useTranslation("rd");
   const { setSections } = useBudget();
   const [projects, setProjects] = useState<Project[]>(() => {
     try {
@@ -471,12 +473,12 @@ export default function RDPage() {
 
   return (
     <div>
-      <PageHeader title="Recherche & Développement" subtitle="Projets R&D" />
+      <PageHeader title={t("title")} subtitle={t("subtitle")} />
 
       <div className="flex items-center gap-3 mt-8 mb-6">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="primary">Créer un projet</Button>
+            <Button variant="primary">{t("createProject")}</Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="start">
             {pieceTypes.map((type) => (
@@ -493,7 +495,7 @@ export default function RDPage() {
           </DropdownMenuContent>
         </DropdownMenu>
         <span className="text-xs text-muted-foreground">
-          {projects.length} projet{projects.length !== 1 ? "s" : ""}
+          {t("projectCount", { count: projects.length })}
         </span>
         <Button
           variant="destructive"
@@ -501,22 +503,22 @@ export default function RDPage() {
           onClick={() => setResetDialogOpen(true)}
         >
           <ArrowPathIcon className="w-4 h-4" />
-          Tout réinitialiser
+          {t("resetAll")}
         </Button>
       </div>
 
       <Dialog open={resetDialogOpen} onOpenChange={setResetDialogOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Réinitialiser la R&D ?</DialogTitle>
+            <DialogTitle>{t("resetTitle")}</DialogTitle>
             <DialogDescription>
-              Cette action supprimera tous les projets et remettra toutes les valeurs du tableau aérodynamique à zéro. Cette action est irréversible.
+              {t("resetDescription")}
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
-            <Button variant="destructive" onClick={resetAll}>Confirmer la réinitialisation</Button>
+            <Button variant="destructive" onClick={resetAll}>{t("confirmReset")}</Button>
             <DialogClose asChild>
-              <Button type="button" variant="secondary">Annuler</Button>
+              <Button type="button" variant="secondary">{t("cancel")}</Button>
             </DialogClose>
           </DialogFooter>
         </DialogContent>
@@ -528,28 +530,28 @@ export default function RDPage() {
       }}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>{editingProject ? `Modifier : ${selectedPiece}` : `Créer un projet : ${selectedPiece}`}</DialogTitle>
+            <DialogTitle>{editingProject ? t("editTitle", { piece: selectedPiece }) : t("createTitle", { piece: selectedPiece })}</DialogTitle>
             <DialogDescription>
-              {editingProject ? "Modifie les informations du projet." : "Remplis les informations du projet pour la pièce sélectionnée."}
+              {editingProject ? t("editDescription") : t("createDescription")}
             </DialogDescription>
           </DialogHeader>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="block mb-1 text-sm font-medium">Nom du projet</label>
+              <label className="block mb-1 text-sm font-medium">{t("projectNameLabel")}</label>
               <Input
                 value={formValues.nom}
                 onChange={(e) => setFormValues((f) => ({ ...f, nom: e.target.value }))}
-                placeholder="Nom du projet"
+                placeholder={t("projectNamePlaceholder")}
                 required
               />
             </div>
             <div>
-              <label className="block mb-1 text-sm font-medium">Coût (M€)</label>
+              <label className="block mb-1 text-sm font-medium">{t("costLabel")}</label>
               <Input
                 type="number"
                 value={formValues.cout}
                 onChange={(e) => setFormValues((f) => ({ ...f, cout: e.target.value }))}
-                placeholder="Ex : 1.5 pour 1,5 M€"
+                placeholder={t("costPlaceholder")}
                 min={0}
                 step={0.01}
               />
@@ -826,9 +828,9 @@ export default function RDPage() {
               </>
             )}
             <DialogFooter>
-              <Button type="submit">{editingProject ? "Enregistrer" : "Valider"}</Button>
+              <Button type="submit">{editingProject ? t("save") : t("submit")}</Button>
               <DialogClose asChild>
-                <Button type="button" variant="secondary">Annuler</Button>
+                <Button type="button" variant="secondary">{t("cancel")}</Button>
               </DialogClose>
             </DialogFooter>
           </form>
@@ -839,7 +841,7 @@ export default function RDPage() {
         const actifs = projects.filter((p) => !collapsedIds.has(p.id));
         return actifs.length === 0 ? (
           <div className="flex flex-col items-center justify-center mt-16">
-            <span className="text-muted-foreground text-lg">Aucun projet R&D en cours.</span>
+            <span className="text-muted-foreground text-lg">{t("noProjects")}</span>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -865,33 +867,33 @@ export default function RDPage() {
                       <button
                         onClick={() => toggleCollapse(project.id)}
                         className="shrink-0 p-1 rounded text-muted-foreground hover:text-green-400 hover:bg-green-400/10 transition-colors"
-                        title="Achevé"
+                        title={t("complete")}
                       >
                         <CheckIcon className="w-3.5 h-3.5" />
                       </button>
                       <button
                         onClick={() => openEdit(project)}
                         className="shrink-0 p-1 rounded text-muted-foreground hover:text-primary hover:bg-primary/10 transition-colors"
-                        title="Modifier"
+                        title={t("edit")}
                       >
                         <PencilIcon className="w-3.5 h-3.5" />
                       </button>
                       <button
                         onClick={() => removeProject(project.id)}
                         className="shrink-0 p-1 rounded text-muted-foreground hover:text-red-400 hover:bg-red-500/10 transition-colors"
-                        title="Supprimer"
+                        title={t("delete")}
                       >
                         <TrashIcon className="w-3.5 h-3.5" />
                       </button>
                     </div>
                   </div>
                   <div className="flex justify-between text-xs mt-3">
-                    <span className="text-muted-foreground">Coût</span>
+                    <span className="text-muted-foreground">{t("cost")}</span>
                     <span className="font-mono">{project.cost ? formatMoneyInMillions(project.cost, 2) : "—"}</span>
                   </div>
                   {project.deadline !== "—" && (
                     <div className="flex justify-between text-xs mt-1">
-                      <span className="text-muted-foreground">Deadline</span>
+                      <span className="text-muted-foreground">{t("deadline")}</span>
                       <span className="font-mono text-primary">{project.deadline}</span>
                     </div>
                   )}
@@ -915,7 +917,7 @@ export default function RDPage() {
       {/* ── Aerodynamic Performance Table ─────────────────────────────────────── */}
       <div className="mt-12">
         <h2 className="text-sm font-semibold text-foreground mb-4 uppercase tracking-wide">
-          Performances Aérodynamiques
+          {t("aeroPerformance")}
         </h2>
         <div className="overflow-x-auto rounded-lg border border-border">
           <table className="w-full text-xs border-collapse">
@@ -924,25 +926,25 @@ export default function RDPage() {
                 <th className="px-3 py-2 text-left font-medium text-muted-foreground w-28"></th>
                 <th className="px-3 py-2 text-left font-medium text-muted-foreground w-40"></th>
                 <th className="px-3 py-2 text-center font-medium text-muted-foreground">
-                  Stat. de base
+                  {t("baseStat")}
                 </th>
                 <th className="px-3 py-2 text-center font-medium text-muted-foreground">
-                  Gains Attendus
+                  {t("expectedGains")}
                 </th>
                 <th className="px-3 py-2 text-center font-medium text-muted-foreground">
-                  Modifications Réglementations
+                  {t("regulationChanges")}
                 </th>
                 <th className="px-3 py-2 text-center font-medium text-muted-foreground">
-                  Valeur après de réglementation
+                  {t("postRegulationValue")}
                 </th>
                 <th className="px-3 py-2 text-center font-medium text-muted-foreground">
-                  objectif
+                  {t("objective")}
                 </th>
                 <th className="px-3 py-2 text-center font-medium text-cyan-400">
-                  gap
+                  {t("gap")}
                 </th>
                 <th className="px-3 py-2 text-center font-medium text-muted-foreground">
-                  N DE R
+                  {t("nDeR")}
                 </th>
                 <th className="px-3 py-2 w-20"></th>
               </tr>
@@ -1082,7 +1084,7 @@ export default function RDPage() {
         return (
           <div className="mt-10">
             <h2 className="text-sm font-semibold text-foreground mb-3 uppercase tracking-wide">
-              Projets achevés ({achevesList.length})
+              {t("completedProjects", { count: achevesList.length })}
             </h2>
             <div className="flex flex-col gap-1">
               {achevesList.map((project) => {
@@ -1101,21 +1103,21 @@ export default function RDPage() {
                       <button
                         onClick={() => toggleCollapse(project.id)}
                         className="p-1 rounded text-green-400 hover:text-muted-foreground hover:bg-muted/20 transition-colors"
-                        title="Réactiver"
+                        title={t("reactivate")}
                       >
                         <ArrowPathIcon className="w-3.5 h-3.5" />
                       </button>
                       <button
                         onClick={() => openEdit(project)}
                         className="p-1 rounded text-muted-foreground hover:text-primary hover:bg-primary/10 transition-colors"
-                        title="Modifier"
+                        title={t("edit")}
                       >
                         <PencilIcon className="w-3.5 h-3.5" />
                       </button>
                       <button
                         onClick={() => removeProject(project.id)}
                         className="p-1 rounded text-muted-foreground hover:text-red-400 hover:bg-red-500/10 transition-colors"
-                        title="Supprimer"
+                        title={t("delete")}
                       >
                         <TrashIcon className="w-3.5 h-3.5" />
                       </button>
