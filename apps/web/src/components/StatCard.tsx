@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import type { ComponentType, SVGProps } from "react";
+import { useTranslation } from "react-i18next";
 
 type StatCardProps = {
   label: string;
@@ -19,6 +20,7 @@ export default function StatCard({
   trend,
   competitor,
 }: StatCardProps) {
+  const { t } = useTranslation("common");
   const valueStr = String(value);
   const competitorStr = competitor !== undefined ? String(competitor) : undefined;
   return (
@@ -45,7 +47,7 @@ export default function StatCard({
       </div>
       {competitorStr && (
         <div className="text-xs mt-1 text-muted-foreground">
-          Concurrent: <span className="font-mono">{competitorStr}</span>
+          {t("statCard.competitor")}: <span className="font-mono">{competitorStr}</span>
         </div>
       )}
       {trend !== undefined && (

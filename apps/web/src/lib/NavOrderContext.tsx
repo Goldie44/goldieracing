@@ -15,17 +15,17 @@ const NAV_ORDER_STORAGE_KEY = "goldie-racing:nav-order";
 export const settingsNavItem = {
   path: "/settings",
   icon: Cog6ToothIcon,
-  label: "Paramètres",
+  labelKey: "nav.settings",
 };
 
 const navItemsSource = [
-  { path: "/", icon: Squares2X2Icon, label: "Dashboard" },
-  { path: "/calendar", icon: CalendarDaysIcon, label: "Calendrier" },
-  { path: "/stock", icon: CubeIcon, label: "Stock Pièces" },
-  { path: "/performance", icon: ChartBarIcon, label: "Performance" },
-  { path: "/budget", icon: WalletIcon, label: "Budget" },
-  { path: "/rd", icon: BeakerIcon, label: "R&D" },
-  { path: "/strategy", icon: FlagIcon, label: "Stratégie" },
+  { path: "/", icon: Squares2X2Icon, labelKey: "nav.dashboard" },
+  { path: "/calendar", icon: CalendarDaysIcon, labelKey: "nav.calendar" },
+  { path: "/stock", icon: CubeIcon, labelKey: "nav.stock" },
+  { path: "/performance", icon: ChartBarIcon, labelKey: "nav.performance" },
+  { path: "/budget", icon: WalletIcon, labelKey: "nav.budget" },
+  { path: "/rd", icon: BeakerIcon, labelKey: "nav.rd" },
+  { path: "/strategy", icon: FlagIcon, labelKey: "nav.strategy" },
 ];
 
 const mergeOrder = savedPaths => {

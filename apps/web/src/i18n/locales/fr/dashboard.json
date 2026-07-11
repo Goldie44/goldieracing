@@ -1,0 +1,18 @@
+{
+  "title": "Dashboard",
+  "races": "Courses",
+  "budgetUsed": "Budget utilisé",
+  "topDeficits": "⚠ 3 plus grands déficits · Écart de performance",
+  "nextRace": "Prochaine Course",
+  "allRacesDone": "Toutes les courses terminées 🏁",
+  "type": "Type",
+  "strategy": "Stratégie",
+  "stockStatus": "État du Stock Pièces",
+  "piecesCount": "{{count}} pièces",
+  "stockOk": "Stock OK",
+  "stockWarning": "Attention",
+  "stockCritical": "Critique",
+  "stockAllGood": "Tous les stocks sont suffisants pour la saison",
+  "pcsRaces": "{{count}} pcs · {{races}} courses",
+  "circuitTypes": "Types de Circuit"
+}

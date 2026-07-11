@@ -1,0 +1,9 @@
+{
+  "title": "Bienvenue dans Goldie Racing 🏎️",
+  "description": "Configurez votre première sauvegarde avant de commencer la saison.",
+  "saveNameLabel": "Nom de la sauvegarde",
+  "saveNamePlaceholder": "Ex : Saison 2023 principale",
+  "teamNameLabel": "Nom de l'écurie",
+  "teamNamePlaceholder": "Ex : Red Bull Racing",
+  "start": "Commencer"
+}

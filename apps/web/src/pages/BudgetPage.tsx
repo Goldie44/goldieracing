@@ -12,6 +12,7 @@ import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts";
 import PageHeader from "../components/PageHeader";
 import StatCard from "../components/StatCard";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useBudget } from "../lib/BudgetContext";
 import { formatMoneyInMillions } from "../lib/utils";
 import {
@@ -29,6 +30,7 @@ const fmt = (v) => v != null ? formatMoneyInMillions(v, 2) : "—";
 const fmtPct = (v, total) => total ? `${((v / total) * 100).toFixed(1)}%` : "—";
 
 export default function BudgetPage() {
+  const { t } = useTranslation("budget");
   const { sections, setSections, totalBudget, setTotalBudget, reset } = useBudget();
   const [expanded, setExpanded] = useState({});
   const [resetDialogOpen, setResetDialogOpen] = useState(false);
@@ -56,7 +58,7 @@ export default function BudgetPage() {
 
   return (
     <div>
-      <PageHeader title="Budget" subtitle="Répartition du plafond budgétaire" />
+      <PageHeader title={t("title")} subtitle={t("subtitle")} />
 
       <div className="flex justify-end mt-6 mb-2">
         <Button
@@ -65,22 +67,22 @@ export default function BudgetPage() {
           onClick={() => setResetDialogOpen(true)}
         >
           <ArrowPathIcon className="w-4 h-4" />
-          Tout réinitialiser
+          {t("resetAll")}
         </Button>
       </div>
 
       <Dialog open={resetDialogOpen} onOpenChange={setResetDialogOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Réinitialiser le Budget ?</DialogTitle>
+            <DialogTitle>{t("resetTitle")}</DialogTitle>
             <DialogDescription>
-              Cette action remettra toutes les dépenses, allocations et le plafond budgétaire à leurs valeurs initiales. Cette action est irréversible.
+              {t("resetDescription")}
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
-            <Button variant="destructive" onClick={() => { reset(); setResetDialogOpen(false); }}>Confirmer la réinitialisation</Button>
+            <Button variant="destructive" onClick={() => { reset(); setResetDialogOpen(false); }}>{t("confirmReset")}</Button>
             <DialogClose asChild>
-              <Button type="button" variant="secondary">Annuler</Button>
+              <Button type="button" variant="secondary">{t("cancel")}</Button>
             </DialogClose>
           </DialogFooter>
         </DialogContent>
@@ -90,7 +92,7 @@ export default function BudgetPage() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
         <div className="bg-card border border-border rounded-xl p-5 hover:border-primary/20 transition-colors">
           <div className="flex items-start justify-between mb-3">
-            <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Plafond total</span>
+            <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">{t("totalCap")}</span>
             <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
               <WalletIcon className="w-4 h-4 text-primary" />
             </div>
@@ -117,8 +119,8 @@ export default function BudgetPage() {
             </button>
           )}
         </div>
-        <StatCard label="Dépensé" value={formatMoneyInMillions(totalSpent, 1)} icon={ArrowTrendingUpIcon} />
-        <StatCard label="Restant" value={formatMoneyInMillions(remaining, 1)} icon={ExclamationCircleIcon} />
+        <StatCard label={t("spent")} value={formatMoneyInMillions(totalSpent, 1)} icon={ArrowTrendingUpIcon} />
+        <StatCard label={t("remaining")} value={formatMoneyInMillions(remaining, 1)} icon={ExclamationCircleIcon} />
       </div>
 
       {/* Progress Bar */}
@@ -128,7 +130,7 @@ export default function BudgetPage() {
         className="bg-card border border-border rounded-xl p-6 mb-8"
       >
         <div className="flex items-center justify-between mb-3">
-          <span className="text-sm font-semibold">Utilisation du plafond</span>
+          <span className="text-sm font-semibold">{t("capUsage")}</span>
           <span className="text-sm font-mono text-primary">{percentUsed}%</span>
         </div>
         <div className="h-3 bg-secondary rounded-full overflow-hidden">
@@ -153,7 +155,7 @@ export default function BudgetPage() {
           transition={{ delay: 0.1 }}
           className="bg-card border border-border rounded-xl p-6"
         >
-          <h3 className="text-sm font-semibold mb-4">Répartition dépensée</h3>
+          <h3 className="text-sm font-semibold mb-4">{t("spentBreakdown")}</h3>
           <ResponsiveContainer height={220}>
             <PieChart>
               <Pie data={pieData} cx="50%" cy="50%" innerRadius={50} outerRadius={90} dataKey="value" strokeWidth={0}>
@@ -177,7 +179,7 @@ export default function BudgetPage() {
           transition={{ delay: 0.2 }}
           className="lg:col-span-2 bg-card border border-border rounded-xl p-6"
         >
-          <h3 className="text-sm font-semibold mb-4">Détail des allocations</h3>
+          <h3 className="text-sm font-semibold mb-4">{t("allocationDetail")}</h3>
 
           {/* % total indicator */}
           <div className={`flex items-center justify-between mb-4 px-2 py-2 rounded-lg text-xs font-mono ${
@@ -187,15 +189,15 @@ export default function BudgetPage() {
               ? 'bg-red-500/10 text-red-400'
               : 'bg-yellow-500/10 text-yellow-400'
           }`}>
-            <span>Total alloué</span>
+            <span>{t("totalAllocated")}</span>
             <span className="font-bold">{totalPct}% / 100%</span>
           </div>
 
           {/* Header */}
           <div className="grid grid-cols-[minmax(0,1fr)_7rem_8rem] text-xs text-muted-foreground font-medium mb-3 px-2 gap-2">
-            <span>Poste</span>
-            <span className="text-right">Allocation</span>
-            <span className="text-right">Dépensé (M€) %</span>
+            <span>{t("columnItem")}</span>
+            <span className="text-right">{t("columnAllocation")}</span>
+            <span className="text-right">{t("columnSpent")}</span>
           </div>
 
           <div className="space-y-1">
@@ -245,7 +247,7 @@ export default function BudgetPage() {
                       className="w-20 text-right text-sm font-mono bg-secondary/50 border border-transparent focus:border-primary rounded px-1.5 py-0.5 outline-none transition-colors"
                       style={{ color: s.color }}
                     />
-                    <button onClick={() => updateSpent(i, 0)} className="text-muted-foreground/40 hover:text-red-400 transition-colors" title="Remettre à 0">
+                    <button onClick={() => updateSpent(i, 0)} className="text-muted-foreground/40 hover:text-red-400 transition-colors" title={t("resetToZero")}>
                       <XMarkIcon className="w-3 h-3" />
                     </button>
                     <span className="text-xs text-muted-foreground w-10 text-right">{totalBudget ? ((s.spentTotal / totalBudget) * 100).toFixed(1) : 0}%</span>
@@ -269,7 +271,7 @@ export default function BudgetPage() {
 
             {/* Total row */}
             <div className="grid grid-cols-[minmax(0,1fr)_7rem_8rem] items-center py-2.5 px-2 border-t border-border mt-2 pt-3 gap-2">
-              <span className="text-sm font-bold">Total</span>
+              <span className="text-sm font-bold">{t("total")}</span>
               <span className="text-right text-sm font-bold font-mono text-foreground">{fmt(totalAllocated)}</span>
               <div className="flex items-center justify-end gap-1">
                 <span className={`text-sm font-bold font-mono ${

@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { Bars2Icon } from "@heroicons/react/24/outline";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
+import { useTranslation } from "react-i18next";
 
 export default function NavList({
   items,
@@ -10,6 +11,7 @@ export default function NavList({
   onReorder,
   onItemClick,
 }) {
+  const { t } = useTranslation("layout");
   const handleDragEnd = result => {
     if (!result.destination) return;
     onReorder(result.source.index, result.destination.index);
@@ -32,7 +34,7 @@ export default function NavList({
                     >
                       <Bars2Icon className="w-4 h-4 text-muted-foreground/60" />
                       <item.icon className="w-4 h-4" />
-                      {item.label}
+                      {t(item.labelKey)}
                     </div>
                   )}
                 </Draggable>
@@ -61,7 +63,7 @@ export default function NavList({
             }`}
           >
             <item.icon className="w-4 h-4" />
-            {item.label}
+            {t(item.labelKey)}
             {isActive && (
               <div className="ml-auto w-1.5 h-1.5 rounded-full bg-primary" />
             )}

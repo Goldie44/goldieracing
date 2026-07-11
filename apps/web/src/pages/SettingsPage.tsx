@@ -1,25 +1,29 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import PageHeader from "@/components/PageHeader";
 import SettingsAppearance from "./settings/SettingsAppearance";
 import SettingsProfile from "./settings/SettingsProfile";
 import SettingsData from "./settings/SettingsData";
 import SettingsNavigation from "./settings/SettingsNavigation";
+import SettingsLanguage from "./settings/SettingsLanguage";
 
 const TABS = [
-  { id: "appearance", label: "🎨 Apparence" },
-  { id: "profile", label: "🏎️ Profil" },
-  { id: "data", label: "💾 Données" },
-  { id: "navigation", label: "🧭 Navigation" },
+  { id: "appearance", labelKey: "tabs.appearance" },
+  { id: "profile", labelKey: "tabs.profile" },
+  { id: "data", labelKey: "tabs.data" },
+  { id: "navigation", labelKey: "tabs.navigation" },
+  { id: "language", labelKey: "tabs.language" },
 ] as const;
 
 type TabId = typeof TABS[number]["id"];
 
 export default function SettingsPage() {
+  const { t } = useTranslation("settings");
   const [activeTab, setActiveTab] = useState<TabId>("appearance");
 
   return (
     <div>
-      <PageHeader title="Paramètres" subtitle="Personnalise l'application" />
+      <PageHeader title={t("title")} subtitle={t("subtitle")} />
 
       {/* Tab bar */}
       <div className="flex gap-1 border-b border-border mb-8 mt-6">
@@ -33,7 +37,7 @@ export default function SettingsPage() {
                 : "border-transparent text-muted-foreground hover:text-foreground"
             }`}
           >
-            {tab.label}
+            {t(tab.labelKey)}
           </button>
         ))}
       </div>
@@ -43,6 +47,7 @@ export default function SettingsPage() {
       {activeTab === "profile" && <SettingsProfile />}
       {activeTab === "data" && <SettingsData />}
       {activeTab === "navigation" && <SettingsNavigation />}
+      {activeTab === "language" && <SettingsLanguage />}
     </div>
   );
 }

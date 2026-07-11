@@ -1,0 +1,11 @@
+{
+  "saveSlot": {
+    "load": "Charger",
+    "rename": "Renommer",
+    "export": "Exporter JSON",
+    "delete": "Supprimer"
+  },
+  "statCard": {
+    "competitor": "Concurrent"
+  }
+}

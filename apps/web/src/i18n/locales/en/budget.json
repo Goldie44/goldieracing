@@ -1,0 +1,21 @@
+{
+  "title": "Budget",
+  "subtitle": "Budget cap breakdown",
+  "resetAll": "Reset All",
+  "resetTitle": "Reset Budget?",
+  "resetDescription": "This will reset all spending, allocations and the budget cap to their initial values. This action is irreversible.",
+  "confirmReset": "Confirm Reset",
+  "cancel": "Cancel",
+  "totalCap": "Total cap",
+  "spent": "Spent",
+  "remaining": "Remaining",
+  "capUsage": "Cap usage",
+  "spentBreakdown": "Spending breakdown",
+  "allocationDetail": "Allocation detail",
+  "totalAllocated": "Total allocated",
+  "columnItem": "Item",
+  "columnAllocation": "Allocation",
+  "columnSpent": "Spent (M€) %",
+  "total": "Total",
+  "resetToZero": "Reset to 0"
+}

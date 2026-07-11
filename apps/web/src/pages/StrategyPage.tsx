@@ -1,4 +1,5 @@
 import { useState, useMemo } from "react";
+import { useTranslation } from "react-i18next";
 import { ArrowPathIcon } from "@heroicons/react/24/outline";
 import PageHeader from "../components/PageHeader";
 import {
@@ -195,6 +196,7 @@ function CompoundPill({
 
 /** Barre visuelle des relais proportionnelle aux tours */
 function StintBar({ strategy, totalLaps }: { strategy: Strategy; totalLaps: number }) {
+  const { t } = useTranslation("strategy");
   return (
     <div className="flex w-full h-3 rounded overflow-hidden gap-px">
       {strategy.stintLengths.map((len, i) => (
@@ -204,7 +206,7 @@ function StintBar({ strategy, totalLaps }: { strategy: Strategy; totalLaps: numb
             width: `${(len / totalLaps) * 100}%`,
             backgroundColor: COMPOUND_COLORS[strategy.compounds[i]] + "cc",
           }}
-          title={`${COMPOUND_LABELS[strategy.compounds[i]]} — ${len} tours`}
+          title={t("stintTooltip", { compound: COMPOUND_LABELS[strategy.compounds[i]], laps: len })}
         />
       ))}
     </div>
@@ -249,6 +251,7 @@ const ZERO_TIRE_DATA: Record<Compound, TireData> = {
 };
 
 export default function StrategyPage() {
+  const { t } = useTranslation("strategy");
   const [params, setParams] = useState<RaceParams>(ZERO_PARAMS);
   const [tireData, setTireData] = useState<Record<Compound, TireData>>(ZERO_TIRE_DATA);
   const [resetDialogOpen, setResetDialogOpen] = useState(false);
@@ -264,7 +267,7 @@ export default function StrategyPage() {
 
   return (
     <div>
-      <PageHeader title="Stratégie" subtitle="Optimisation pneumatique" />
+      <PageHeader title={t("title")} subtitle={t("subtitle")} />
 
       <div className="flex justify-end mt-6 mb-2">
         <Button
@@ -273,24 +276,24 @@ export default function StrategyPage() {
           onClick={() => setResetDialogOpen(true)}
         >
           <ArrowPathIcon className="w-4 h-4" />
-          Tout réinitialiser
+          {t("resetAll")}
         </Button>
       </div>
 
       <Dialog open={resetDialogOpen} onOpenChange={setResetDialogOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Réinitialiser la Stratégie ?</DialogTitle>
+            <DialogTitle>{t("resetTitle")}</DialogTitle>
             <DialogDescription>
-              Cette action remettra tous les paramètres de course et les données pneus à zéro. Cette action est irréversible.
+              {t("resetDescription")}
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
             <Button variant="destructive" onClick={() => { setParams(ZERO_PARAMS); setTireData(ZERO_TIRE_DATA); setResetDialogOpen(false); }}>
-              Confirmer la réinitialisation
+              {t("confirmReset")}
             </Button>
             <DialogClose asChild>
-              <Button type="button" variant="secondary">Annuler</Button>
+              <Button type="button" variant="secondary">{t("cancel")}</Button>
             </DialogClose>
           </DialogFooter>
         </DialogContent>
@@ -302,11 +305,11 @@ export default function StrategyPage() {
         {/* Course */}
         <div className="bg-card border border-border rounded-xl p-5">
           <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-4">
-            Paramètres de course
+            {t("raceParams")}
           </h3>
           <div className="space-y-3">
             <div className="flex items-center justify-between">
-              <label className="text-sm text-foreground">Nombre de tours</label>
+              <label className="text-sm text-foreground">{t("lapCount")}</label>
               <NumInput
                 value={params.totalLaps}
                 onChange={(v) => setParam("totalLaps", Math.max(2, v))}
@@ -315,7 +318,7 @@ export default function StrategyPage() {
               />
             </div>
             <div className="flex items-center justify-between">
-              <label className="text-sm text-foreground">Perte aux stands (s)</label>
+              <label className="text-sm text-foreground">{t("pitLoss")}</label>
               <NumInput
                 value={params.pitDelta}
                 onChange={(v) => setParam("pitDelta", v)}
@@ -329,15 +332,15 @@ export default function StrategyPage() {
         {/* Pneus */}
         <div className="bg-card border border-border rounded-xl p-5">
           <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-4">
-            Données pneus
+            {t("tireData")}
           </h3>
           <table className="w-full">
             <thead>
               <tr className="text-xs text-muted-foreground">
                 <th className="text-left pb-2 font-medium"></th>
-                <th className="text-right pb-2 font-medium">Temps base (s)</th>
-                <th className="text-right pb-2 font-medium">Dégradation (s/t)</th>
-                <th className="text-right pb-2 font-medium">Tours max</th>
+                <th className="text-right pb-2 font-medium">{t("baseTime")}</th>
+                <th className="text-right pb-2 font-medium">{t("degradation")}</th>
+                <th className="text-right pb-2 font-medium">{t("maxLaps")}</th>
               </tr>
             </thead>
             <tbody>
@@ -381,14 +384,14 @@ export default function StrategyPage() {
       {best && (
         <div className="bg-primary/5 border border-primary/20 rounded-xl p-5 mb-6">
           <p className="text-xs font-semibold text-primary uppercase tracking-wider mb-3">
-            ★ Stratégie optimale
+            {t("optimalStrategy")}
           </p>
           <div className="flex flex-wrap items-center gap-3 mb-3">
             {best.compounds.map((c, i) => (
               <span key={i} className="flex items-center gap-2">
                 {i > 0 && (
                   <span className="text-xs text-muted-foreground">
-                    → arrêt T{best.pitLaps[i - 1]}
+                    {t("pitStop", { lap: best.pitLaps[i - 1] })}
                   </span>
                 )}
                 <CompoundPill compound={c} label={`${COMPOUND_LABELS[c]} (${best.stintLengths[i]}t)`} />
@@ -406,23 +409,23 @@ export default function StrategyPage() {
       <div className="bg-card border border-border rounded-xl overflow-hidden">
         <div className="px-5 py-3 border-b border-border">
           <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-            Classement des stratégies ({strategies.length})
+            {t("ranking", { count: strategies.length })}
           </h3>
         </div>
         {strategies.length === 0 ? (
           <p className="px-5 py-8 text-center text-sm text-muted-foreground">
-            Aucune stratégie viable avec ces paramètres.
+            {t("noStrategy")}
           </p>
         ) : (
           <table className="w-full text-sm">
             <thead>
               <tr className="bg-muted/20 border-b border-border text-xs text-muted-foreground font-semibold uppercase tracking-wider">
-                <th className="px-4 py-2 text-left w-10">Rang</th>
-                <th className="px-4 py-2 text-left">Stratégie</th>
-                <th className="px-4 py-2 text-left w-40">Visualisation</th>
-                <th className="px-4 py-2 text-center w-20">Arrêts</th>
-                <th className="px-4 py-2 text-right w-32">Temps total</th>
-                <th className="px-4 py-2 text-right w-24">Écart</th>
+                <th className="px-4 py-2 text-left w-10">{t("rank")}</th>
+                <th className="px-4 py-2 text-left">{t("strategyColumn")}</th>
+                <th className="px-4 py-2 text-left w-40">{t("visualization")}</th>
+                <th className="px-4 py-2 text-center w-20">{t("stops")}</th>
+                <th className="px-4 py-2 text-right w-32">{t("totalTime")}</th>
+                <th className="px-4 py-2 text-right w-24">{t("gap")}</th>
               </tr>
             </thead>
             <tbody>

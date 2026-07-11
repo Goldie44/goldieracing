@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { PencilIcon, ArrowDownTrayIcon, TrashIcon } from "@heroicons/react/24/outline";
+import { useTranslation } from "react-i18next";
 
 export type SaveSlotData = {
   id: string;
@@ -22,6 +23,7 @@ type Props = {
 };
 
 export default function SaveSlot({ slot, onLoad, onRename, onExport, onDelete }: Props) {
+  const { t } = useTranslation("common");
   const [editing, setEditing] = useState(false);
   const [name, setName] = useState(slot.name);
 
@@ -57,26 +59,26 @@ export default function SaveSlot({ slot, onLoad, onRename, onExport, onDelete }:
           onClick={() => onLoad(slot)}
           className="px-2 py-1 rounded text-xs font-semibold text-primary bg-primary/10 hover:bg-primary/20 transition-colors"
         >
-          Charger
+          {t("saveSlot.load")}
         </button>
         <button
           onClick={() => setEditing(true)}
           className="p-1.5 rounded text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors"
-          title="Renommer"
+          title={t("saveSlot.rename")}
         >
           <PencilIcon className="w-3.5 h-3.5" />
         </button>
         <button
           onClick={() => onExport(slot)}
           className="p-1.5 rounded text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors"
-          title="Exporter JSON"
+          title={t("saveSlot.export")}
         >
           <ArrowDownTrayIcon className="w-3.5 h-3.5" />
         </button>
         <button
           onClick={() => onDelete(slot.id)}
           className="p-1.5 rounded text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors"
-          title="Supprimer"
+          title={t("saveSlot.delete")}
         >
           <TrashIcon className="w-3.5 h-3.5" />
         </button>

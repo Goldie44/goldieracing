@@ -1,0 +1,11 @@
+{
+  "saveSlot": {
+    "load": "Load",
+    "rename": "Rename",
+    "export": "Export JSON",
+    "delete": "Delete"
+  },
+  "statCard": {
+    "competitor": "Competitor"
+  }
+}

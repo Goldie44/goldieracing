@@ -1,0 +1,17 @@
+{
+  "title": "Stock Pièces",
+  "subtitle": "Inventaire et gestion des composants",
+  "resetAll": "Tout réinitialiser",
+  "resetTitle": "Réinitialiser le Stock ?",
+  "resetDescription": "Cette action remettra toutes les quantités, durées de vie et coûts unitaires à leurs valeurs initiales. Cette action est irréversible.",
+  "confirmReset": "Confirmer la réinitialisation",
+  "cancel": "Annuler",
+  "coverageChart": "Couverture saison par pièce",
+  "seasonCapacity": "Capacité saison",
+  "inStock": "En stock",
+  "daysToMake": "{{count}}j de fabrication",
+  "lifespan": "Durée de vie",
+  "races": "courses",
+  "unitCost": "Coût unitaire",
+  "totalCost": "Coût total de fabrication"
+}

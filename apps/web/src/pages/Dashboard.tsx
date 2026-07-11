@@ -8,6 +8,7 @@ import {
   WalletIcon,
 } from "@heroicons/react/24/outline";
 import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
+import { useTranslation } from "react-i18next";
 import StatCard from "../components/StatCard";
 import { calendar, circuitTypes, stock } from "../lib/f1Data";
 import { useBudget } from "../lib/BudgetContext";
@@ -52,6 +53,7 @@ function useStockHealth() {
 }
 
 export default function Dashboard() {
+  const { t } = useTranslation("dashboard");
   const { sections, totalBudget: ctxTotalBudget } = useBudget();
   const { atrData } = useAtr();
   const calcAtrDelta = (r) => {
@@ -80,14 +82,14 @@ const top3Deficits = [...allDeltasWithLabel].sort((a, b) => a.delta - b.delta).s
   return (
     <div>
       <div className="mb-8">
-        <h1 className="text-2xl md:text-3xl font-bold text-foreground tracking-tight">Dashboard</h1>
+        <h1 className="text-2xl md:text-3xl font-bold text-foreground tracking-tight">{t("title")}</h1>
         <div className="h-1 w-12 bg-primary rounded-full mt-3" />
       </div>
 
       {/* Stats Row */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-        <StatCard label="Courses" value="23" icon={FlagIcon} />
-        <StatCard label="Budget utilisé" value={budgetPercent + "%"} icon={WalletIcon} />
+        <StatCard label={t("races")} value="23" icon={FlagIcon} />
+        <StatCard label={t("budgetUsed")} value={budgetPercent + "%"} icon={WalletIcon} />
       </div>
 
       {/* Top 3 Déficits */}
@@ -99,7 +101,7 @@ const top3Deficits = [...allDeltasWithLabel].sort((a, b) => a.delta - b.delta).s
           className="bg-red-500/5 border border-red-500/20 rounded-xl p-5 mb-8"
         >
           <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">
-            ⚠ 3 plus grands déficits · Écart de performance
+            {t("topDeficits")}
           </h3>
           <div className="flex flex-col gap-2">
             {top3Deficits.map((item, i) => (
@@ -121,17 +123,17 @@ const top3Deficits = [...allDeltasWithLabel].sort((a, b) => a.delta - b.delta).s
       >
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <div>
-            <span className="text-xs font-mono text-primary uppercase tracking-widest">Prochaine Course</span>
-            <h2 className="text-xl font-bold mt-1">{nextRaceUnchecked?.name ?? "Toutes les courses terminées 🏁"}</h2>
+            <span className="text-xs font-mono text-primary uppercase tracking-widest">{t("nextRace")}</span>
+            <h2 className="text-xl font-bold mt-1">{nextRaceUnchecked?.name ?? t("allRacesDone")}</h2>
             <p className="text-sm text-muted-foreground mt-1">{nextRaceUnchecked?.circuit}</p>
           </div>
           <div className="flex items-center gap-4">
             <div className="text-right">
-            <div className="text-xs text-muted-foreground">Type</div>
+            <div className="text-xs text-muted-foreground">{t("type")}</div>
               <div className="text-sm font-semibold text-primary">{nextRaceUnchecked?.type}</div>
             </div>
             <div className="text-right">
-            <div className="text-xs text-muted-foreground">Stratégie</div>
+            <div className="text-xs text-muted-foreground">{t("strategy")}</div>
               <div className="text-sm font-semibold">{nextRaceUnchecked?.strategy}</div>
             </div>
           </div>
@@ -147,23 +149,23 @@ const top3Deficits = [...allDeltasWithLabel].sort((a, b) => a.delta - b.delta).s
       >
         <div className="flex items-center gap-2 mb-5">
           <CubeIcon className="w-4 h-4 text-primary" />
-          <h3 className="text-sm font-semibold text-foreground">État du Stock Pièces</h3>
-          <span className="ml-auto text-xs text-muted-foreground font-mono">{stockItems.length} pièces</span>
+          <h3 className="text-sm font-semibold text-foreground">{t("stockStatus")}</h3>
+          <span className="ml-auto text-xs text-muted-foreground font-mono">{t("piecesCount", { count: stockItems.length })}</span>
         </div>
 
         {/* Counters */}
         <div className="grid grid-cols-3 gap-3 mb-5">
           <div className="rounded-lg bg-green-500/10 border border-green-500/20 p-3 text-center">
             <div className="text-2xl font-bold font-mono text-green-400">{stockGood}</div>
-            <div className="text-xs text-muted-foreground mt-1">Stock OK</div>
+            <div className="text-xs text-muted-foreground mt-1">{t("stockOk")}</div>
           </div>
           <div className="rounded-lg bg-yellow-500/10 border border-yellow-500/20 p-3 text-center">
             <div className="text-2xl font-bold font-mono text-yellow-400">{stockWarning}</div>
-            <div className="text-xs text-muted-foreground mt-1">Attention</div>
+            <div className="text-xs text-muted-foreground mt-1">{t("stockWarning")}</div>
           </div>
           <div className="rounded-lg bg-red-500/10 border border-red-500/20 p-3 text-center">
             <div className="text-2xl font-bold font-mono text-red-400">{stockCritical}</div>
-            <div className="text-xs text-muted-foreground mt-1">Critique</div>
+            <div className="text-xs text-muted-foreground mt-1">{t("stockCritical")}</div>
           </div>
         </div>
 
@@ -183,14 +185,14 @@ const top3Deficits = [...allDeltasWithLabel].sort((a, b) => a.delta - b.delta).s
                   <ExclamationTriangleIcon className={`w-3.5 h-3.5 flex-shrink-0 ${item.health === "critical" ? "text-red-400" : "text-yellow-400"}`} />
                   <span className="text-sm font-medium">{item.piece}</span>
                 </div>
-                <span className="text-xs font-mono text-muted-foreground">{item.count} pcs · {item.capacity} courses</span>
+                <span className="text-xs font-mono text-muted-foreground">{t("pcsRaces", { count: item.count, races: item.capacity })}</span>
               </div>
             ))}
           </div>
         ) : (
           <div className="flex items-center gap-2 text-sm text-green-400">
             <CheckCircleIcon className="w-4 h-4" />
-            <span>Tous les stocks sont suffisants pour la saison</span>
+            <span>{t("stockAllGood")}</span>
           </div>
         )}
       </motion.div>
@@ -204,7 +206,7 @@ const top3Deficits = [...allDeltasWithLabel].sort((a, b) => a.delta - b.delta).s
           transition={{ delay: 0.2 }}
           className="bg-card border border-border rounded-xl p-6"
         >
-          <h3 className="text-sm font-semibold text-foreground mb-4">Types de Circuit</h3>
+          <h3 className="text-sm font-semibold text-foreground mb-4">{t("circuitTypes")}</h3>
           <div className="flex items-center gap-6">
             <div className="w-36 h-36">
               <ResponsiveContainer>

@@ -13,6 +13,7 @@ import { useRace } from "../lib/RaceContext";
 import PageHeader from "../components/PageHeader";
 import { calendar } from "../lib/f1Data";
 import moment from "moment";
+import { useTranslation } from "react-i18next";
 
 const typeConfig = {
   "Rapide": { icon: BoltIcon, badge: "bg-red-500/15 text-red-400 border-red-500/20" },
@@ -24,6 +25,7 @@ const typeConfig = {
 const STORAGE_KEY = "calendarOrder";
 
 export default function CalendarPage() {
+  const { t } = useTranslation("calendar");
   const { done, toggle } = useRace();
   const [dragIndex, setDragIndex] = useState<number | null>(null);
   const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
@@ -85,8 +87,8 @@ export default function CalendarPage() {
 
   return (
     <div>
-      <PageHeader title="Calendrier " subtitle="Roadmap complète de la saison" />
-      <div className="mb-6 text-sm text-muted-foreground">Glisser-déposer une course pour modifier son ordre.</div>
+      <PageHeader title={t("title")} subtitle={t("subtitle")} />
+      <div className="mb-6 text-sm text-muted-foreground">{t("dragHint")}</div>
 
       <div className="space-y-3">
         {races.map((race, i) => {
@@ -118,7 +120,7 @@ export default function CalendarPage() {
                     : <StopCircleIcon className="w-5 h-5 text-muted-foreground/40 hover:text-muted-foreground transition-colors" />}
                 </button>
                 {dragOverIndex === i && (
-                  <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-primary border border-primary/20 rounded-full px-2 py-1 bg-primary/10">Déposer ici</span>
+                  <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-primary border border-primary/20 rounded-full px-2 py-1 bg-primary/10">{t("dropHere")}</span>
                 )}
                 {/* Race Number */}
                 <div className="flex items-center gap-4 md:w-12">

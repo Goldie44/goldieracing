@@ -1,0 +1,9 @@
+{
+  "title": "Welcome to Goldie Racing 🏎️",
+  "description": "Set up your first save before starting the season.",
+  "saveNameLabel": "Save name",
+  "saveNamePlaceholder": "e.g. Main 2023 season",
+  "teamNameLabel": "Team name",
+  "teamNamePlaceholder": "e.g. Red Bull Racing",
+  "start": "Get started"
+}

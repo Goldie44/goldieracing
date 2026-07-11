@@ -8,6 +8,7 @@ import {
   TrashIcon,
 } from "@heroicons/react/24/outline";
 import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { useAtr } from "../lib/AtrContext";
 import PageHeader from "../components/PageHeader";
 import StatCard from "../components/StatCard";
@@ -72,6 +73,7 @@ const PARTS_LIST = [
 ];
 
 export default function PerformancePage() {
+  const { t } = useTranslation("performance");
   const { atrData, setAtrData } = useAtr();
   const [projects, setProjects] = useState(loadProjects);
 
@@ -190,19 +192,19 @@ export default function PerformancePage() {
 
   return (
     <div>
-      <PageHeader title="Performance" subtitle="Analyse des métriques de performance véhicule" />
+      <PageHeader title={t("title")} subtitle={t("subtitle")} />
 
       {/* BOP Stats */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-        <StatCard label="Vélocité" value={avg(0)} icon={BoltIcon} competitor={avgComp(0)} />
-        <StatCard label="Virage" value={avg(1)} icon={CloudIcon} competitor={avgComp(1)} />
-        <StatCard label="Composants" value={avg(2)} icon={ChartBarIcon} competitor={avgComp(2)} />
+        <StatCard label={t("velocity")} value={avg(0)} icon={BoltIcon} competitor={avgComp(0)} />
+        <StatCard label={t("cornering")} value={avg(1)} icon={CloudIcon} competitor={avgComp(1)} />
+        <StatCard label={t("components")} value={avg(2)} icon={ChartBarIcon} competitor={avgComp(2)} />
 
       </div>
 
 
 
-      <AtrCalTable data={atrData} setData={setAtrData} />
+      <AtrCalTable data={atrData} setData={setAtrData} title={t("calibrationTitle")} />
 
       {/* Nouveau Projet */}
       <div className="my-6 flex flex-col items-start gap-4">
@@ -212,7 +214,7 @@ export default function PerformancePage() {
             className="flex items-center gap-1.5 text-xs bg-primary/10 text-primary hover:bg-primary/20 transition-colors px-3 py-1.5 rounded-lg font-medium"
           >
             <PlusIcon className="w-3 h-3" />
-            Nouveau projet
+            {t("newProject")}
           </button>
           <Button
             variant="destructive"
@@ -220,22 +222,22 @@ export default function PerformancePage() {
             onClick={() => setResetDialogOpen(true)}
           >
             <ArrowPathIcon className="w-3.5 h-3.5" />
-            Tout réinitialiser
+            {t("resetAll")}
           </Button>
         </div>
 
         <Dialog open={resetDialogOpen} onOpenChange={setResetDialogOpen}>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>Réinitialiser la Performance ?</DialogTitle>
+              <DialogTitle>{t("resetTitle")}</DialogTitle>
               <DialogDescription>
-                Cette action supprimera tous les projets et remettra toutes les valeurs du tableau ATR à zéro. Cette action est irréversible.
+                {t("resetDescription")}
               </DialogDescription>
             </DialogHeader>
             <DialogFooter>
-              <Button variant="destructive" onClick={resetAll}>Confirmer la réinitialisation</Button>
+              <Button variant="destructive" onClick={resetAll}>{t("confirmReset")}</Button>
               <DialogClose asChild>
-                <Button type="button" variant="secondary">Annuler</Button>
+                <Button type="button" variant="secondary">{t("cancel")}</Button>
               </DialogClose>
             </DialogFooter>
           </DialogContent>
@@ -247,10 +249,10 @@ export default function PerformancePage() {
               <input value={newProject.atr} onChange={e => setNewProject(p => ({...p, atr: e.target.value}))} className="w-full text-xs bg-background border border-border rounded px-2 py-1.5 outline-none focus:border-primary text-foreground" placeholder="ex: ATR-08" />
             </div>
             <div>
-              <label className="text-xs text-muted-foreground mb-1 block">Pièces</label>
+              <label className="text-xs text-muted-foreground mb-1 block">{t("pieceLabel")}</label>
               <Select value={newProject.part} onValueChange={(value) => setNewProject(p => ({...p, part: value}))}>
                 <SelectTrigger className="w-full text-xs h-9">
-                  <SelectValue placeholder="Sélectionner une pièce" />
+                  <SelectValue placeholder={t("selectPiece")} />
                 </SelectTrigger>
                 <SelectContent>
                   {PARTS_LIST.map((part) => (
@@ -307,7 +309,7 @@ export default function PerformancePage() {
               </div>
             </div>
             <div className="flex gap-2 justify-end">
-              <button onClick={() => setShowNewProject(false)} className="text-xs text-muted-foreground hover:text-foreground px-3 py-1.5">Annuler</button>
+              <button onClick={() => setShowNewProject(false)} className="text-xs text-muted-foreground hover:text-foreground px-3 py-1.5">{t("cancel")}</button>
               <button
                 onClick={() => {
                   if (!newProject.atr) return;
@@ -319,7 +321,7 @@ export default function PerformancePage() {
                 }}
                 className="text-xs bg-primary text-primary-foreground px-3 py-1.5 rounded-lg font-medium hover:bg-primary/90 transition-colors"
               >
-                Ajouter
+                {t("add")}
               </button>
             </div>
           </div>
@@ -333,7 +335,7 @@ export default function PerformancePage() {
         transition={{ delay: 0.2 }}
         className="bg-card border border-border rounded-xl p-6"
       >
-        <h3 className="text-sm font-semibold mb-6">Plan de Développement</h3>
+        <h3 className="text-sm font-semibold mb-6">{t("developmentPlan")}</h3>
         <div className="relative">
           <div className="absolute left-4 top-0 bottom-0 w-px bg-border" />
           <div className="space-y-6">
@@ -357,8 +359,8 @@ export default function PerformancePage() {
                     <button
                       type="button"
                       onClick={() => removeProject(i)}
-                      aria-label={`Supprimer ${update.atr}`}
-                      title={`Supprimer ${update.atr}`}
+                      aria-label={t("deleteProject", { atr: update.atr })}
+                      title={t("deleteProject", { atr: update.atr })}
                       className="shrink-0 rounded-md p-1 text-muted-foreground transition-colors hover:bg-red-500/10 hover:text-red-400 focus:outline-none focus:ring-2 focus:ring-red-500/40"
                     >
                       <TrashIcon className="h-4 w-4" />
@@ -387,12 +389,12 @@ export default function PerformancePage() {
                     return (
                       <div className="mt-3 relative group">
                         <div className="p-2 rounded bg-green-500/10 border border-green-500/30 cursor-pointer">
-                          <div className="text-xs text-muted-foreground mb-1">Gains attendus</div>
+                          <div className="text-xs text-muted-foreground mb-1">{t("expectedGains")}</div>
                           <div className="text-lg font-bold text-green-400">{gainsAttendus}</div>
                         </div>
                         {/* Tooltip */}
                         <div className="absolute left-0 bottom-full mb-2 w-64 p-3 rounded-lg bg-card border border-border shadow-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none group-hover:pointer-events-auto z-50">
-                          <div className="text-xs font-semibold text-muted-foreground mb-2">Détail des gains</div>
+                          <div className="text-xs font-semibold text-muted-foreground mb-2">{t("gainsDetail")}</div>
                           <div className="space-y-1 text-xs">
                             {update.vitesseMax && <div className="flex justify-between"><span>Vitesse max:</span><span className="text-green-400">{update.vitesseMax}</span></div>}
                             {update.acceleration && <div className="flex justify-between"><span>Accélération:</span><span className="text-green-400">{update.acceleration}</span></div>}
@@ -419,7 +421,8 @@ export default function PerformancePage() {
   );
 }
 
-function AtrCalTable({ data, setData, title = "Calibration ATR" }) {
+function AtrCalTable({ data, setData, title }: { data: any; setData: any; title?: string }) {
+  const { t } = useTranslation("performance");
   const reset = () => setData(initialSections.map(s => ({
     ...s,
     rows: s.rows.map(r => ({ ...r, v1: "", moyenne: "", delta: "", cd: "", deltaCD: "", gainsAttendus: "" })),
@@ -459,7 +462,7 @@ function AtrCalTable({ data, setData, title = "Calibration ATR" }) {
         <h3 className="text-sm font-semibold">{title}</h3>
         <button onClick={reset} className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-red-400 transition-colors">
           <ArrowPathIcon className="w-3 h-3" />
-          Remettre à zéro
+          {t("resetToZero")}
         </button>
       </div>
       {/* Top 3 smallest deltas */}
@@ -473,7 +476,7 @@ function AtrCalTable({ data, setData, title = "Calibration ATR" }) {
         const top3 = worst.slice(0, 3);
         return (
           <div className="mb-4 border border-red-500/20 rounded-lg bg-red-500/10 p-3">
-            <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">⚠ 3 plus grands déficits</h4>
+            <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">{t("topDeficits")}</h4>
             <div className="flex flex-col gap-1.5">
               {top3.map((item, i) => (
                 <div key={i} className="flex items-center justify-between px-2 py-1.5 rounded bg-red-500/10">
@@ -489,10 +492,10 @@ function AtrCalTable({ data, setData, title = "Calibration ATR" }) {
         <thead>
           <tr className="text-muted-foreground">
             <th className="text-left py-2 px-2 font-medium w-48"></th>
-            <th className="py-2 px-2 font-medium">Monoplace</th>
-            <th className="py-2 px-2 font-medium text-green-400">Gains Attendus</th>
-            <th className="py-2 px-2 font-medium">Concurrent Direct</th>
-            <th className="py-2 px-2 font-medium text-yellow-400">Δ Déficit</th>
+            <th className="py-2 px-2 font-medium">{t("tableMonoplace")}</th>
+            <th className="py-2 px-2 font-medium text-green-400">{t("tableGains")}</th>
+            <th className="py-2 px-2 font-medium">{t("tableCompetitor")}</th>
+            <th className="py-2 px-2 font-medium text-yellow-400">{t("tableDeficit")}</th>
           </tr>
         </thead>
         <tbody>

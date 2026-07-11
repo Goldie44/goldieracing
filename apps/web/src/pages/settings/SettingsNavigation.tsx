@@ -1,18 +1,20 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useNavOrder } from "@/lib/NavOrderContext";
 import NavList from "@/components/NavList";
 import { PencilIcon } from "@heroicons/react/24/outline";
 
 export default function SettingsNavigation() {
+  const { t } = useTranslation("settings");
   const { orderedItems, reorder } = useNavOrder();
   const [isEditMode, setIsEditMode] = useState(false);
 
   return (
     <div className="flex flex-col gap-6 max-w-sm">
       <div>
-        <h3 className="text-sm font-semibold text-foreground mb-1">Ordre des pages</h3>
+        <h3 className="text-sm font-semibold text-foreground mb-1">{t("navigation.order")}</h3>
         <p className="text-xs text-muted-foreground mb-4">
-          Glisse les pages pour réorganiser la navigation.
+          {t("navigation.hint")}
         </p>
         <div className="flex flex-col gap-1">
           <NavList
@@ -34,7 +36,7 @@ export default function SettingsNavigation() {
         }`}
       >
         <PencilIcon className="w-3.5 h-3.5" />
-        {isEditMode ? "Terminer" : "Modifier l'ordre"}
+        {isEditMode ? t("navigation.finish") : t("navigation.edit")}
       </button>
     </div>
   );

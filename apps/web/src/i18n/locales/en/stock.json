@@ -1,0 +1,17 @@
+{
+  "title": "Parts Stock",
+  "subtitle": "Component inventory and management",
+  "resetAll": "Reset All",
+  "resetTitle": "Reset Stock?",
+  "resetDescription": "This will reset all quantities, lifespans and unit costs to their initial values. This action is irreversible.",
+  "confirmReset": "Confirm Reset",
+  "cancel": "Cancel",
+  "coverageChart": "Season coverage per part",
+  "seasonCapacity": "Season capacity",
+  "inStock": "In stock",
+  "daysToMake": "{{count}}d to manufacture",
+  "lifespan": "Lifespan",
+  "races": "races",
+  "unitCost": "Unit cost",
+  "totalCost": "Total manufacturing cost"
+}

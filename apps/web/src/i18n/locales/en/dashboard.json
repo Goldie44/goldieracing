@@ -1,0 +1,18 @@
+{
+  "title": "Dashboard",
+  "races": "Races",
+  "budgetUsed": "Budget Used",
+  "topDeficits": "⚠ Top 3 deficits · Performance gap",
+  "nextRace": "Next Race",
+  "allRacesDone": "All races completed 🏁",
+  "type": "Type",
+  "strategy": "Strategy",
+  "stockStatus": "Parts Stock Status",
+  "piecesCount": "{{count}} parts",
+  "stockOk": "Stock OK",
+  "stockWarning": "Warning",
+  "stockCritical": "Critical",
+  "stockAllGood": "All stock is sufficient for the season",
+  "pcsRaces": "{{count}} pcs · {{races}} races",
+  "circuitTypes": "Circuit Types"
+}

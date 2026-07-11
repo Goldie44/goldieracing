@@ -1,0 +1,81 @@
+{
+  "title": "Paramètres",
+  "subtitle": "Personnalise l'application",
+  "tabs": {
+    "appearance": "🎨 Apparence",
+    "profile": "🏎️ Profil",
+    "data": "💾 Données",
+    "navigation": "🧭 Navigation",
+    "language": "🌐 Langue"
+  },
+  "appearance": {
+    "theme": "Thème",
+    "themeDark": "🌙 Sombre",
+    "themeLight": "☀️ Clair",
+    "themeSystem": "💻 Système",
+    "accentColor": "Couleur d'accent",
+    "font": "Police",
+    "fontColorLabel": "Couleur",
+    "fontColorTitle": "Couleur du texte",
+    "preview": "Aperçu — F1 Manager 2023 · Goldie Racing",
+    "backgroundImage": "Image de fond",
+    "changeImage": "Changer l'image",
+    "dropImage": "Clique ou glisse une image",
+    "opacity": "Opacité",
+    "blur": "Flou",
+    "matchAccent": "🎨 Matcher la couleur d'accent",
+    "removeImage": "🗑️ Supprimer",
+    "fontFamilies": {
+      "inter": "Inter (défaut)",
+      "robotoMono": "Roboto Mono",
+      "spaceGrotesk": "Space Grotesk",
+      "orbitron": "Orbitron",
+      "rajdhani": "Rajdhani",
+      "georgia": "Georgia",
+      "system": "Système"
+    },
+    "fontSizes": {
+      "xs": "Très petite — 11px",
+      "sm": "Petite — 13px",
+      "md": "Normale — 15px",
+      "lg": "Grande — 17px",
+      "xl": "Très grande — 20px"
+    }
+  },
+  "profile": {
+    "teamName": "Nom de l'équipe",
+    "teamNamePlaceholder": "Goldie Racing",
+    "activeSeason": "Saison active"
+  },
+  "data": {
+    "saves": "Sauvegardes ({{count}}/{{max}})",
+    "importJson": "Importer JSON",
+    "newSave": "+ Nouvelle sauvegarde",
+    "noSaves": "Aucune sauvegarde. Crée-en une !",
+    "resetTitle": "Réinitialisation",
+    "resetBudgetLabel": "Reset Budget",
+    "resetBudgetDesc": "Remet toutes les dépenses et allocations à zéro.",
+    "resetRaceLabel": "Reset Courses",
+    "resetRaceDesc": "Décoche toutes les courses marquées comme terminées.",
+    "resetAtrLabel": "Reset ATR",
+    "resetAtrDesc": "Efface toutes les valeurs du tableau ATR.",
+    "resetArrow": "Réinitialiser →",
+    "resetIrreversible": "Cette action est irréversible.",
+    "confirm": "Confirmer",
+    "cancel": "Annuler",
+    "invalidFile": "Fichier JSON invalide.",
+    "importedSuffix": " (importé)",
+    "saveNamePrefix": "Sauvegarde"
+  },
+  "navigation": {
+    "order": "Ordre des pages",
+    "hint": "Glisse les pages pour réorganiser la navigation.",
+    "finish": "Terminer",
+    "edit": "Modifier l'ordre"
+  },
+  "language": {
+    "title": "Langue",
+    "fr": "Français",
+    "en": "English"
+  }
+}
