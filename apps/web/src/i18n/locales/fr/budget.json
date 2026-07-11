@@ -1,1 +1,21 @@
-{}
+{
+  "title": "Budget",
+  "subtitle": "Répartition du plafond budgétaire",
+  "resetAll": "Tout réinitialiser",
+  "resetTitle": "Réinitialiser le Budget ?",
+  "resetDescription": "Cette action remettra toutes les dépenses, allocations et le plafond budgétaire à leurs valeurs initiales. Cette action est irréversible.",
+  "confirmReset": "Confirmer la réinitialisation",
+  "cancel": "Annuler",
+  "totalCap": "Plafond total",
+  "spent": "Dépensé",
+  "remaining": "Restant",
+  "capUsage": "Utilisation du plafond",
+  "spentBreakdown": "Répartition dépensée",
+  "allocationDetail": "Détail des allocations",
+  "totalAllocated": "Total alloué",
+  "columnItem": "Poste",
+  "columnAllocation": "Allocation",
+  "columnSpent": "Dépensé (M€) %",
+  "total": "Total",
+  "resetToZero": "Remettre à 0"
+}
