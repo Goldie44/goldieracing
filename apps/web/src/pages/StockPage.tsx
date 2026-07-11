@@ -122,8 +122,8 @@ export default function StockPage() {
               contentStyle={{ background: "hsl(220, 14%, 9%)", border: "1px solid hsl(220, 12%, 16%)", borderRadius: "8px", fontSize: "12px" }}
               labelStyle={{ color: "hsl(40, 20%, 95%)" }}
             />
-            <Bar dataKey="capacité" fill="hsl(220, 12%, 25%)" radius={[4, 4, 0, 0]} name="Capacité saison" />
-            <Bar dataKey="stock" fill="hsl(43, 96%, 56%)" radius={[4, 4, 0, 0]} name="En stock" />
+            <Bar dataKey="capacité" fill="hsl(220, 12%, 25%)" radius={[4, 4, 0, 0]} name={t("seasonCapacity")} />
+            <Bar dataKey="stock" fill="hsl(43, 96%, 56%)" radius={[4, 4, 0, 0]} name={t("inStock")} />
           </BarChart>
         </ResponsiveContainer>
       </motion.div>
