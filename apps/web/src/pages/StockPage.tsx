@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { ArrowPathIcon, CheckCircleIcon, ExclamationTriangleIcon } from "@heroicons/react/24/outline";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
 import PageHeader from "../components/PageHeader";
@@ -20,6 +21,7 @@ const STOCK_COSTS_KEY = "goldie-racing:stock-costs";
 const STOCK_LIFESPANS_KEY = "goldie-racing:stock-lifespans";
 
 export default function StockPage() {
+  const { t } = useTranslation("stock");
   const [counts, setCounts] = useState<Record<string, number>>(() => {
     try {
       const stored = window.localStorage.getItem(STOCK_COUNTS_KEY);
@@ -75,7 +77,7 @@ export default function StockPage() {
 
   return (
     <div>
-      <PageHeader title="Stock Pièces" subtitle="Inventaire et gestion des composants" />
+      <PageHeader title={t("title")} subtitle={t("subtitle")} />
 
       <div className="flex justify-end mt-6 mb-2">
         <Button
@@ -84,22 +86,22 @@ export default function StockPage() {
           onClick={() => setResetDialogOpen(true)}
         >
           <ArrowPathIcon className="w-4 h-4" />
-          Tout réinitialiser
+          {t("resetAll")}
         </Button>
       </div>
 
       <Dialog open={resetDialogOpen} onOpenChange={setResetDialogOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Réinitialiser le Stock ?</DialogTitle>
+            <DialogTitle>{t("resetTitle")}</DialogTitle>
             <DialogDescription>
-              Cette action remettra toutes les quantités, durées de vie et coûts unitaires à leurs valeurs initiales. Cette action est irréversible.
+              {t("resetDescription")}
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
-            <Button variant="destructive" onClick={resetAll}>Confirmer la réinitialisation</Button>
+            <Button variant="destructive" onClick={resetAll}>{t("confirmReset")}</Button>
             <DialogClose asChild>
-              <Button type="button" variant="secondary">Annuler</Button>
+              <Button type="button" variant="secondary">{t("cancel")}</Button>
             </DialogClose>
           </DialogFooter>
         </DialogContent>
@@ -111,7 +113,7 @@ export default function StockPage() {
         animate={{ opacity: 1, y: 0 }}
         className="bg-card border border-border rounded-xl p-6 mb-8"
       >
-        <h3 className="text-sm font-semibold mb-4">Couverture saison par pièce</h3>
+        <h3 className="text-sm font-semibold mb-4">{t("coverageChart")}</h3>
         <ResponsiveContainer height={200}>
           <BarChart data={chartData} barGap={4}>
             <XAxis dataKey="name" tick={{ fontSize: 10, fill: "hsl(220, 10%, 50%)" }} axisLine={false} tickLine={false} />
@@ -144,7 +146,7 @@ export default function StockPage() {
               <div className="flex items-start justify-between mb-4">
                 <div>
                   <h3 className="text-sm font-semibold">{item.piece}</h3>
-                  <span className="text-xs text-muted-foreground">{item.daysToMake}j de fabrication</span>
+                  <span className="text-xs text-muted-foreground">{t("daysToMake", { count: item.daysToMake })}</span>
                 </div>
                 {health === "good" ? (
                   <CheckCircleIcon className="w-4 h-4 text-green-400" />
@@ -157,7 +159,7 @@ export default function StockPage() {
 
               <div className="grid grid-cols-2 gap-3 mb-4">
                 <div className="bg-secondary/50 rounded-lg p-3">
-                  <div className="text-xs text-muted-foreground">En stock</div>
+                  <div className="text-xs text-muted-foreground">{t("inStock")}</div>
                   <input
                     type="number"
                     min={0}
@@ -167,7 +169,7 @@ export default function StockPage() {
                   />
                 </div>
                 <div className="bg-secondary/50 rounded-lg p-3">
-                  <div className="text-xs text-muted-foreground">Durée de vie</div>
+                  <div className="text-xs text-muted-foreground">{t("lifespan")}</div>
                   <div className="flex items-baseline gap-1">
                     <input
                       type="number"
@@ -176,19 +178,19 @@ export default function StockPage() {
                       onChange={e => setLifespans(prev => ({ ...prev, [item.piece]: Number(e.target.value) }))}
                       className="text-lg font-bold font-mono bg-transparent w-full outline-none border-b border-transparent focus:border-primary transition-colors"
                     />
-                    <span className="text-xs text-muted-foreground">courses</span>
+                    <span className="text-xs text-muted-foreground">{t("races")}</span>
                   </div>
                 </div>
               </div>
 
               <div className="space-y-2">
                 <div className="flex justify-between text-xs">
-                  <span className="text-muted-foreground">Capacité saison</span>
+                  <span className="text-muted-foreground">{t("seasonCapacity")}</span>
                   <span className="font-mono">{capacity}</span>
                 </div>
 
                 <div className="flex justify-between text-xs items-center">
-                   <span className="text-muted-foreground">Coût unitaire</span>
+                   <span className="text-muted-foreground">{t("unitCost")}</span>
                    <div className="flex items-center gap-1">
                      <input
                        type="number"
@@ -213,7 +215,7 @@ export default function StockPage() {
         transition={{ delay: 0.3 }}
         className="mt-6 bg-card border border-primary/20 rounded-xl p-5 flex items-center justify-between"
       >
-        <span className="text-sm text-muted-foreground">Coût total de fabrication</span>
+        <span className="text-sm text-muted-foreground">{t("totalCost")}</span>
         <span className="text-xl font-bold font-mono text-primary">{(totalCost / 1000000).toFixed(1)}M €</span>
       </motion.div>
     </div>
