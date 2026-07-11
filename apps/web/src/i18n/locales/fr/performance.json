@@ -20,5 +20,8 @@
   "tableGains": "Gains Attendus",
   "tableCompetitor": "Concurrent Direct",
   "tableDeficit": "Δ Déficit",
-  "calibrationTitle": "Calibration ATR"
+  "calibrationTitle": "Calibration ATR",
+  "pieceLabel": "Pièces",
+  "selectPiece": "Sélectionner une pièce",
+  "deleteProject": "Supprimer {{atr}}"
 }

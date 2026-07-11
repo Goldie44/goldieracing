@@ -249,10 +249,10 @@ export default function PerformancePage() {
               <input value={newProject.atr} onChange={e => setNewProject(p => ({...p, atr: e.target.value}))} className="w-full text-xs bg-background border border-border rounded px-2 py-1.5 outline-none focus:border-primary text-foreground" placeholder="ex: ATR-08" />
             </div>
             <div>
-              <label className="text-xs text-muted-foreground mb-1 block">Pièces</label>
+              <label className="text-xs text-muted-foreground mb-1 block">{t("pieceLabel")}</label>
               <Select value={newProject.part} onValueChange={(value) => setNewProject(p => ({...p, part: value}))}>
                 <SelectTrigger className="w-full text-xs h-9">
-                  <SelectValue placeholder="Sélectionner une pièce" />
+                  <SelectValue placeholder={t("selectPiece")} />
                 </SelectTrigger>
                 <SelectContent>
                   {PARTS_LIST.map((part) => (
@@ -359,8 +359,8 @@ export default function PerformancePage() {
                     <button
                       type="button"
                       onClick={() => removeProject(i)}
-                      aria-label={`Supprimer ${update.atr}`}
-                      title={`Supprimer ${update.atr}`}
+                      aria-label={t("deleteProject", { atr: update.atr })}
+                      title={t("deleteProject", { atr: update.atr })}
                       className="shrink-0 rounded-md p-1 text-muted-foreground transition-colors hover:bg-red-500/10 hover:text-red-400 focus:outline-none focus:ring-2 focus:ring-red-500/40"
                     >
                       <TrashIcon className="h-4 w-4" />

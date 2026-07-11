@@ -20,5 +20,8 @@
   "tableGains": "Expected Gains",
   "tableCompetitor": "Direct Competitor",
   "tableDeficit": "Δ Deficit",
-  "calibrationTitle": "ATR Calibration"
+  "calibrationTitle": "ATR Calibration",
+  "pieceLabel": "Parts",
+  "selectPiece": "Select a part",
+  "deleteProject": "Delete {{atr}}"
 }
