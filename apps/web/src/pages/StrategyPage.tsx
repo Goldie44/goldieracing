@@ -195,7 +195,8 @@ function CompoundPill({
 }
 
 /** Barre visuelle des relais proportionnelle aux tours */
-function StintBar({ strategy, totalLaps, t }: { strategy: Strategy; totalLaps: number; t: (key: string, options?: any) => string }) {
+function StintBar({ strategy, totalLaps }: { strategy: Strategy; totalLaps: number }) {
+  const { t } = useTranslation("strategy");
   return (
     <div className="flex w-full h-3 rounded overflow-hidden gap-px">
       {strategy.stintLengths.map((len, i) => (
@@ -400,7 +401,7 @@ export default function StrategyPage() {
               {formatTime(best.totalTime)}
             </span>
           </div>
-          <StintBar strategy={best} totalLaps={params.totalLaps} t={t} />
+          <StintBar strategy={best} totalLaps={params.totalLaps} />
         </div>
       )}
 
@@ -456,7 +457,7 @@ export default function StrategyPage() {
                     </div>
                   </td>
                   <td className="px-4 py-3">
-                    <StintBar strategy={s} totalLaps={params.totalLaps} t={t} />
+                    <StintBar strategy={s} totalLaps={params.totalLaps} />
                   </td>
                   <td className="px-4 py-3 text-center text-xs text-muted-foreground">
                     {s.pitLaps.length}
