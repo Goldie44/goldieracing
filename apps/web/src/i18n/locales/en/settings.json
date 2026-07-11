@@ -1,1 +1,81 @@
-{}
+{
+  "title": "Settings",
+  "subtitle": "Customize the application",
+  "tabs": {
+    "appearance": "🎨 Appearance",
+    "profile": "🏎️ Profile",
+    "data": "💾 Data",
+    "navigation": "🧭 Navigation",
+    "language": "🌐 Language"
+  },
+  "appearance": {
+    "theme": "Theme",
+    "themeDark": "🌙 Dark",
+    "themeLight": "☀️ Light",
+    "themeSystem": "💻 System",
+    "accentColor": "Accent color",
+    "font": "Font",
+    "fontColorLabel": "Color",
+    "fontColorTitle": "Text color",
+    "preview": "Preview — F1 Manager 2023 · Goldie Racing",
+    "backgroundImage": "Background image",
+    "changeImage": "Change image",
+    "dropImage": "Click or drop an image",
+    "opacity": "Opacity",
+    "blur": "Blur",
+    "matchAccent": "🎨 Match accent color",
+    "removeImage": "🗑️ Remove",
+    "fontFamilies": {
+      "inter": "Inter (default)",
+      "robotoMono": "Roboto Mono",
+      "spaceGrotesk": "Space Grotesk",
+      "orbitron": "Orbitron",
+      "rajdhani": "Rajdhani",
+      "georgia": "Georgia",
+      "system": "System"
+    },
+    "fontSizes": {
+      "xs": "Extra small — 11px",
+      "sm": "Small — 13px",
+      "md": "Normal — 15px",
+      "lg": "Large — 17px",
+      "xl": "Extra large — 20px"
+    }
+  },
+  "profile": {
+    "teamName": "Team name",
+    "teamNamePlaceholder": "Goldie Racing",
+    "activeSeason": "Active season"
+  },
+  "data": {
+    "saves": "Saves ({{count}}/{{max}})",
+    "importJson": "Import JSON",
+    "newSave": "+ New save",
+    "noSaves": "No saves yet. Create one!",
+    "resetTitle": "Reset",
+    "resetBudgetLabel": "Reset Budget",
+    "resetBudgetDesc": "Resets all spending and allocations to zero.",
+    "resetRaceLabel": "Reset Races",
+    "resetRaceDesc": "Unchecks all races marked as completed.",
+    "resetAtrLabel": "Reset ATR",
+    "resetAtrDesc": "Clears all values in the ATR table.",
+    "resetArrow": "Reset →",
+    "resetIrreversible": "This action is irreversible.",
+    "confirm": "Confirm",
+    "cancel": "Cancel",
+    "invalidFile": "Invalid JSON file.",
+    "importedSuffix": " (imported)",
+    "saveNamePrefix": "Save"
+  },
+  "navigation": {
+    "order": "Page order",
+    "hint": "Drag pages to reorder the navigation.",
+    "finish": "Done",
+    "edit": "Edit order"
+  },
+  "language": {
+    "title": "Language",
+    "fr": "Français",
+    "en": "English"
+  }
+}

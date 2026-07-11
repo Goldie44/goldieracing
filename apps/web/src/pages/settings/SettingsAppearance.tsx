@@ -1,24 +1,25 @@
 import { useRef } from "react";
+import { useTranslation } from "react-i18next";
 import { useTheme } from "@/lib/ThemeContext";
 import { useAppearance } from "@/lib/AppearanceContext";
 import ColorPicker from "@/components/ColorPicker";
 
 const FONT_FAMILIES = [
-  { label: "Inter (défaut)", value: "Inter, sans-serif" },
-  { label: "Roboto Mono", value: "'Roboto Mono', monospace" },
-  { label: "Space Grotesk", value: "'Space Grotesk', sans-serif" },
-  { label: "Orbitron", value: "'Orbitron', sans-serif" },
-  { label: "Rajdhani", value: "'Rajdhani', sans-serif" },
-  { label: "Georgia", value: "Georgia, serif" },
-  { label: "Système", value: "system-ui, sans-serif" },
+  { labelKey: "appearance.fontFamilies.inter", value: "Inter, sans-serif" },
+  { labelKey: "appearance.fontFamilies.robotoMono", value: "'Roboto Mono', monospace" },
+  { labelKey: "appearance.fontFamilies.spaceGrotesk", value: "'Space Grotesk', sans-serif" },
+  { labelKey: "appearance.fontFamilies.orbitron", value: "'Orbitron', sans-serif" },
+  { labelKey: "appearance.fontFamilies.rajdhani", value: "'Rajdhani', sans-serif" },
+  { labelKey: "appearance.fontFamilies.georgia", value: "Georgia, serif" },
+  { labelKey: "appearance.fontFamilies.system", value: "system-ui, sans-serif" },
 ];
 
 const FONT_SIZES = [
-  { label: "Très petite — 11px", value: "11px" },
-  { label: "Petite — 13px", value: "13px" },
-  { label: "Normale — 15px", value: "15px" },
-  { label: "Grande — 17px", value: "17px" },
-  { label: "Très grande — 20px", value: "20px" },
+  { labelKey: "appearance.fontSizes.xs", value: "11px" },
+  { labelKey: "appearance.fontSizes.sm", value: "13px" },
+  { labelKey: "appearance.fontSizes.md", value: "15px" },
+  { labelKey: "appearance.fontSizes.lg", value: "17px" },
+  { labelKey: "appearance.fontSizes.xl", value: "20px" },
 ];
 
 function extractDominantColor(src: string): Promise<string> {
@@ -59,6 +60,7 @@ export default function SettingsAppearance() {
     bgOpacity, setBgOpacity,
     bgBlur, setBgBlur,
   } = useAppearance();
+  const { t } = useTranslation("settings");
   const fileRef = useRef<HTMLInputElement>(null);
 
   const handleFileLoad = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -80,19 +82,19 @@ export default function SettingsAppearance() {
 
       {/* Thème */}
       <div>
-        <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-3">Thème</p>
+        <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-3">{t("appearance.theme")}</p>
         <div className="flex gap-3">
-          {(["dark", "light", "system"] as const).map((t) => (
+          {(["dark", "light", "system"] as const).map((themeOption) => (
             <button
-              key={t}
-              onClick={() => setTheme(t)}
+              key={themeOption}
+              onClick={() => setTheme(themeOption)}
               className={`px-5 py-2 rounded-lg text-sm font-medium border transition-all ${
-                theme === t
+                theme === themeOption
                   ? "border-primary bg-primary/10 text-primary"
                   : "border-border bg-card text-muted-foreground hover:text-foreground hover:bg-secondary"
               }`}
             >
-              {t === "dark" ? "🌙 Sombre" : t === "light" ? "☀️ Clair" : "💻 Système"}
+              {themeOption === "dark" ? t("appearance.themeDark") : themeOption === "light" ? t("appearance.themeLight") : t("appearance.themeSystem")}
             </button>
           ))}
         </div>
@@ -100,13 +102,13 @@ export default function SettingsAppearance() {
 
       {/* Couleur d'accent */}
       <div>
-        <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-3">Couleur d'accent</p>
+        <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-3">{t("appearance.accentColor")}</p>
         <ColorPicker value={accentHex} onChange={setAccentHex} />
       </div>
 
       {/* Police */}
       <div>
-        <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-3">Police</p>
+        <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-3">{t("appearance.font")}</p>
         <div className="flex gap-3">
           <select
             value={fontFamily}
@@ -114,7 +116,7 @@ export default function SettingsAppearance() {
             className="bg-card border border-border rounded-lg text-sm text-foreground px-3 py-2 outline-none cursor-pointer"
           >
             {FONT_FAMILIES.map((f) => (
-              <option key={f.value} value={f.value}>{f.label}</option>
+              <option key={f.value} value={f.value}>{t(f.labelKey)}</option>
             ))}
           </select>
           <select
@@ -123,11 +125,11 @@ export default function SettingsAppearance() {
             className="bg-card border border-border rounded-lg text-sm text-foreground px-3 py-2 outline-none cursor-pointer"
           >
             {FONT_SIZES.map((s) => (
-              <option key={s.value} value={s.value}>{s.label}</option>
+              <option key={s.value} value={s.value}>{t(s.labelKey)}</option>
             ))}
           </select>
-          <label className="flex items-center gap-2 cursor-pointer" title="Couleur du texte">
-            <span className="text-xs text-muted-foreground">Couleur</span>
+          <label className="flex items-center gap-2 cursor-pointer" title={t("appearance.fontColorTitle")}>
+            <span className="text-xs text-muted-foreground">{t("appearance.fontColorLabel")}</span>
             <input
               type="color"
               value={`#${fontColor}`}
@@ -137,13 +139,13 @@ export default function SettingsAppearance() {
           </label>
         </div>
         <p className="mt-3" style={{ fontFamily, fontSize, color: `#${fontColor}` }}>
-          Aperçu — F1 Manager 2023 · Goldie Racing
+          {t("appearance.preview")}
         </p>
       </div>
 
       {/* Image de fond */}
       <div>
-        <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-3">Image de fond</p>
+        <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-3">{t("appearance.backgroundImage")}</p>
 
         <div
           onClick={() => fileRef.current?.click()}
@@ -163,7 +165,7 @@ export default function SettingsAppearance() {
           <div className="relative z-10 flex items-center gap-2">
             <span className="text-base">🖼️</span>
             <span className="text-xs text-muted-foreground">
-              {bgImage ? "Changer l'image" : "Clique ou glisse une image"}
+              {bgImage ? t("appearance.changeImage") : t("appearance.dropImage")}
             </span>
           </div>
           <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={handleFileLoad} />
@@ -172,7 +174,7 @@ export default function SettingsAppearance() {
         <div className="flex flex-col gap-3 mt-3" style={{ width: 180 }}>
           <div>
             <div className="flex justify-between mb-1.5">
-              <span className="text-xs text-muted-foreground font-medium">Opacité</span>
+              <span className="text-xs text-muted-foreground font-medium">{t("appearance.opacity")}</span>
               <span className="text-xs text-primary font-mono font-semibold">{bgOpacity}%</span>
             </div>
             <input
@@ -183,7 +185,7 @@ export default function SettingsAppearance() {
           </div>
           <div>
             <div className="flex justify-between mb-1.5">
-              <span className="text-xs text-muted-foreground font-medium">Flou</span>
+              <span className="text-xs text-muted-foreground font-medium">{t("appearance.blur")}</span>
               <span className="text-xs text-primary font-mono font-semibold">{bgBlur}%</span>
             </div>
             <input
@@ -199,13 +201,13 @@ export default function SettingsAppearance() {
                 onClick={handleMatch}
                 className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-semibold text-primary bg-primary/10 border border-primary/30 hover:bg-primary/20 transition-colors"
               >
-                🎨 Matcher la couleur d'accent
+                {t("appearance.matchAccent")}
               </button>
               <button
                 onClick={() => { setBgImage(null); if (fileRef.current) fileRef.current.value = ""; }}
                 className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-semibold text-destructive bg-destructive/10 border border-destructive/30 hover:bg-destructive/20 transition-colors"
               >
-                🗑️ Supprimer
+                {t("appearance.removeImage")}
               </button>
             </div>
           )}

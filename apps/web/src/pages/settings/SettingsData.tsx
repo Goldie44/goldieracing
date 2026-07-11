@@ -1,4 +1,5 @@
 import { useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useBudget } from "@/lib/BudgetContext";
 import { useRace } from "@/lib/RaceContext";
 import { useAtr } from "@/lib/AtrContext";
@@ -26,6 +27,7 @@ function persistSlots(slots: SaveSlotData[]) {
 }
 
 export default function SettingsData() {
+  const { t } = useTranslation("settings");
   const { teamName, setTeamName } = useProfile();
   const { sections, totalBudget, setSections, setTotalBudget, reset: resetBudget } = useBudget();
   const { done, reset: resetRace } = useRace();
@@ -42,7 +44,7 @@ export default function SettingsData() {
     if (slots.length >= MAX_SLOTS) return;
     const newSlot: SaveSlotData = {
       id: crypto.randomUUID(),
-      name: `Sauvegarde ${new Date().toLocaleDateString("fr-FR")}`,
+      name: `${t("data.saveNamePrefix")} ${new Date().toLocaleDateString("fr-FR")}`,
       createdAt: new Date().toISOString(),
       data: {
         teamName,
@@ -92,11 +94,11 @@ export default function SettingsData() {
         const imported: SaveSlotData = {
           ...slot,
           id: crypto.randomUUID(),
-          name: `${slot.name} (importé)`,
+          name: `${slot.name}${t("data.importedSuffix")}`,
         };
         updateSlots([imported, ...slots].slice(0, MAX_SLOTS));
       } catch {
-        alert("Fichier JSON invalide.");
+        alert(t("data.invalidFile"));
       }
     };
     reader.readAsText(file);
@@ -110,21 +112,21 @@ export default function SettingsData() {
       <div>
         <div className="flex items-center justify-between mb-3">
           <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
-            Sauvegardes ({slots.length}/{MAX_SLOTS})
+            {t("data.saves", { count: slots.length, max: MAX_SLOTS })}
           </p>
           <div className="flex gap-2">
             <button
               onClick={() => importRef.current?.click()}
               className="px-3 py-1.5 rounded-lg text-xs font-medium text-muted-foreground border border-border hover:text-foreground hover:bg-secondary transition-colors"
             >
-              Importer JSON
+              {t("data.importJson")}
             </button>
             <button
               onClick={handleNewSave}
               disabled={slots.length >= MAX_SLOTS}
               className="px-3 py-1.5 rounded-lg text-xs font-semibold text-primary bg-primary/10 border border-primary/30 hover:bg-primary/20 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              + Nouvelle sauvegarde
+              {t("data.newSave")}
             </button>
           </div>
         </div>
@@ -132,7 +134,7 @@ export default function SettingsData() {
 
         {slots.length === 0 ? (
           <p className="text-sm text-muted-foreground py-4 text-center border border-dashed border-border rounded-lg">
-            Aucune sauvegarde. Crée-en une !
+            {t("data.noSaves")}
           </p>
         ) : (
           <div className="flex flex-col gap-2">
@@ -153,13 +155,13 @@ export default function SettingsData() {
       {/* Reset */}
       <div>
         <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-3">
-          Réinitialisation
+          {t("data.resetTitle")}
         </p>
         <div className="flex flex-col gap-2">
           {[
-            { label: "Reset Budget", action: resetBudget, desc: "Remet toutes les dépenses et allocations à zéro." },
-            { label: "Reset Courses", action: resetRace, desc: "Décoche toutes les courses marquées comme terminées." },
-            { label: "Reset ATR", action: resetAtr, desc: "Efface toutes les valeurs du tableau ATR." },
+            { label: t("data.resetBudgetLabel"), action: resetBudget, desc: t("data.resetBudgetDesc") },
+            { label: t("data.resetRaceLabel"), action: resetRace, desc: t("data.resetRaceDesc") },
+            { label: t("data.resetAtrLabel"), action: resetAtr, desc: t("data.resetAtrDesc") },
           ].map(({ label, action, desc }) => (
             <AlertDialog key={label}>
               <AlertDialogTrigger asChild>
@@ -168,18 +170,18 @@ export default function SettingsData() {
                     <p className="text-sm font-medium text-destructive">{label}</p>
                     <p className="text-xs text-muted-foreground mt-0.5">{desc}</p>
                   </div>
-                  <span className="text-destructive/60 text-xs font-medium ml-4 flex-shrink-0">Réinitialiser →</span>
+                  <span className="text-destructive/60 text-xs font-medium ml-4 flex-shrink-0">{t("data.resetArrow")}</span>
                 </button>
               </AlertDialogTrigger>
               <AlertDialogContent>
                 <AlertDialogHeader>
                   <AlertDialogTitle>{label}</AlertDialogTitle>
-                  <AlertDialogDescription>{desc} Cette action est irréversible.</AlertDialogDescription>
+                  <AlertDialogDescription>{`${desc} ${t("data.resetIrreversible")}`}</AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
-                  <AlertDialogCancel>Annuler</AlertDialogCancel>
+                  <AlertDialogCancel>{t("data.cancel")}</AlertDialogCancel>
                   <AlertDialogAction onClick={action} className="bg-destructive hover:bg-destructive/90">
-                    Confirmer
+                    {t("data.confirm")}
                   </AlertDialogAction>
                 </AlertDialogFooter>
               </AlertDialogContent>
