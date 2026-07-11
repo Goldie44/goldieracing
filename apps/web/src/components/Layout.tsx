@@ -6,6 +6,7 @@ import {
 } from "@heroicons/react/24/outline";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useTranslation } from "react-i18next";
 import { useNavOrder } from "@/lib/NavOrderContext";
 import { useProfile } from "@/lib/ProfileContext";
 import { useAppearance } from "@/lib/AppearanceContext";
@@ -17,6 +18,7 @@ export default function Layout() {
   const { orderedItems, reorder, settingsItem } = useNavOrder();
   const { teamName } = useProfile();
   const { bgImage, bgOpacity, bgBlur } = useAppearance();
+  const { t } = useTranslation("layout");
 
   return (
     <div className="min-h-screen flex bg-background relative">
@@ -38,7 +40,7 @@ export default function Layout() {
               <FlagIcon className="w-5 h-5 text-primary" />
             </div>
             <div>
-              <h1 className="text-lg font-bold text-primary tracking-tight">F1 Manager</h1>
+              <h1 className="text-lg font-bold text-primary tracking-tight">{t("appTitle")}</h1>
               <p className="text-xs text-muted-foreground font-mono">{teamName}</p>
             </div>
           </div>
@@ -63,13 +65,13 @@ export default function Layout() {
             }`}
           >
             <settingsItem.icon className="w-4 h-4" />
-            {settingsItem.label}
+            {t(settingsItem.labelKey)}
             {location.pathname === settingsItem.path && (
               <div className="ml-auto w-1.5 h-1.5 rounded-full bg-primary" />
             )}
           </Link>
           <div className="text-xs text-muted-foreground font-mono text-center">
-            <p>Beta Version 1.8.1</p>
+            <p>{t("betaVersion")}</p>
           </div>
         </div>
       </aside>
@@ -79,7 +81,7 @@ export default function Layout() {
         <div className="flex items-center justify-between p-4">
           <div className="flex items-center gap-2">
             <FlagIcon className="w-5 h-5 text-primary" />
-            <span className="font-bold text-primary">GOLDIE F1</span>
+            <span className="font-bold text-primary">{t("mobileTitle")}</span>
           </div>
           <button onClick={() => setMobileOpen(!mobileOpen)} className="p-2 text-foreground">
             {mobileOpen ? <XMarkIcon className="w-5 h-5" /> : <Bars3Icon className="w-5 h-5" />}
@@ -124,7 +126,7 @@ export default function Layout() {
                   }`}
                 >
                   <settingsItem.icon className="w-4 h-4" />
-                  {settingsItem.label}
+                  {t(settingsItem.labelKey)}
                 </Link>
               </div>
             </motion.nav>

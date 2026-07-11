@@ -1,1 +1,15 @@
-{}
+{
+  "appTitle": "F1 Manager",
+  "mobileTitle": "GOLDIE F1",
+  "betaVersion": "Beta Version 1.8.1",
+  "nav": {
+    "dashboard": "Dashboard",
+    "calendar": "Calendrier",
+    "stock": "Stock Pièces",
+    "performance": "Performance",
+    "budget": "Budget",
+    "rd": "R&D",
+    "strategy": "Stratégie",
+    "settings": "Paramètres"
+  }
+}
