@@ -3,6 +3,7 @@ import { UserIcon } from "@heroicons/react/24/outline";
 import { StarIcon } from "@heroicons/react/24/solid";
 import PageHeader from "../components/PageHeader";
 import { staff } from "../lib/f1Data";
+import { useTranslation } from "react-i18next";
 
 function SkillBar({ name, value }) {
   const color = value >= 90 ? "bg-green-400" : value >= 85 ? "bg-primary" : value >= 80 ? "bg-blue-400" : "bg-muted-foreground";
@@ -26,9 +27,10 @@ function SkillBar({ name, value }) {
 }
 
 export default function StaffPage() {
+  const { t } = useTranslation("staff");
   return (
     <div>
-      <PageHeader title="Personnel" subtitle="Équipe technique et compétences" />
+      <PageHeader title={t("title")} subtitle={t("subtitle")} />
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {staff.map((member, i) => {
@@ -52,7 +54,7 @@ export default function StaffPage() {
                     <h3 className="text-sm font-semibold">{member.role}</h3>
                     <div className="flex items-center gap-1 mt-0.5">
                       <StarIcon className="w-3 h-3 text-primary" />
-                      <span className="text-xs text-muted-foreground">Moy. {avgSkill}</span>
+                      <span className="text-xs text-muted-foreground">{t("avgShort", { value: avgSkill })}</span>
                     </div>
                   </div>
                 </div>
@@ -63,7 +65,7 @@ export default function StaffPage() {
 
               {/* Top Skill Highlight */}
               <div className="bg-primary/5 border border-primary/10 rounded-lg p-3 mb-4">
-                <div className="text-xs text-primary font-medium">Meilleure compétence</div>
+                <div className="text-xs text-primary font-medium">{t("topSkill")}</div>
                 <div className="text-sm font-semibold mt-0.5">{topSkill.name} — {topSkill.value}</div>
               </div>
 

@@ -1,1 +1,6 @@
-{}
+{
+  "title": "Personnel",
+  "subtitle": "Équipe technique et compétences",
+  "avgShort": "Moy. {{value}}",
+  "topSkill": "Meilleure compétence"
+}

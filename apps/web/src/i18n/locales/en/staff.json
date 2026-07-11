@@ -1,1 +1,6 @@
-{}
+{
+  "title": "Staff",
+  "subtitle": "Technical team and skills",
+  "avgShort": "Avg. {{value}}",
+  "topSkill": "Best skill"
+}
