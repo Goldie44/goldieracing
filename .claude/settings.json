@@ -29,7 +29,32 @@
       "Bash(cd /e/Documents && ls -la \"Projet perso/goldie-racing\")",
       "Read(//e/Documents/**)",
       "Bash(find apps/web/src/lib -iname \"*context*\" -o -iname \"*store*\")",
-      "Bash(grep -rli \"i18n\\\\|react-intl\\\\|formatjs\\\\|translation\" apps/web/src apps/app/src apps/web/package.json apps/app/package.json)"
+      "Bash(grep -rli \"i18n\\\\|react-intl\\\\|formatjs\\\\|translation\" apps/web/src apps/app/src apps/web/package.json apps/app/package.json)",
+      "Bash(git check-ignore *)",
+      "Bash(echo \"ignored_status=$?\")",
+      "Bash(git worktree *)",
+      "Bash(pnpm install *)",
+      "Bash(npm run *)",
+      "Bash(pnpm add *)",
+      "Bash(node -e \"require\\('e:/Documents/Projet perso/goldie-racing/.worktrees/i18n-language-switcher/apps/web/node_modules/i18next/package.json'\\)\")",
+      "Bash(find . -path ./node_modules -prune -o -name \"vite.json\" -print)",
+      "Bash(cat packages/typescript/vite.json)",
+      "Bash(find . -path ./node_modules -prune -o -name \"*.json\" -path \"*typescript*\" -print)",
+      "Bash(echo \"EXIT:$?\")",
+      "Bash(wc -l /tmp_typecheck_out.txt)",
+      "Bash(echo \"DIFF_EXIT:$?\")",
+      "Bash(tee /tmp/current-typecheck.txt)",
+      "Bash(tee /tmp/tc_out.txt)",
+      "Bash(cd \"e:/Documents/Projet perso/goldie-racing/.worktrees/i18n-language-switcher/apps/web\" && grep \"error TS\" /tmp/tc_out.txt | sort > /tmp/tc_errs.txt && grep \"error TS\" \"../../baseline-typecheck.txt\" | sort > /tmp/baseline_errs.txt && diff /tmp/baseline_errs.txt /tmp/tc_errs.txt && echo \"NO DIFF - IDENTICAL\")",
+      "Bash(cd \"e:\\\\Documents\\\\Projet perso\\\\goldie-racing\\\\.worktrees\\\\i18n-language-switcher\" && grep \"error TS\" /tmp/current_tc.txt | sed -E 's/\\\\\\([0-9]+,[0-9]+\\\\\\)//' | sort > /tmp/cur_norm.txt && grep \"error TS\" baseline-typecheck.txt | sed -E 's/\\\\\\([0-9]+,[0-9]+\\\\\\)//' | sort > /tmp/base_norm.txt && diff /tmp/base_norm.txt /tmp/cur_norm.txt)",
+      "Bash(ls fr *)",
+      "Bash(cat fr/common.json)",
+      "Bash(cat en/common.json)",
+      "Bash(cat fr/welcome.json)",
+      "Bash(cat en/welcome.json)",
+      "Bash(grep -c \"error TS\" /tmp_typecheck_out.txt)",
+      "Bash(grep -i \"Dashboard\" /tmp_typecheck_out.txt)",
+      "Read(//c/Users/naelj/AppData/Local/Temp/**)"
     ]
   }
 }
