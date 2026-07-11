@@ -1,9 +1,4 @@
 {
-  "reset": {
-    "button": "Reset All",
-    "confirm": "Confirm Reset",
-    "cancel": "Cancel"
-  },
   "saveSlot": {
     "load": "Load",
     "rename": "Rename",
