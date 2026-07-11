@@ -1,1 +1,16 @@
-{}
+{
+  "reset": {
+    "button": "Tout réinitialiser",
+    "confirm": "Confirmer la réinitialisation",
+    "cancel": "Annuler"
+  },
+  "saveSlot": {
+    "load": "Charger",
+    "rename": "Renommer",
+    "export": "Exporter JSON",
+    "delete": "Supprimer"
+  },
+  "statCard": {
+    "competitor": "Concurrent"
+  }
+}

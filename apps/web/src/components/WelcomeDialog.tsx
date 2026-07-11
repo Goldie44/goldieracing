@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 import {
   Dialog,
@@ -19,6 +20,7 @@ const SAVES_KEY = "goldie_saves";
 const ONBOARDED_KEY = "goldie-racing:onboarded";
 
 export default function WelcomeDialog() {
+  const { t } = useTranslation("welcome");
   const [open, setOpen] = useState(() => !localStorage.getItem(ONBOARDED_KEY));
   const [teamName, setTeamName] = useState("");
   const [saveName, setSaveName] = useState("");
@@ -67,36 +69,36 @@ export default function WelcomeDialog() {
           className="fixed left-[50%] top-[50%] z-50 w-full max-w-md translate-x-[-50%] translate-y-[-50%] border bg-background p-6 shadow-lg duration-200 data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] sm:rounded-lg"
         >
           <DialogHeader>
-            <DialogTitle className="text-xl">Bienvenue dans Goldie Racing 🏎️</DialogTitle>
+            <DialogTitle className="text-xl">{t("title")}</DialogTitle>
             <DialogDescription className="mt-1">
-              Configurez votre première sauvegarde avant de commencer la saison.
+              {t("description")}
             </DialogDescription>
           </DialogHeader>
 
           <form onSubmit={handleSubmit} className="flex flex-col gap-4 mt-5">
             <div className="flex flex-col gap-1.5">
               <label htmlFor="welcome-save-name" className="text-sm font-medium text-foreground">
-                Nom de la sauvegarde
+                {t("saveNameLabel")}
               </label>
               <input
                 id="welcome-save-name"
                 autoFocus
                 value={saveName}
                 onChange={(e) => setSaveName(e.target.value)}
-                placeholder="Ex : Saison 2023 principale"
+                placeholder={t("saveNamePlaceholder")}
                 className="px-3 py-2 rounded-md border border-border bg-background text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 transition-shadow"
               />
             </div>
 
             <div className="flex flex-col gap-1.5">
               <label htmlFor="welcome-team-name" className="text-sm font-medium text-foreground">
-                Nom de l'écurie
+                {t("teamNameLabel")}
               </label>
               <input
                 id="welcome-team-name"
                 value={teamName}
                 onChange={(e) => setTeamName(e.target.value)}
-                placeholder="Ex : Red Bull Racing"
+                placeholder={t("teamNamePlaceholder")}
                 className="px-3 py-2 rounded-md border border-border bg-background text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 transition-shadow"
               />
             </div>
@@ -107,7 +109,7 @@ export default function WelcomeDialog() {
                 disabled={!canSubmit}
                 className="w-full px-4 py-2.5 rounded-lg text-sm font-semibold bg-primary text-primary-foreground hover:bg-primary/90 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
               >
-                Commencer
+                {t("start")}
               </button>
             </DialogFooter>
           </form>
