@@ -25,5 +25,14 @@
   "pieceLabel": "Parts",
   "selectPiece": "Select a part",
   "deleteProject": "Delete {{atr}}",
-  "noProjects": "No development projects"
+  "noProjects": "No development projects",
+  "importFromScreenshot": "Import from screenshot",
+  "importTitle": "Import from screenshot",
+  "importPasteHint": "Paste your screenshot here (Ctrl+V)",
+  "importPastePlaceholder": "Waiting for a pasted image…",
+  "importAnalyze": "Analyze",
+  "importAnalyzing": "Analyzing…",
+  "importPreviewTitle": "Preview of extracted values",
+  "importApply": "Apply",
+  "importNoEntries": "No values could be extracted from this image."
 }

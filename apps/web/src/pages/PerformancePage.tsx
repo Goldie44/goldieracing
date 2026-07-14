@@ -37,6 +37,7 @@ import {
 } from "../components/ui/dialog";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
+import { mergeAtrVisionEntries, type AtrVisionEntry } from "../lib/atrVisionImport";
 
 const radarData = [
   { subject: "Vitesse Max", value: 78 },
@@ -415,6 +416,63 @@ function AtrCalTable({ data, setData, title }: { data: any; setData: any; title?
     }));
   };
 
+  const [importOpen, setImportOpen] = useState(false);
+  const [pastedImage, setPastedImage] = useState<{ base64: string; mediaType: string } | null>(null);
+  const [importLoading, setImportLoading] = useState(false);
+  const [importError, setImportError] = useState<string | null>(null);
+  const [previewEntries, setPreviewEntries] = useState<AtrVisionEntry[] | null>(null);
+
+  const resetImportState = () => {
+    setPastedImage(null);
+    setImportLoading(false);
+    setImportError(null);
+    setPreviewEntries(null);
+  };
+
+  const handlePaste = (e: React.ClipboardEvent<HTMLDivElement>) => {
+    const item = Array.from(e.clipboardData.items).find((i) => i.type.startsWith("image/"));
+    if (!item) return;
+    const file = item.getAsFile();
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      const result = reader.result as string;
+      const base64 = result.split(",")[1] ?? "";
+      setPastedImage({ base64, mediaType: item.type });
+      setImportError(null);
+      setPreviewEntries(null);
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handleAnalyze = async () => {
+    if (!pastedImage || !window.app?.atrVision) return;
+    setImportLoading(true);
+    setImportError(null);
+    try {
+      const entries = await window.app.atrVision.extract(pastedImage.base64, pastedImage.mediaType);
+      setPreviewEntries(entries);
+    } catch (err) {
+      setImportError(err instanceof Error ? err.message : String(err));
+    } finally {
+      setImportLoading(false);
+    }
+  };
+
+  const updatePreviewEntry = (index: number, field: "v1" | "moyenne", value: string) => {
+    setPreviewEntries((prev) =>
+      prev ? prev.map((entry, i) => (i === index ? { ...entry, [field]: value } : entry)) : prev,
+    );
+  };
+
+  const handleApplyImport = () => {
+    if (!previewEntries) return;
+    setData((prev) => mergeAtrVisionEntries(prev, previewEntries));
+    setImportOpen(false);
+    resetImportState();
+  };
+
   const cellCls = "w-full text-center text-xs font-mono bg-transparent border border-transparent focus:border-primary rounded px-1 py-1 outline-none transition-colors text-foreground";
 
   const calcDelta = (v1, gainsAttendus, moyenne) => {
@@ -440,10 +498,18 @@ function AtrCalTable({ data, setData, title }: { data: any; setData: any; title?
     >
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-sm font-semibold">{title}</h3>
-        <button onClick={reset} className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-red-400 transition-colors">
-          <ArrowPathIcon className="w-3 h-3" />
-          {t("resetToZero")}
-        </button>
+        <div className="flex items-center">
+          <button
+            onClick={() => setImportOpen(true)}
+            className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-primary transition-colors mr-4"
+          >
+            {t("importFromScreenshot")}
+          </button>
+          <button onClick={reset} className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-red-400 transition-colors">
+            <ArrowPathIcon className="w-3 h-3" />
+            {t("resetToZero")}
+          </button>
+        </div>
       </div>
       {/* Top 3 smallest deltas */}
       {threshold3 !== null && (() => {
@@ -545,6 +611,91 @@ function AtrCalTable({ data, setData, title }: { data: any; setData: any; title?
           ))}
         </tbody>
       </table>
+
+      <Dialog
+        open={importOpen}
+        onOpenChange={(open) => {
+          setImportOpen(open);
+          if (!open) resetImportState();
+        }}
+      >
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>{t("importTitle")}</DialogTitle>
+          </DialogHeader>
+
+          {!previewEntries && (
+            <>
+              <div
+                onPaste={handlePaste}
+                tabIndex={0}
+                className="border border-dashed border-border rounded-lg p-6 text-center text-sm text-muted-foreground focus:border-primary outline-none"
+              >
+                {pastedImage ? (
+                  <img
+                    src={`data:${pastedImage.mediaType};base64,${pastedImage.base64}`}
+                    alt=""
+                    className="max-h-48 mx-auto rounded"
+                  />
+                ) : (
+                  t("importPasteHint")
+                )}
+              </div>
+              {importError && <p className="text-xs text-red-400">{importError}</p>}
+              <DialogFooter>
+                <Button
+                  variant="primary"
+                  disabled={!pastedImage || importLoading}
+                  onClick={handleAnalyze}
+                >
+                  {importLoading ? t("importAnalyzing") : t("importAnalyze")}
+                </Button>
+              </DialogFooter>
+            </>
+          )}
+
+          {previewEntries && (
+            <>
+              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                {t("importPreviewTitle")}
+              </p>
+              {previewEntries.length === 0 ? (
+                <p className="text-sm text-muted-foreground">{t("importNoEntries")}</p>
+              ) : (
+                <div className="flex flex-col gap-2 max-h-64 overflow-y-auto">
+                  {previewEntries.map((entry, i) => (
+                    <div key={`${entry.section}-${entry.label}`} className="grid grid-cols-3 gap-2 items-center text-xs">
+                      <span className="text-muted-foreground truncate">{entry.label}</span>
+                      <Input
+                        type="number"
+                        value={entry.v1 ?? ""}
+                        onChange={(e) => updatePreviewEntry(i, "v1", e.target.value)}
+                      />
+                      <Input
+                        type="number"
+                        value={entry.moyenne ?? ""}
+                        onChange={(e) => updatePreviewEntry(i, "moyenne", e.target.value)}
+                      />
+                    </div>
+                  ))}
+                </div>
+              )}
+              <DialogFooter>
+                <Button variant="secondary" onClick={resetImportState}>
+                  {t("cancel")}
+                </Button>
+                <Button
+                  variant="primary"
+                  disabled={previewEntries.length === 0}
+                  onClick={handleApplyImport}
+                >
+                  {t("importApply")}
+                </Button>
+              </DialogFooter>
+            </>
+          )}
+        </DialogContent>
+      </Dialog>
 
     </motion.div>
   );

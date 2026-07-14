@@ -25,5 +25,14 @@
   "pieceLabel": "Pièces",
   "selectPiece": "Sélectionner une pièce",
   "deleteProject": "Supprimer {{atr}}",
-  "noProjects": "Aucun projet de développement"
+  "noProjects": "Aucun projet de développement",
+  "importFromScreenshot": "Importer depuis capture d'écran",
+  "importTitle": "Importer depuis capture d'écran",
+  "importPasteHint": "Collez votre capture d'écran ici (Ctrl+V)",
+  "importPastePlaceholder": "En attente d'une image collée…",
+  "importAnalyze": "Analyser",
+  "importAnalyzing": "Analyse en cours…",
+  "importPreviewTitle": "Aperçu des valeurs extraites",
+  "importApply": "Appliquer",
+  "importNoEntries": "Aucune valeur n'a pu être extraite de cette image."
 }
