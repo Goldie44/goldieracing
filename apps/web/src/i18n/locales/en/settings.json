@@ -64,7 +64,11 @@
     "cancel": "Cancel",
     "invalidFile": "Invalid JSON file.",
     "importedSuffix": " (imported)",
-    "saveNamePrefix": "Save"
+    "saveNamePrefix": "Save",
+    "aiVisionTitle": "AI Vision",
+    "aiVisionApiKeyLabel": "AI Vision API key",
+    "aiVisionApiKeyPlaceholder": "sk-ant-...",
+    "aiVisionApiKeyHint": "Used to import ATR table values from a screenshot, on the Performance page."
   },
   "navigation": {
     "order": "Page order",

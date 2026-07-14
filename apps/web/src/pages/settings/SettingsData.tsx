@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useBudget } from "@/lib/BudgetContext";
 import { useRace } from "@/lib/RaceContext";
@@ -34,6 +34,17 @@ export default function SettingsData() {
   const { atrData, setAtrData, reset: resetAtr } = useAtr();
   const [slots, setSlots] = useState<SaveSlotData[]>(loadSlots);
   const importRef = useRef<HTMLInputElement>(null);
+  const [apiKey, setApiKey] = useState("");
+
+  useEffect(() => {
+    const storage = window.app?.atrVisionApiKey;
+    if (!storage) return;
+    storage.load().then((value) => setApiKey(value ?? "")).catch(() => {});
+  }, []);
+
+  const handleApiKeyBlur = () => {
+    void window.app?.atrVisionApiKey?.save(apiKey);
+  };
 
   const updateSlots = (next: SaveSlotData[]) => {
     setSlots(next);
@@ -188,6 +199,23 @@ export default function SettingsData() {
             </AlertDialog>
           ))}
         </div>
+      </div>
+
+      {/* IA Vision */}
+      <div>
+        <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-3">
+          {t("data.aiVisionTitle")}
+        </p>
+        <label className="block mb-1 text-sm font-medium">{t("data.aiVisionApiKeyLabel")}</label>
+        <input
+          type="password"
+          value={apiKey}
+          onChange={(e) => setApiKey(e.target.value)}
+          onBlur={handleApiKeyBlur}
+          placeholder={t("data.aiVisionApiKeyPlaceholder")}
+          className="w-full px-3 py-2 rounded-lg border border-border bg-background text-sm outline-none focus:border-primary transition-colors"
+        />
+        <p className="text-xs text-muted-foreground mt-1">{t("data.aiVisionApiKeyHint")}</p>
       </div>
     </div>
   );
