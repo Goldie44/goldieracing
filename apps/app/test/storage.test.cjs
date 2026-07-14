@@ -12,14 +12,14 @@ test("saves and loads budget spentTotal values locally", () => {
 
   try {
     const storage = createBudgetSpentTotalStorage(dbPath);
-    storage.save({
+    storage.saveSpentTotals({
       "Developpement de pieces": 1250000,
       "Recherche de pieces": 340000,
     });
     storage.close();
 
     const reopened = createBudgetSpentTotalStorage(dbPath);
-    assert.deepEqual(reopened.load(), {
+    assert.deepEqual(reopened.loadSpentTotals(), {
       "Developpement de pieces": 1250000,
       "Recherche de pieces": 340000,
     });
