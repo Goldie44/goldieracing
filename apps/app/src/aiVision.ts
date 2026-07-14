@@ -1,3 +1,5 @@
+import Anthropic from "@anthropic-ai/sdk";
+
 export type AtrVisionEntry = {
   section: string;
   label: string;
@@ -102,4 +104,52 @@ export function parseAtrVisionResponse(text: string): AtrVisionEntry[] {
       moyenne: entry.moyenne !== undefined && entry.moyenne !== null ? String(entry.moyenne) : "",
     }))
     .filter((entry) => entry.section !== "" && entry.label !== "");
+}
+
+export function buildAtrVisionPrompt(): string {
+  const sectionsDescription = ATR_SECTIONS
+    .map((s) => `- ${s.label}: ${s.rows.join(", ")}`)
+    .join("\n");
+
+  return `Tu regardes une capture d'écran de l'écran de comparaison technique du jeu F1 Manager. Cet écran affiche, pour chaque caractéristique technique de la monoplace, deux valeurs numériques côte à côte : la valeur de la monoplace du joueur, et la valeur moyenne des concurrents.
+
+Les caractéristiques attendues sont regroupées par section :
+${sectionsDescription}
+
+Lis les valeurs affichées sur la capture d'écran et renvoie UNIQUEMENT un tableau JSON (sans texte autour), avec une entrée par caractéristique trouvée, au format :
+[{ "section": "<nom de la section>", "label": "<nom exact de la ligne>", "v1": "<valeur monoplace>", "moyenne": "<valeur concurrent>" }]
+
+Si une valeur n'est pas visible ou lisible sur l'image, omets le champ correspondant plutôt que d'inventer une valeur.`;
+}
+
+export async function callAtrVisionApi(
+  imageBase64: string,
+  mediaType: string,
+  apiKey: string,
+): Promise<AtrVisionEntry[]> {
+  const client = new Anthropic({ apiKey });
+
+  const response = await client.messages.create({
+    model: "claude-sonnet-5",
+    max_tokens: 1024,
+    messages: [
+      {
+        role: "user",
+        content: [
+          {
+            type: "image",
+            source: { type: "base64", media_type: mediaType as "image/png", data: imageBase64 },
+          },
+          { type: "text", text: buildAtrVisionPrompt() },
+        ],
+      },
+    ],
+  });
+
+  const textBlock = response.content.find((block) => block.type === "text");
+  if (!textBlock || textBlock.type !== "text") {
+    throw new Error("Le modèle n'a renvoyé aucun texte exploitable.");
+  }
+
+  return parseAtrVisionResponse(textBlock.text);
 }
