@@ -1,6 +1,7 @@
 import path from 'node:path';
 import { app, BrowserWindow, ipcMain, Menu, shell } from 'electron';
 import { createBudgetStorage, type BudgetStorage } from './storage';
+import { callAtrVisionApi } from './aiVision';
 
 const isDev = !app.isPackaged;
 const DEV_URL = process.env.WEB_DEV_URL ?? 'http://localhost:5173';
@@ -22,6 +23,23 @@ function registerBudgetHandlers(storage: BudgetStorage): void {
   ipcMain.handle('budget-total-budget:save', (_event, value: number) => {
     storage.saveTotalBudget(value);
   });
+}
+
+function registerAtrVisionHandlers(storage: BudgetStorage): void {
+  ipcMain.handle('atr-vision-api-key:load', () => storage.loadVisionApiKey());
+  ipcMain.handle('atr-vision-api-key:save', (_event, value: string) => {
+    storage.saveVisionApiKey(value);
+  });
+  ipcMain.handle(
+    'atr-vision:extract',
+    async (_event, imageBase64: string, mediaType: string) => {
+      const apiKey = storage.loadVisionApiKey();
+      if (!apiKey) {
+        throw new Error("Aucune clé API configurée. Ajoutez-en une dans Paramètres.");
+      }
+      return callAtrVisionApi(imageBase64, mediaType, apiKey);
+    },
+  );
 }
 
 function createWindow(): void {
@@ -66,6 +84,7 @@ app.whenReady().then(() => {
     path.join(app.getPath('userData'), 'goldie-racing.json'),
   );
   registerBudgetHandlers(budgetStorage);
+  registerAtrVisionHandlers(budgetStorage);
 
   createWindow();
 

@@ -19,4 +19,12 @@ contextBridge.exposeInMainWorld('app', {
     load: () => ipcRenderer.invoke('budget-total-budget:load'),
     save: (value: number) => ipcRenderer.invoke('budget-total-budget:save', value),
   },
+  atrVisionApiKey: {
+    load: () => ipcRenderer.invoke('atr-vision-api-key:load'),
+    save: (value: string) => ipcRenderer.invoke('atr-vision-api-key:save', value),
+  },
+  atrVision: {
+    extract: (imageBase64: string, mediaType: string) =>
+      ipcRenderer.invoke('atr-vision:extract', imageBase64, mediaType),
+  },
 });

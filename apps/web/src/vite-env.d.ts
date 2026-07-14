@@ -2,6 +2,13 @@
 
 type BudgetValues = Record<string, number>;
 
+type AtrVisionEntry = {
+  section: string;
+  label: string;
+  v1: string;
+  moyenne: string;
+};
+
 interface Window {
   app?: {
     platform: NodeJS.Platform;
@@ -21,6 +28,13 @@ interface Window {
     budgetTotalBudget?: {
       load: () => Promise<number | null>;
       save: (value: number) => Promise<void>;
+    };
+    atrVisionApiKey?: {
+      load: () => Promise<string | null>;
+      save: (value: string) => Promise<void>;
+    };
+    atrVision?: {
+      extract: (imageBase64: string, mediaType: string) => Promise<AtrVisionEntry[]>;
     };
   };
 }
