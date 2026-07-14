@@ -34,5 +34,6 @@
   "importAnalyzing": "Analyzing…",
   "importPreviewTitle": "Preview of extracted values",
   "importApply": "Apply",
-  "importNoEntries": "No values could be extracted from this image."
+  "importNoEntries": "No values could be extracted from this image.",
+  "importNoApiKey": "No API key configured. Go to Settings to add one."
 }

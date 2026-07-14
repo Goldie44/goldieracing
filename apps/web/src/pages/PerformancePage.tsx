@@ -421,6 +421,22 @@ function AtrCalTable({ data, setData, title }: { data: any; setData: any; title?
   const [importLoading, setImportLoading] = useState(false);
   const [importError, setImportError] = useState<string | null>(null);
   const [previewEntries, setPreviewEntries] = useState<AtrVisionEntry[] | null>(null);
+  const [hasApiKey, setHasApiKey] = useState(false);
+
+  useEffect(() => {
+    let cancelled = false;
+    window.app?.atrVisionApiKey
+      ?.load()
+      .then((key) => {
+        if (!cancelled) setHasApiKey(!!key);
+      })
+      .catch(() => {
+        if (!cancelled) setHasApiKey(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   const resetImportState = () => {
     setPastedImage(null);
@@ -452,7 +468,22 @@ function AtrCalTable({ data, setData, title }: { data: any; setData: any; title?
     setImportError(null);
     try {
       const entries = await window.app.atrVision.extract(pastedImage.base64, pastedImage.mediaType);
-      setPreviewEntries(entries);
+      // Reconcile the model's response against the full ATR row structure so
+      // every row appears in the preview, even ones the model omitted entirely.
+      const fullEntries: AtrVisionEntry[] = data.flatMap((section) =>
+        section.rows.map((row) => {
+          const match = entries.find(
+            (entry) => entry.section === section.label && entry.label === row.label,
+          );
+          return {
+            section: section.label,
+            label: row.label,
+            v1: match?.v1 ?? "",
+            moyenne: match?.moyenne ?? "",
+          };
+        }),
+      );
+      setPreviewEntries(fullEntries);
     } catch (err) {
       setImportError(err instanceof Error ? err.message : String(err));
     } finally {
@@ -460,9 +491,13 @@ function AtrCalTable({ data, setData, title }: { data: any; setData: any; title?
     }
   };
 
-  const updatePreviewEntry = (index: number, field: "v1" | "moyenne", value: string) => {
+  const updatePreviewEntry = (section: string, label: string, field: "v1" | "moyenne", value: string) => {
     setPreviewEntries((prev) =>
-      prev ? prev.map((entry, i) => (i === index ? { ...entry, [field]: value } : entry)) : prev,
+      prev
+        ? prev.map((entry) =>
+            entry.section === section && entry.label === label ? { ...entry, [field]: value } : entry,
+          )
+        : prev,
     );
   };
 
@@ -642,10 +677,11 @@ function AtrCalTable({ data, setData, title }: { data: any; setData: any; title?
                 )}
               </div>
               {importError && <p className="text-xs text-red-400">{importError}</p>}
+              {!hasApiKey && <p className="text-xs text-yellow-400">{t("importNoApiKey")}</p>}
               <DialogFooter>
                 <Button
                   variant="primary"
-                  disabled={!pastedImage || importLoading}
+                  disabled={!pastedImage || importLoading || !hasApiKey}
                   onClick={handleAnalyze}
                 >
                   {importLoading ? t("importAnalyzing") : t("importAnalyze")}
@@ -659,23 +695,35 @@ function AtrCalTable({ data, setData, title }: { data: any; setData: any; title?
               <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
                 {t("importPreviewTitle")}
               </p>
-              {previewEntries.length === 0 ? (
+              {data.every((section) => section.rows.length === 0) ? (
                 <p className="text-sm text-muted-foreground">{t("importNoEntries")}</p>
               ) : (
                 <div className="flex flex-col gap-2 max-h-64 overflow-y-auto">
-                  {previewEntries.map((entry, i) => (
-                    <div key={`${entry.section}-${entry.label}`} className="grid grid-cols-3 gap-2 items-center text-xs">
-                      <span className="text-muted-foreground truncate">{entry.label}</span>
-                      <Input
-                        type="number"
-                        value={entry.v1 ?? ""}
-                        onChange={(e) => updatePreviewEntry(i, "v1", e.target.value)}
-                      />
-                      <Input
-                        type="number"
-                        value={entry.moyenne ?? ""}
-                        onChange={(e) => updatePreviewEntry(i, "moyenne", e.target.value)}
-                      />
+                  {data.map((section) => (
+                    <div key={section.label}>
+                      <p className="text-xs font-semibold text-primary uppercase tracking-wider mt-2 mb-1">
+                        {section.label}
+                      </p>
+                      {section.rows.map((row) => {
+                        const entry = previewEntries.find(
+                          (e) => e.section === section.label && e.label === row.label,
+                        );
+                        return (
+                          <div key={row.label} className="grid grid-cols-3 gap-2 items-center text-xs mb-1">
+                            <span className="text-muted-foreground truncate">{row.label}</span>
+                            <Input
+                              type="number"
+                              value={entry?.v1 ?? ""}
+                              onChange={(e) => updatePreviewEntry(section.label, row.label, "v1", e.target.value)}
+                            />
+                            <Input
+                              type="number"
+                              value={entry?.moyenne ?? ""}
+                              onChange={(e) => updatePreviewEntry(section.label, row.label, "moyenne", e.target.value)}
+                            />
+                          </div>
+                        );
+                      })}
                     </div>
                   ))}
                 </div>
