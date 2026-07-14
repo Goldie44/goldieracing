@@ -28,3 +28,22 @@ test("saves and loads budget spentTotal values locally", () => {
     rmSync(dir, { recursive: true, force: true });
   }
 });
+
+test("saves and loads the vision API key locally", () => {
+  const dir = mkdtempSync(path.join(tmpdir(), "goldie-vision-key-"));
+  const dbPath = path.join(dir, "app.sqlite");
+
+  try {
+    const storage = createBudgetSpentTotalStorage(dbPath);
+    assert.equal(storage.loadVisionApiKey(), null);
+
+    storage.saveVisionApiKey("sk-ant-test-123");
+    storage.close();
+
+    const reopened = createBudgetSpentTotalStorage(dbPath);
+    assert.equal(reopened.loadVisionApiKey(), "sk-ant-test-123");
+    reopened.close();
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});

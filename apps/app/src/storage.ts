@@ -11,6 +11,8 @@ export type BudgetStorage = {
   saveAllocatedTotals: (values: BudgetAllocatedTotals) => void;
   loadTotalBudget: () => number | null;
   saveTotalBudget: (value: number) => void;
+  loadVisionApiKey: () => string | null;
+  saveVisionApiKey: (value: string) => void;
   close: () => void;
 };
 
@@ -18,9 +20,10 @@ type StoreData = {
   spentTotals: BudgetSpentTotals;
   allocatedTotals: BudgetAllocatedTotals;
   totalBudget: number | null;
+  visionApiKey: string | null;
 };
 
-const EMPTY: StoreData = { spentTotals: {}, allocatedTotals: {}, totalBudget: null };
+const EMPTY: StoreData = { spentTotals: {}, allocatedTotals: {}, totalBudget: null, visionApiKey: null };
 
 export function createBudgetStorage(filePath: string): BudgetStorage {
   fs.mkdirSync(path.dirname(filePath), { recursive: true });
@@ -47,6 +50,9 @@ export function createBudgetStorage(filePath: string): BudgetStorage {
     loadTotalBudget: () => read().totalBudget ?? null,
     saveTotalBudget: (value) =>
       write({ ...read(), totalBudget: Number.isFinite(value) ? value : null }),
+
+    loadVisionApiKey: () => read().visionApiKey ?? null,
+    saveVisionApiKey: (value) => write({ ...read(), visionApiKey: value || null }),
 
     close: () => {},
   };
