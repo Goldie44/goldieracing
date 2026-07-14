@@ -33,6 +33,7 @@ function createWindow(): void {
     backgroundColor: '#0f1118',
     show: false,
     titleBarStyle: 'hiddenInset',
+    icon: path.resolve(__dirname, '../build/icon.png'),
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
       contextIsolation: true,
@@ -62,7 +63,7 @@ app.whenReady().then(() => {
   Menu.setApplicationMenu(null);
 
   budgetStorage = createBudgetStorage(
-    path.join(app.getPath('userData'), 'goldie-racing.sqlite'),
+    path.join(app.getPath('userData'), 'goldie-racing.json'),
   );
   registerBudgetHandlers(budgetStorage);
 

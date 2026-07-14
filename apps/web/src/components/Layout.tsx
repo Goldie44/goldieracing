@@ -1,9 +1,5 @@
 import { Link, Outlet, useLocation } from "react-router-dom";
-import {
-  Bars3Icon,
-  FlagIcon,
-  XMarkIcon,
-} from "@heroicons/react/24/outline";
+import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTranslation } from "react-i18next";
@@ -36,8 +32,12 @@ export default function Layout() {
       <aside className="hidden lg:flex flex-col w-64 border-r border-border bg-card fixed inset-y-0 z-30">
         <div className="p-6 border-b border-border">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
-              <FlagIcon className="w-5 h-5 text-primary" />
+            <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center overflow-hidden">
+              <img
+                src="/manageur_compagnon_logo.svg"
+                alt="Manageur Compagnon logo"
+                className="w-full h-full object-contain"
+              />
             </div>
             <div>
               <h1 className="text-lg font-bold text-primary tracking-tight">{t("appTitle")}</h1>
@@ -80,7 +80,13 @@ export default function Layout() {
       <div className="lg:hidden fixed top-0 left-0 right-0 z-40 bg-card/95 backdrop-blur-xl border-b border-border">
         <div className="flex items-center justify-between p-4">
           <div className="flex items-center gap-2">
-            <FlagIcon className="w-5 h-5 text-primary" />
+            <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center overflow-hidden">
+              <img
+                src="/manageur_compagnon_logo.svg"
+                alt="Manageur Compagnon logo"
+                className="w-full h-full object-contain"
+              />
+            </div>
             <span className="font-bold text-primary">{t("mobileTitle")}</span>
           </div>
           <button onClick={() => setMobileOpen(!mobileOpen)} className="p-2 text-foreground">

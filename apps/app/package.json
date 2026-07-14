@@ -2,7 +2,7 @@
   "name": "@f1-manager/app",
   "private": true,
   "version": "0.1.0",
-  "description": "Electron shell for the F1 Manager web app",
+  "description": "Electron shell for the Manager Companion web app",
   "main": "dist/main.js",
   "scripts": {
     "dev": "concurrently -k -n tsc,electron -c blue,magenta \"pnpm run dev:tsc\" \"pnpm run dev:electron\"",
@@ -15,6 +15,7 @@
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "devDependencies": {
+    "@electron/rebuild": "^4.2.0",
     "@f1-manager/typescript": "workspace:*",
     "@types/better-sqlite3": "^7.6.13",
     "@types/node": "^22.13.5",
@@ -23,8 +24,5 @@
     "electron-builder": "^25.1.8",
     "typescript": "^5.8.2",
     "wait-on": "^8.0.1"
-  },
-  "dependencies": {
-    "better-sqlite3": "^12.9.0"
   }
 }

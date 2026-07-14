@@ -5,6 +5,7 @@
   "cornering": "Cornering",
   "components": "Components",
   "newProject": "New project",
+  "newProjectDescription": "Create a new development project and its expected gains.",
   "resetAll": "Reset All",
   "resetTitle": "Reset Performance?",
   "resetDescription": "This will delete all projects and reset all ATR table values to zero. This action is irreversible.",
@@ -23,5 +24,6 @@
   "calibrationTitle": "ATR Calibration",
   "pieceLabel": "Parts",
   "selectPiece": "Select a part",
-  "deleteProject": "Delete {{atr}}"
+  "deleteProject": "Delete {{atr}}",
+  "noProjects": "No development projects"
 }

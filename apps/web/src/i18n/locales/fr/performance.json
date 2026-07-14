@@ -5,6 +5,7 @@
   "cornering": "Virage",
   "components": "Composants",
   "newProject": "Nouveau projet",
+  "newProjectDescription": "Créez un nouveau projet de développement et ses gains attendus.",
   "resetAll": "Tout réinitialiser",
   "resetTitle": "Réinitialiser la Performance ?",
   "resetDescription": "Cette action supprimera tous les projets et remettra toutes les valeurs du tableau ATR à zéro. Cette action est irréversible.",
@@ -23,5 +24,6 @@
   "calibrationTitle": "Calibration ATR",
   "pieceLabel": "Pièces",
   "selectPiece": "Sélectionner une pièce",
-  "deleteProject": "Supprimer {{atr}}"
+  "deleteProject": "Supprimer {{atr}}",
+  "noProjects": "Aucun projet de développement"
 }

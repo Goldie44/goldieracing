@@ -922,31 +922,31 @@ export default function RDPage() {
         <div className="overflow-x-auto rounded-lg border border-border">
           <table className="w-full text-xs border-collapse">
             <thead>
-              <tr className="bg-card border-b border-border">
-                <th className="px-3 py-2 text-left font-medium text-muted-foreground w-28"></th>
-                <th className="px-3 py-2 text-left font-medium text-muted-foreground w-40"></th>
-                <th className="px-3 py-2 text-center font-medium text-muted-foreground">
+              <tr className="sticky top-0 z-10 bg-card border-b-2 border-border shadow-sm">
+                <th className="px-3 py-3 text-left font-semibold text-muted-foreground uppercase tracking-wide text-[10px] w-28"></th>
+                <th className="px-3 py-3 text-left font-semibold text-muted-foreground uppercase tracking-wide text-[10px] w-40"></th>
+                <th className="px-3 py-3 text-center font-semibold text-muted-foreground uppercase tracking-wide text-[10px]">
                   {t("baseStat")}
                 </th>
-                <th className="px-3 py-2 text-center font-medium text-muted-foreground">
+                <th className="px-3 py-3 text-center font-semibold text-muted-foreground uppercase tracking-wide text-[10px]">
                   {t("expectedGains")}
                 </th>
-                <th className="px-3 py-2 text-center font-medium text-muted-foreground">
+                <th className="px-3 py-3 text-center font-semibold text-muted-foreground uppercase tracking-wide text-[10px]">
                   {t("regulationChanges")}
                 </th>
-                <th className="px-3 py-2 text-center font-medium text-muted-foreground">
+                <th className="px-3 py-3 text-center font-semibold text-muted-foreground uppercase tracking-wide text-[10px]">
                   {t("postRegulationValue")}
                 </th>
-                <th className="px-3 py-2 text-center font-medium text-muted-foreground">
+                <th className="px-3 py-3 text-center font-semibold text-muted-foreground uppercase tracking-wide text-[10px]">
                   {t("objective")}
                 </th>
-                <th className="px-3 py-2 text-center font-medium text-cyan-400">
+                <th className="px-3 py-3 text-center font-semibold text-cyan-400 uppercase tracking-wide text-[10px]">
                   {t("gap")}
                 </th>
-                <th className="px-3 py-2 text-center font-medium text-muted-foreground">
+                <th className="px-3 py-3 text-center font-semibold text-muted-foreground uppercase tracking-wide text-[10px]">
                   {t("nDeR")}
                 </th>
-                <th className="px-3 py-2 w-20"></th>
+                <th className="px-3 py-3 w-20"></th>
               </tr>
             </thead>
             <tbody>
@@ -981,12 +981,8 @@ export default function RDPage() {
                 return aeroGroups.flatMap((group, groupIdx) => {
                   const groupGap = groupGapsData[groupIdx];
                   const gapColor = getGapColor(groupGap);
-
-                const separatorRow = (
-                  <tr key={`sep-${group.piece}`}>
-                    <td colSpan={10} className="h-2 p-0 bg-gray-900" />
-                  </tr>
-                );
+                  const groupColor = categoryColors[group.piece] ?? "hsl(220, 12%, 50%)";
+                  const zebra = groupIdx % 2 === 0 ? "bg-card" : "bg-muted/5";
 
                 const dataRows = group.parametres.map((param, pIdx) => {
                   const cellKey = `${group.piece}__${param}`;
@@ -994,13 +990,19 @@ export default function RDPage() {
                   const valeur = (cell.statBase + cell.gainsAttendus) - cell.modificationsReglementations;
                   const gap = valeur - cell.objectif;
                   const isFirst = pIdx === 0;
+                  const isLast = pIdx === group.parametres.length - 1;
 
                   return (
-                    <tr key={cellKey} className="border-b border-border/40 bg-card hover:bg-muted/10 transition-colors">
+                    <tr
+                      key={cellKey}
+                      className={`${zebra} hover:bg-muted/20 transition-colors ${isFirst ? "border-t-2" : "border-t border-border/30"} ${isLast ? "border-b-2 border-b-border/60" : ""}`}
+                      style={isFirst ? { borderTopColor: groupColor } : undefined}
+                    >
                       {isFirst && (
                         <td
                           rowSpan={group.parametres.length}
                           className="px-3 py-2 font-semibold text-foreground text-center border-r border-border align-middle whitespace-nowrap"
+                          style={{ boxShadow: `inset 3px 0 0 ${groupColor}` }}
                         >
                           {group.piece}
                         </td>
@@ -1067,12 +1069,9 @@ export default function RDPage() {
                   );
                 });
 
-                return [separatorRow, ...dataRows];
+                return dataRows;
                 });
               })()}
-              <tr>
-                <td colSpan={10} className="h-2 p-0 bg-gray-900" />
-              </tr>
             </tbody>
           </table>
         </div>

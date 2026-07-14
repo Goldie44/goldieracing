@@ -23,5 +23,15 @@
   "stops": "Stops",
   "totalTime": "Total time",
   "gap": "Gap",
-  "stintTooltip": "{{compound}} — {{laps}} laps"
+  "stintTooltip": "{{compound}} — {{laps}} laps",
+  "converter": "Min/sec converter",
+  "converterMinutes": "Minutes",
+  "converterSeconds": "Seconds",
+  "converterResult": "= {{seconds}} s",
+  "converterAddToAverage": "Add to lap average table",
+  "lapAverage": "Lap time average",
+  "lapAverageLap": "Lap",
+  "lapAverageChrono": "Chrono (s)",
+  "lapAverageResult": "Average",
+  "lapAverageReset": "Reset table"
 }

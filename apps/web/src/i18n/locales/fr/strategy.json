@@ -23,5 +23,15 @@
   "stops": "Arrêts",
   "totalTime": "Temps total",
   "gap": "Écart",
-  "stintTooltip": "{{compound}} — {{laps}} tours"
+  "stintTooltip": "{{compound}} — {{laps}} tours",
+  "converter": "Convertisseur min/sec",
+  "converterMinutes": "Minutes",
+  "converterSeconds": "Secondes",
+  "converterResult": "= {{seconds}} s",
+  "converterAddToAverage": "Ajouter au tableau des moyennes",
+  "lapAverage": "Moyenne des chronos",
+  "lapAverageLap": "Tour",
+  "lapAverageChrono": "Chrono (s)",
+  "lapAverageResult": "Moyenne",
+  "lapAverageReset": "Réinitialiser le tableau"
 }

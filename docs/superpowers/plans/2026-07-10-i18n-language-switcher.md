@@ -173,7 +173,7 @@ git commit -m "feat: bootstrap i18next with fr/en namespaces"
 {
   "appTitle": "F1 Manager",
   "mobileTitle": "GOLDIE F1",
-  "betaVersion": "Beta Version 1.8.1",
+  "betaVersion": "Beta Version 1.9.2",
   "nav": {
     "dashboard": "Dashboard",
     "calendar": "Calendrier",
@@ -193,7 +193,7 @@ git commit -m "feat: bootstrap i18next with fr/en namespaces"
 {
   "appTitle": "F1 Manager",
   "mobileTitle": "GOLDIE F1",
-  "betaVersion": "Beta Version 1.8.1",
+  "betaVersion": "Beta Version 1.9.2",
   "nav": {
     "dashboard": "Dashboard",
     "calendar": "Calendar",
@@ -287,7 +287,7 @@ Replace `<span className="font-bold text-primary">GOLDIE F1</span>` with:
             <span className="font-bold text-primary">{t("mobileTitle")}</span>
 ```
 
-Replace `<p>Beta Version 1.8.1</p>` with:
+Replace `<p>Beta Version 1.8.5</p>` with:
 ```jsx
             <p>{t("betaVersion")}</p>
 ```

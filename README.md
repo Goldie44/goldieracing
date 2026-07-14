@@ -1,8 +1,8 @@
-# 🏎️ F1 Manager — Fantasy Formula 1 Team Manager
+# 🏎️ Manager Companion — Fantasy Formula 1 Team Manager
 
 > Fantasy Formula 1 management game. Run your own constructor across a full season — manage the budget, hire staff, drive R&D, juggle stock, plan the calendar, and chase performance race after race.
 
-This repository is a [Turborepo](https://turborepo.com/) + [pnpm](https://pnpm.io/) monorepo. The current generation of F1 Manager is a single-page web app built with React 18, Vite, TypeScript, [shadcn/ui](https://ui.shadcn.com/) and Tailwind CSS, with shared workspace packages for tooling.
+This repository is a [Turborepo](https://turborepo.com/) + [pnpm](https://pnpm.io/) monorepo. The current generation of Manager Companion is a single-page web app built with React 18, Vite, TypeScript, [shadcn/ui](https://ui.shadcn.com/) and Tailwind CSS, with shared workspace packages for tooling.
 
 ## 📚 Table of Contents
 

@@ -103,7 +103,7 @@ export default function BudgetPage() {
                 autoFocus
                 type="number"
                 step="0.01"
-                value={budgetInput}
+                value={budgetInput === 0 ? "" : budgetInput}
                 onChange={e => setBudgetInput(e.target.value)}
                 className="w-full text-lg font-bold font-mono bg-secondary/50 border border-primary rounded px-2 py-0.5 outline-none text-foreground"
               />
@@ -221,7 +221,7 @@ export default function BudgetPage() {
                         min={0}
                         step="0.01"
                         autoFocus
-                        value={(s.allocatedTotal || 0) / 1000000}
+                        value={(s.allocatedTotal || 0) === 0 ? "" : (s.allocatedTotal || 0) / 1000000}
                         onChange={e => updateAllocation(i, e.target.value)}
                         onBlur={() => setEditingAllocation(null)}
                         onKeyDown={e => e.key === 'Enter' && setEditingAllocation(null)}
@@ -242,7 +242,7 @@ export default function BudgetPage() {
                       type="number"
                       min={0}
                       step="0.01"
-                      value={(s.spentTotal || 0) / 1000000}
+                      value={(s.spentTotal || 0) === 0 ? "" : (s.spentTotal || 0) / 1000000}
                       onChange={e => updateSpent(i, e.target.value)}
                       className="w-20 text-right text-sm font-mono bg-secondary/50 border border-transparent focus:border-primary rounded px-1.5 py-0.5 outline-none transition-colors"
                       style={{ color: s.color }}

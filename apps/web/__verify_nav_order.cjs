@@ -9,7 +9,7 @@ const { chromium } = require("playwright");
   page.on("pageerror", err => console.log("PAGE ERROR:", err.message));
 
   await page.goto("http://localhost:5180");
-  await page.waitForSelector("text=F1 Manager");
+  await page.waitForSelector("text=Manager Companion");
 
   // --- Desktop sidebar ---
   await page.screenshot({ path: "/tmp/01-initial-desktop.png" });
@@ -59,7 +59,7 @@ const { chromium } = require("playwright");
 
   // Reload and confirm order persisted
   await page.reload();
-  await page.waitForSelector("text=F1 Manager");
+  await page.waitForSelector("text=Manager Companion");
   const afterReloadOrder = await page.$$eval("aside nav a", links => links.map(a => a.textContent.trim()));
   console.log("Desktop order after reload:", JSON.stringify(afterReloadOrder));
   await page.screenshot({ path: "/tmp/05-after-reload.png" });

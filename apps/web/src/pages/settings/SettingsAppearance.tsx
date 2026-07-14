@@ -84,7 +84,7 @@ export default function SettingsAppearance() {
       <div>
         <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-3">{t("appearance.theme")}</p>
         <div className="flex gap-3">
-          {(["dark", "light", "system"] as const).map((themeOption) => (
+          {(["dark", "light"] as const).map((themeOption) => (
             <button
               key={themeOption}
               onClick={() => setTheme(themeOption)}
@@ -94,7 +94,7 @@ export default function SettingsAppearance() {
                   : "border-border bg-card text-muted-foreground hover:text-foreground hover:bg-secondary"
               }`}
             >
-              {themeOption === "dark" ? t("appearance.themeDark") : themeOption === "light" ? t("appearance.themeLight") : t("appearance.themeSystem")}
+              {themeOption === "dark" ? t("appearance.themeDark") : t("appearance.themeLight")}
             </button>
           ))}
         </div>

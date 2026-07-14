@@ -163,8 +163,8 @@ export default function StockPage() {
                   <input
                     type="number"
                     min={0}
-                    value={counts[item.piece]}
-                    onChange={e => setCounts(prev => ({ ...prev, [item.piece]: Number(e.target.value) }))}
+                    value={counts[item.piece] === 0 ? "" : counts[item.piece]}
+                    onChange={e => setCounts(prev => ({ ...prev, [item.piece]: Number(e.target.value) || 0 }))}
                     className="text-lg font-bold font-mono bg-transparent w-full outline-none border-b border-transparent focus:border-primary transition-colors"
                   />
                 </div>
@@ -174,8 +174,8 @@ export default function StockPage() {
                     <input
                       type="number"
                       min={1}
-                      value={lifespans[item.piece]}
-                      onChange={e => setLifespans(prev => ({ ...prev, [item.piece]: Number(e.target.value) }))}
+                      value={lifespans[item.piece] === 0 ? "" : lifespans[item.piece]}
+                      onChange={e => setLifespans(prev => ({ ...prev, [item.piece]: Number(e.target.value) || 0 }))}
                       className="text-lg font-bold font-mono bg-transparent w-full outline-none border-b border-transparent focus:border-primary transition-colors"
                     />
                     <span className="text-xs text-muted-foreground">{t("races")}</span>
@@ -195,8 +195,8 @@ export default function StockPage() {
                      <input
                        type="number"
                        min={0}
-                       value={costs[item.piece]}
-                       onChange={e => setCosts(prev => ({ ...prev, [item.piece]: Number(e.target.value) }))}
+                       value={costs[item.piece] === 0 ? "" : costs[item.piece]}
+                       onChange={e => setCosts(prev => ({ ...prev, [item.piece]: Number(e.target.value) || 0 }))}
                        className="w-20 text-right font-mono text-primary bg-transparent border-b border-transparent focus:border-primary outline-none transition-colors text-xs"
                      />
                      <span className="text-muted-foreground">€</span>

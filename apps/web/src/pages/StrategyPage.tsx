@@ -1,6 +1,6 @@
 import { useState, useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import { ArrowPathIcon } from "@heroicons/react/24/outline";
+import { ArrowPathIcon, PlusIcon } from "@heroicons/react/24/outline";
 import PageHeader from "../components/PageHeader";
 import {
   Dialog,
@@ -40,7 +40,7 @@ interface Strategy {
 const COMPOUND_COLORS: Record<Compound, string> = {
   soft: "#ef4444",
   medium: "#eab308",
-  hard: "#f8fafc",
+  hard: "#64748b",
 };
 
 const COMPOUND_LABELS: Record<Compound, string> = {
@@ -213,6 +213,121 @@ function StintBar({ strategy, totalLaps }: { strategy: Strategy; totalLaps: numb
   );
 }
 
+/** Petit convertisseur minutes → secondes */
+function MinSecConverter({
+  minutes,
+  seconds,
+  onChangeMinutes,
+  onChangeSeconds,
+  onAddLap,
+}: {
+  minutes: number;
+  seconds: number;
+  onChangeMinutes: (v: number) => void;
+  onChangeSeconds: (v: number) => void;
+  onAddLap: (seconds: number) => void;
+}) {
+  const { t } = useTranslation("strategy");
+
+  const totalSeconds = minutes * 60 + seconds;
+
+  return (
+    <div className="bg-card border border-border rounded-xl p-5 w-full">
+      <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-4">
+        {t("converter")}
+      </h3>
+      <div className="flex items-end gap-3">
+        <div className="space-y-1">
+          <label className="text-xs text-muted-foreground block">{t("converterMinutes")}</label>
+          <NumInput value={minutes} onChange={onChangeMinutes} min={0} className="w-16" />
+        </div>
+        <div className="space-y-1">
+          <label className="text-xs text-muted-foreground block">{t("converterSeconds")}</label>
+          <NumInput value={seconds} onChange={onChangeSeconds} step={0.001} min={0} className="w-20" />
+        </div>
+        <span className="text-sm font-mono text-primary ml-2 pb-1.5 whitespace-nowrap">
+          {t("converterResult", { seconds: totalSeconds.toFixed(3) })}
+        </span>
+        <Button
+          variant="secondary"
+          className="flex items-center gap-1 ml-auto"
+          onClick={() => onAddLap(totalSeconds)}
+          title={t("converterAddToAverage")}
+        >
+          <PlusIcon className="w-4 h-4" />
+        </Button>
+      </div>
+    </div>
+  );
+}
+
+/** Tableau de saisie des chronos pour calculer un temps au tour moyen */
+function LapAverageCalculator({
+  laps,
+  onChangeLap,
+  onReset,
+}: {
+  laps: number[];
+  onChangeLap: (i: number, v: number) => void;
+  onReset: () => void;
+}) {
+  const { t } = useTranslation("strategy");
+
+  const validLaps = laps.filter((l) => l > 0);
+  const average = validLaps.length > 0
+    ? validLaps.reduce((sum, l) => sum + l, 0) / validLaps.length
+    : null;
+
+  return (
+    <div className="bg-card border border-border rounded-xl p-5">
+      <div className="flex items-center justify-between mb-4">
+        <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+          {t("lapAverage")}
+        </h3>
+        <button
+          type="button"
+          onClick={onReset}
+          title={t("lapAverageReset")}
+          className="text-muted-foreground hover:text-destructive transition-colors"
+        >
+          <ArrowPathIcon className="w-3.5 h-3.5" />
+        </button>
+      </div>
+      <table className="w-full">
+        <thead>
+          <tr className="text-xs text-muted-foreground">
+            <th className="text-left pb-2 font-medium">{t("lapAverageLap")}</th>
+            <th className="text-right pb-2 font-medium">{t("lapAverageChrono")}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {laps.map((l, i) => (
+            <tr key={i} className="border-t border-border/30">
+              <td className="py-1.5 text-sm text-foreground">{i + 1}</td>
+              <td className="py-1.5 text-right">
+                <NumInput
+                  value={l}
+                  onChange={(v) => onChangeLap(i, v)}
+                  step={0.001}
+                  className="w-24"
+                />
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <div className="flex items-center justify-between mt-3 pt-3 border-t border-border">
+        <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+          {t("lapAverageResult")}
+        </span>
+        <span className="text-sm font-mono text-primary">
+          {average !== null ? formatTime(average) : "—"}
+        </span>
+      </div>
+    </div>
+  );
+}
+
 // ── Composant ─────────────────────────────────────────────────────────────────
 
 function NumInput({
@@ -233,12 +348,16 @@ function NumInput({
       type="number"
       step={step}
       min={min}
-      value={value}
+      value={value === 0 ? "" : value}
       onChange={(e) => {
+        if (e.target.value === "") {
+          onChange(0);
+          return;
+        }
         const v = step < 1 ? parseFloat(e.target.value) : parseInt(e.target.value);
         if (!isNaN(v)) onChange(v);
       }}
-      className={`bg-muted/20 border border-border/60 rounded px-2 py-1 text-xs text-right font-mono focus:outline-none focus:ring-1 focus:ring-primary/40 focus:border-primary/40 ${className}`}
+      className={`bg-muted/20 border border-border/60 rounded px-2 py-1 text-xs text-right font-mono focus:outline-none focus:ring-1 focus:ring-primary/40 focus:border-primary/40 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none ${className}`}
     />
   );
 }
@@ -255,12 +374,26 @@ export default function StrategyPage() {
   const [params, setParams] = useState<RaceParams>(ZERO_PARAMS);
   const [tireData, setTireData] = useState<Record<Compound, TireData>>(ZERO_TIRE_DATA);
   const [resetDialogOpen, setResetDialogOpen] = useState(false);
+  const [laps, setLaps] = useState<number[]>(Array(10).fill(0));
+  const [converterMinutes, setConverterMinutes] = useState(1);
+  const [converterSeconds, setConverterSeconds] = useState(30);
 
   const setParam = <K extends keyof RaceParams>(k: K, v: RaceParams[K]) =>
     setParams((p) => ({ ...p, [k]: v }));
 
   const setTire = (c: Compound, k: keyof TireData, v: number) =>
     setTireData((prev) => ({ ...prev, [c]: { ...prev[c], [k]: v } }));
+
+  const setLap = (i: number, v: number) =>
+    setLaps((prev) => prev.map((l, idx) => (idx === i ? v : l)));
+
+  const addLapFromConverter = (seconds: number) => {
+    setLaps((prev) => {
+      const emptyIndex = prev.findIndex((l) => l === 0);
+      if (emptyIndex === -1) return prev;
+      return prev.map((l, idx) => (idx === emptyIndex ? seconds : l));
+    });
+  };
 
   const strategies = useMemo(() => generateStrategies(tireData, params), [tireData, params]);
   const best = strategies[0] ?? null;
@@ -289,7 +422,7 @@ export default function StrategyPage() {
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
-            <Button variant="destructive" onClick={() => { setParams(ZERO_PARAMS); setTireData(ZERO_TIRE_DATA); setResetDialogOpen(false); }}>
+            <Button variant="destructive" onClick={() => { setParams(ZERO_PARAMS); setTireData(ZERO_TIRE_DATA); setLaps(Array(10).fill(0)); setConverterMinutes(0); setConverterSeconds(0); setResetDialogOpen(false); }}>
               {t("confirmReset")}
             </Button>
             <DialogClose asChild>
@@ -300,86 +433,6 @@ export default function StrategyPage() {
       </Dialog>
 
       {/* Paramètres */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-
-        {/* Course */}
-        <div className="bg-card border border-border rounded-xl p-5">
-          <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-4">
-            {t("raceParams")}
-          </h3>
-          <div className="space-y-3">
-            <div className="flex items-center justify-between">
-              <label className="text-sm text-foreground">{t("lapCount")}</label>
-              <NumInput
-                value={params.totalLaps}
-                onChange={(v) => setParam("totalLaps", Math.max(2, v))}
-                min={2}
-                className="w-20"
-              />
-            </div>
-            <div className="flex items-center justify-between">
-              <label className="text-sm text-foreground">{t("pitLoss")}</label>
-              <NumInput
-                value={params.pitDelta}
-                onChange={(v) => setParam("pitDelta", v)}
-                step={0.1}
-                className="w-20"
-              />
-            </div>
-          </div>
-        </div>
-
-        {/* Pneus */}
-        <div className="bg-card border border-border rounded-xl p-5">
-          <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-4">
-            {t("tireData")}
-          </h3>
-          <table className="w-full">
-            <thead>
-              <tr className="text-xs text-muted-foreground">
-                <th className="text-left pb-2 font-medium"></th>
-                <th className="text-right pb-2 font-medium">{t("baseTime")}</th>
-                <th className="text-right pb-2 font-medium">{t("degradation")}</th>
-                <th className="text-right pb-2 font-medium">{t("maxLaps")}</th>
-              </tr>
-            </thead>
-            <tbody>
-              {COMPOUNDS.map((c) => (
-                <tr key={c} className="border-t border-border/30">
-                  <td className="py-2 pr-3">
-                    <CompoundPill compound={c} />
-                  </td>
-                  <td className="py-2 text-right">
-                    <NumInput
-                      value={tireData[c].baseLapTime}
-                      onChange={(v) => setTire(c, "baseLapTime", v)}
-                      step={0.001}
-                      className="w-24"
-                    />
-                  </td>
-                  <td className="py-2 text-right">
-                    <NumInput
-                      value={tireData[c].degradation}
-                      onChange={(v) => setTire(c, "degradation", v)}
-                      step={0.001}
-                      className="w-20"
-                    />
-                  </td>
-                  <td className="py-2 text-right">
-                    <NumInput
-                      value={tireData[c].maxLaps}
-                      onChange={(v) => setTire(c, "maxLaps", Math.max(1, v))}
-                      min={1}
-                      className="w-16"
-                    />
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
-
       {/* Stratégie optimale */}
       {best && (
         <div className="bg-primary/5 border border-primary/20 rounded-xl p-5 mb-6">
@@ -405,74 +458,172 @@ export default function StrategyPage() {
         </div>
       )}
 
-      {/* Classement */}
-      <div className="bg-card border border-border rounded-xl overflow-hidden">
-        <div className="px-5 py-3 border-b border-border">
-          <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-            {t("ranking", { count: strategies.length })}
-          </h3>
-        </div>
-        {strategies.length === 0 ? (
-          <p className="px-5 py-8 text-center text-sm text-muted-foreground">
-            {t("noStrategy")}
-          </p>
-        ) : (
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="bg-muted/20 border-b border-border text-xs text-muted-foreground font-semibold uppercase tracking-wider">
-                <th className="px-4 py-2 text-left w-10">{t("rank")}</th>
-                <th className="px-4 py-2 text-left">{t("strategyColumn")}</th>
-                <th className="px-4 py-2 text-left w-40">{t("visualization")}</th>
-                <th className="px-4 py-2 text-center w-20">{t("stops")}</th>
-                <th className="px-4 py-2 text-right w-32">{t("totalTime")}</th>
-                <th className="px-4 py-2 text-right w-24">{t("gap")}</th>
-              </tr>
-            </thead>
-            <tbody>
-              {strategies.map((s, i) => (
-                <tr
-                  key={i}
-                  className={`border-b border-border/40 transition-colors ${
-                    i === 0 ? "bg-primary/5" : "hover:bg-muted/10"
-                  }`}
-                >
-                  <td className="px-4 py-3 text-xs font-mono text-muted-foreground">
-                    {i === 0 ? "★" : String(i + 1).padStart(2, "0")}
-                  </td>
-                  <td className="px-4 py-3">
-                    <div className="flex items-center gap-2 flex-wrap">
-                      {s.compounds.map((c, ci) => (
-                        <span key={ci} className="flex items-center gap-1.5">
-                          {ci > 0 && (
-                            <span className="text-xs text-muted-foreground/60">
-                              →T{s.pitLaps[ci - 1]}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+
+        {/* Colonne gauche : Course, Convertisseur, Classement */}
+        <div className="flex flex-col gap-6">
+          <div className="bg-card border border-border rounded-xl p-5">
+            <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-4">
+              {t("raceParams")}
+            </h3>
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <label className="text-sm text-foreground">{t("lapCount")}</label>
+                <NumInput
+                  value={params.totalLaps}
+                  onChange={(v) => setParam("totalLaps", Math.max(2, v))}
+                  min={2}
+                  className="w-20"
+                />
+              </div>
+              <div className="flex items-center justify-between">
+                <label className="text-sm text-foreground">{t("pitLoss")}</label>
+                <NumInput
+                  value={params.pitDelta}
+                  onChange={(v) => setParam("pitDelta", v)}
+                  step={0.1}
+                  className="w-20"
+                />
+              </div>
+            </div>
+          </div>
+
+          <MinSecConverter
+            minutes={converterMinutes}
+            seconds={converterSeconds}
+            onChangeMinutes={setConverterMinutes}
+            onChangeSeconds={setConverterSeconds}
+            onAddLap={addLapFromConverter}
+          />
+
+          {/* Classement */}
+          <div className="bg-card border border-border rounded-xl overflow-hidden">
+            <div className="px-5 py-3 border-b border-border">
+              <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                {t("ranking", { count: strategies.length })}
+              </h3>
+            </div>
+            {strategies.length === 0 ? (
+              <p className="px-5 py-8 text-center text-sm text-muted-foreground">
+                {t("noStrategy")}
+              </p>
+            ) : (
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="bg-muted/20 border-b border-border text-xs text-muted-foreground font-semibold uppercase tracking-wider">
+                    <th className="px-4 py-2 text-left w-10">{t("rank")}</th>
+                    <th className="px-4 py-2 text-left">{t("strategyColumn")}</th>
+                    <th className="px-4 py-2 text-left w-40">{t("visualization")}</th>
+                    <th className="px-4 py-2 text-center w-20">{t("stops")}</th>
+                    <th className="px-4 py-2 text-right w-32">{t("totalTime")}</th>
+                    <th className="px-4 py-2 text-right w-24">{t("gap")}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {strategies.map((s, i) => (
+                    <tr
+                      key={i}
+                      className={`border-b border-border/40 transition-colors ${
+                        i === 0 ? "bg-primary/5" : "hover:bg-muted/10"
+                      }`}
+                    >
+                      <td className="px-4 py-3 text-xs font-mono text-muted-foreground">
+                        {i === 0 ? "★" : String(i + 1).padStart(2, "0")}
+                      </td>
+                      <td className="px-4 py-3">
+                        <div className="flex items-center gap-2 flex-wrap">
+                          {s.compounds.map((c, ci) => (
+                            <span key={ci} className="flex items-center gap-1.5">
+                              {ci > 0 && (
+                                <span className="text-xs text-muted-foreground/60">
+                                  →T{s.pitLaps[ci - 1]}
+                                </span>
+                              )}
+                              <CompoundPill
+                                compound={c}
+                                label={`${COMPOUND_LABELS[c]} ${s.stintLengths[ci]}t`}
+                              />
                             </span>
-                          )}
-                          <CompoundPill
-                            compound={c}
-                            label={`${COMPOUND_LABELS[c]} ${s.stintLengths[ci]}t`}
-                          />
-                        </span>
-                      ))}
-                    </div>
-                  </td>
-                  <td className="px-4 py-3">
-                    <StintBar strategy={s} totalLaps={params.totalLaps} />
-                  </td>
-                  <td className="px-4 py-3 text-center text-xs text-muted-foreground">
-                    {s.pitLaps.length}
-                  </td>
-                  <td className="px-4 py-3 text-right font-mono text-sm">
-                    {formatTime(s.totalTime)}
-                  </td>
-                  <td className="px-4 py-3 text-right font-mono text-xs text-muted-foreground">
-                    {i === 0 ? "—" : `+${(s.totalTime - best!.totalTime).toFixed(3)}s`}
-                  </td>
+                          ))}
+                        </div>
+                      </td>
+                      <td className="px-4 py-3">
+                        <StintBar strategy={s} totalLaps={params.totalLaps} />
+                      </td>
+                      <td className="px-4 py-3 text-center text-xs text-muted-foreground">
+                        {s.pitLaps.length}
+                      </td>
+                      <td className="px-4 py-3 text-right font-mono text-sm">
+                        {formatTime(s.totalTime)}
+                      </td>
+                      <td className="px-4 py-3 text-right font-mono text-xs text-muted-foreground">
+                        {i === 0 ? "—" : `+${(s.totalTime - best!.totalTime).toFixed(3)}s`}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            )}
+          </div>
+        </div>
+
+        {/* Colonne droite : Pneus, Moyenne des chronos */}
+        <div className="flex flex-col gap-6">
+          <div className="bg-card border border-border rounded-xl p-5">
+            <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-4">
+              {t("tireData")}
+            </h3>
+            <table className="w-full">
+              <thead>
+                <tr className="text-xs text-muted-foreground">
+                  <th className="text-left pb-2 font-medium"></th>
+                  <th className="text-right pb-2 font-medium">{t("baseTime")}</th>
+                  <th className="text-right pb-2 font-medium">{t("degradation")}</th>
+                  <th className="text-right pb-2 font-medium">{t("maxLaps")}</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        )}
+              </thead>
+              <tbody>
+                {COMPOUNDS.map((c) => (
+                  <tr key={c} className="border-t border-border/30">
+                    <td className="py-2 pr-3">
+                      <CompoundPill compound={c} />
+                    </td>
+                    <td className="py-2 text-right">
+                      <NumInput
+                        value={tireData[c].baseLapTime}
+                        onChange={(v) => setTire(c, "baseLapTime", v)}
+                        step={0.001}
+                        className="w-24"
+                      />
+                    </td>
+                    <td className="py-2 text-right">
+                      <NumInput
+                        value={tireData[c].degradation}
+                        onChange={(v) => setTire(c, "degradation", v)}
+                        step={0.001}
+                        className="w-20"
+                      />
+                    </td>
+                    <td className="py-2 text-right">
+                      <NumInput
+                        value={tireData[c].maxLaps}
+                        onChange={(v) => setTire(c, "maxLaps", Math.max(1, v))}
+                        min={1}
+                        className="w-16"
+                      />
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          <LapAverageCalculator
+            laps={laps}
+            onChangeLap={setLap}
+            onReset={() => setLaps(Array(10).fill(0))}
+          />
+        </div>
       </div>
     </div>
   );

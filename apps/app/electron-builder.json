@@ -1,10 +1,10 @@
 {
   "appId": "com.f1manager.app",
-  "productName": "F1 Manager",
+  "productName": "Manager Companion",
   "directories": {
     "output": "release"
   },
-  "files": ["dist/**/*", "package.json", "node_modules/better-sqlite3/**/*"],
+  "files": ["dist/**/*", "build/icon.png", "package.json"],
   "extraResources": [
     {
       "from": "../web/dist",
@@ -17,9 +17,11 @@
     "target": ["dmg", "zip"]
   },
   "win": {
-    "target": ["nsis"]
+    "target": ["nsis"],
+    "icon": "build/icon.ico"
   },
   "linux": {
-    "target": ["AppImage"]
+    "target": ["AppImage"],
+    "icon": "build/icon.png"
   }
 }

@@ -54,7 +54,22 @@
       "Bash(cat en/welcome.json)",
       "Bash(grep -c \"error TS\" /tmp_typecheck_out.txt)",
       "Bash(grep -i \"Dashboard\" /tmp_typecheck_out.txt)",
-      "Read(//c/Users/naelj/AppData/Local/Temp/**)"
+      "Read(//c/Users/naelj/AppData/Local/Temp/**)",
+      "Bash(node -e \"console.log\\(require\\('e:/Documents/Projet perso/goldie-racing/node_modules/sharp/package.json'\\).version\\)\")",
+      "Bash(convert -version)",
+      "Bash(npm view *)",
+      "Bash(node gen-icon.mjs)",
+      "Bash(pnpm --filter @f1-manager/app run build)",
+      "Bash(pnpm --filter @f1-manager/web run build)",
+      "Bash(pnpm --filter @f1-manager/app run package)",
+      "PowerShell(& \"e:\\\\Documents\\\\Projet perso\\\\goldie-racing\\\\apps\\\\app\\\\release\\\\win-unpacked\\\\Manager Companion.exe\" --enable-logging 2>&1; Start-Sleep 5; $logPath = \"$env:APPDATA\\\\Manager Companion\\\\logs\\\\main.log\"; if \\(Test-Path $logPath\\) { Get-Content $logPath -Tail 30 })",
+      "Read(//c/Program Files \\\\\\(x86\\\\\\)/Microsoft Visual Studio/18/BuildTools/VC/Tools/MSVC/**)",
+      "PowerShell($env:GYP_MSVS_VERSION = \"2022\"; $env:Path = \"C:\\\\Program Files \\(x86\\)\\\\Microsoft Visual Studio\\\\18\\\\BuildTools\\\\MSBuild\\\\Current\\\\Bin\\\\amd64;\" + $env:Path; Set-Location \"e:\\\\Documents\\\\Projet perso\\\\goldie-racing\\\\apps\\\\app\"; pnpm exec electron-rebuild -f -w better-sqlite3 2>&1)",
+      "Bash(pkill -f \"vite --port\")",
+      "Bash(pkill -f \"node.*vite\")",
+      "Bash(pnpm run *)",
+      "Bash(node --test test/*.test.cjs)",
+      "Bash(node -e ' *)"
     ]
   }
 }
