@@ -32,3 +32,19 @@ test("throws when no JSON array is present", () => {
 test("throws when the JSON array is malformed", () => {
   assert.throws(() => parseAtrVisionResponse("[{\"section\": \"Virage\", ]"));
 });
+
+test("extracts the JSON array even when surrounding text contains unrelated brackets", () => {
+  const text = 'Note [1]: voici les valeurs mesurées. [{"section":"Vélocité","label":"Vitesse max (km/h)","v1":"312","moyenne":"305"}] Fin de l\'analyse [2].';
+  const result = parseAtrVisionResponse(text);
+  assert.deepEqual(result, [
+    { section: "Vélocité", label: "Vitesse max (km/h)", v1: "312", moyenne: "305" },
+  ]);
+});
+
+test("does not get confused by brackets inside a string value", () => {
+  const text = '[{"section":"Vélocité","label":"Vitesse [max] (km/h)","v1":"312","moyenne":"305"}]';
+  const result = parseAtrVisionResponse(text);
+  assert.deepEqual(result, [
+    { section: "Vélocité", label: "Vitesse [max] (km/h)", v1: "312", moyenne: "305" },
+  ]);
+});
