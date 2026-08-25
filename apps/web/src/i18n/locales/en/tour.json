@@ -17,10 +17,6 @@
       "title": "Car weak points",
       "body": "The three biggest performance gaps versus the competition, worth fixing first."
     },
-    "dashboardNextRace": {
-      "title": "Next race",
-      "body": "The name, circuit, type and recommended strategy for your next upcoming race."
-    },
     "dashboardStock": {
       "title": "Stock status",
       "body": "A summary of your parts stock health: what's fine, what's low, and what's critical."

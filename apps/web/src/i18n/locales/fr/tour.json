@@ -17,10 +17,6 @@
       "title": "Points faibles de la voiture",
       "body": "Les trois écarts de performance les plus importants par rapport à la concurrence, à corriger en priorité."
     },
-    "dashboardNextRace": {
-      "title": "Prochaine course",
-      "body": "Le nom, le circuit, le type et la stratégie recommandée pour votre prochaine échéance."
-    },
     "dashboardStock": {
       "title": "État des stocks",
       "body": "Un résumé de la santé de votre stock de pièces : ce qui est en bon état, en alerte ou critique."

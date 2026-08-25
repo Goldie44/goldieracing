@@ -2,8 +2,8 @@ import { describe, expect, it } from "vitest";
 import { tourSteps, TOUR_ROUTES } from "./tourSteps";
 
 describe("tourSteps", () => {
-  it("has 23 steps", () => {
-    expect(tourSteps).toHaveLength(23);
+  it("has 22 steps", () => {
+    expect(tourSteps).toHaveLength(22);
   });
 
   it("has unique step ids", () => {

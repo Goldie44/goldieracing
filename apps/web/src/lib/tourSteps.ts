@@ -35,7 +35,6 @@ export const tourSteps: TourStep[] = [
   step("nav-sidebar", "/"),
   step("dashboard-stats", "/"),
   step("dashboard-deficits", "/"),
-  step("dashboard-next-race", "/"),
   step("dashboard-stock", "/"),
   step("calendar-list", "/calendar"),
   step("calendar-race-card", "/calendar"),

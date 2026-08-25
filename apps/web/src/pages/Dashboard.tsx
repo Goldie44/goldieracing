@@ -117,7 +117,6 @@ const top3Deficits = [...allDeltasWithLabel].sort((a, b) => a.delta - b.delta).s
 
       {/* Next Race Banner */}
       <motion.div
-        data-tour-id="dashboard-next-race"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.1 }}
