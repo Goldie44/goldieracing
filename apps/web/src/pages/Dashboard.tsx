@@ -87,7 +87,7 @@ const top3Deficits = [...allDeltasWithLabel].sort((a, b) => a.delta - b.delta).s
       </div>
 
       {/* Stats Row */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+      <div data-tour-id="dashboard-stats" className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
         <StatCard label={t("races")} value="23" icon={FlagIcon} />
         <StatCard label={t("budgetUsed")} value={budgetPercent + "%"} icon={WalletIcon} />
       </div>
@@ -95,6 +95,7 @@ const top3Deficits = [...allDeltasWithLabel].sort((a, b) => a.delta - b.delta).s
       {/* Top 3 Déficits */}
       {top3Deficits.length > 0 && (
         <motion.div
+          data-tour-id="dashboard-deficits"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.08 }}
@@ -116,6 +117,7 @@ const top3Deficits = [...allDeltasWithLabel].sort((a, b) => a.delta - b.delta).s
 
       {/* Next Race Banner */}
       <motion.div
+        data-tour-id="dashboard-next-race"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.1 }}
@@ -142,6 +144,7 @@ const top3Deficits = [...allDeltasWithLabel].sort((a, b) => a.delta - b.delta).s
 
       {/* Stock Summary */}
       <motion.div
+        data-tour-id="dashboard-stock"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.15 }}
