@@ -1,0 +1,101 @@
+{
+  "stepIndicator": "Step {{current}} / {{total}}",
+  "next": "Next",
+  "previous": "Previous",
+  "skip": "Skip",
+  "finish": "Finish",
+  "steps": {
+    "navSidebar": {
+      "title": "Your main menu",
+      "body": "Every page for managing your team lives here: calendar, budget, R&D, performance, stock and strategy."
+    },
+    "dashboardStats": {
+      "title": "Overview",
+      "body": "The number of races this season and the percentage of your budget already spent, at a glance."
+    },
+    "dashboardDeficits": {
+      "title": "Car weak points",
+      "body": "The three biggest performance gaps versus the competition, worth fixing first."
+    },
+    "dashboardNextRace": {
+      "title": "Next race",
+      "body": "The name, circuit, type and recommended strategy for your next upcoming race."
+    },
+    "dashboardStock": {
+      "title": "Stock status",
+      "body": "A summary of your parts stock health: what's fine, what's low, and what's critical."
+    },
+    "calendarList": {
+      "title": "Season calendar",
+      "body": "The full list of races for the season. You can reorder it by dragging."
+    },
+    "calendarRaceCard": {
+      "title": "Race details",
+      "body": "Check off a race once it's done, and spot its type (Fast, Balanced, Downforce, Test) via the colored badge."
+    },
+    "budgetStats": {
+      "title": "Budget tracking",
+      "body": "Your budget cap, the amount spent, and what's left. Click the cap to edit it."
+    },
+    "budgetCapUsage": {
+      "title": "Budget usage",
+      "body": "A visual gauge of how much of your cap has been used."
+    },
+    "budgetAllocation": {
+      "title": "Breakdown by section",
+      "body": "The detail of spending and allocation per budget section, editable and expandable."
+    },
+    "rdCreateProject": {
+      "title": "Start an R&D project",
+      "body": "Pick a car part to start a new development project."
+    },
+    "rdActiveProjects": {
+      "title": "Active projects",
+      "body": "Track the progress, cost and expected gains of each of your active R&D projects."
+    },
+    "rdAeroTable": {
+      "title": "Aerodynamic table",
+      "body": "Detailed per-part stats: base value, gains, target and remaining gap."
+    },
+    "performanceAtrTable": {
+      "title": "ATR calibration table",
+      "body": "Compare your car's stats to the competition, section by section."
+    },
+    "performanceImportScreenshot": {
+      "title": "Import from a screenshot",
+      "body": "Paste a screenshot of your ATR data: the AI extracts it and pre-fills the table for you."
+    },
+    "performanceDevPlan": {
+      "title": "Development plan",
+      "body": "The list of your ongoing development projects and their expected impact on the ATR."
+    },
+    "stockCoverageChart": {
+      "title": "Stock coverage",
+      "body": "Visually compare your available stock to what the season requires."
+    },
+    "stockPiecesGrid": {
+      "title": "Per-part detail",
+      "body": "Adjust the stock count, lifespan and unit cost for each part."
+    },
+    "strategyParams": {
+      "title": "Race parameters",
+      "body": "Set the lap count, pit stop loss, and the degradation data for each tire compound."
+    },
+    "strategyRanking": {
+      "title": "Strategy ranking",
+      "body": "Every viable tire strategy, ranked by estimated total time."
+    },
+    "strategyOptimal": {
+      "title": "Optimal strategy",
+      "body": "The best computed strategy for this race, with its pit stop breakdown."
+    },
+    "settingsTabs": {
+      "title": "Settings",
+      "body": "Customize the appearance, your profile, your data, navigation and the app's language."
+    },
+    "settingsSaves": {
+      "title": "Saves",
+      "body": "Create, rename, export or import multiple save slots for your game."
+    }
+  }
+}

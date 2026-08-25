@@ -15,6 +15,7 @@ import rdFr from "./locales/fr/rd.json";
 import stockFr from "./locales/fr/stock.json";
 import strategyFr from "./locales/fr/strategy.json";
 import notfoundFr from "./locales/fr/notfound.json";
+import tourFr from "./locales/fr/tour.json";
 
 import commonEn from "./locales/en/common.json";
 import layoutEn from "./locales/en/layout.json";
@@ -29,19 +30,20 @@ import rdEn from "./locales/en/rd.json";
 import stockEn from "./locales/en/stock.json";
 import strategyEn from "./locales/en/strategy.json";
 import notfoundEn from "./locales/en/notfound.json";
+import tourEn from "./locales/en/tour.json";
 
 const resources = {
   fr: {
     common: commonFr, layout: layoutFr, settings: settingsFr, welcome: welcomeFr,
     dashboard: dashboardFr, staff: staffFr, budget: budgetFr, calendar: calendarFr,
     performance: performanceFr, rd: rdFr, stock: stockFr, strategy: strategyFr,
-    notfound: notfoundFr,
+    notfound: notfoundFr, tour: tourFr,
   },
   en: {
     common: commonEn, layout: layoutEn, settings: settingsEn, welcome: welcomeEn,
     dashboard: dashboardEn, staff: staffEn, budget: budgetEn, calendar: calendarEn,
     performance: performanceEn, rd: rdEn, stock: stockEn, strategy: strategyEn,
-    notfound: notfoundEn,
+    notfound: notfoundEn, tour: tourEn,
   },
 };
 

@@ -1,0 +1,101 @@
+{
+  "stepIndicator": "Étape {{current}} / {{total}}",
+  "next": "Suivant",
+  "previous": "Précédent",
+  "skip": "Passer",
+  "finish": "Terminer",
+  "steps": {
+    "navSidebar": {
+      "title": "Votre menu principal",
+      "body": "Retrouvez ici toutes les pages de gestion de votre écurie : calendrier, budget, R&D, performance, stock et stratégie."
+    },
+    "dashboardStats": {
+      "title": "Vue d'ensemble",
+      "body": "Le nombre de courses de la saison et le pourcentage de budget déjà utilisé, en un coup d'œil."
+    },
+    "dashboardDeficits": {
+      "title": "Points faibles de la voiture",
+      "body": "Les trois écarts de performance les plus importants par rapport à la concurrence, à corriger en priorité."
+    },
+    "dashboardNextRace": {
+      "title": "Prochaine course",
+      "body": "Le nom, le circuit, le type et la stratégie recommandée pour votre prochaine échéance."
+    },
+    "dashboardStock": {
+      "title": "État des stocks",
+      "body": "Un résumé de la santé de votre stock de pièces : ce qui est en bon état, en alerte ou critique."
+    },
+    "calendarList": {
+      "title": "Calendrier de la saison",
+      "body": "La liste complète des courses de la saison. Vous pouvez la réorganiser par glisser-déposer."
+    },
+    "calendarRaceCard": {
+      "title": "Détail d'une course",
+      "body": "Cochez une course une fois terminée, et repérez son type (Rapide, Équilibre, Déportance, Test) grâce au badge coloré."
+    },
+    "budgetStats": {
+      "title": "Suivi du budget",
+      "body": "Le plafond budgétaire, le montant dépensé et le solde restant. Cliquez sur le plafond pour le modifier."
+    },
+    "budgetCapUsage": {
+      "title": "Utilisation du budget",
+      "body": "Une jauge visuelle du pourcentage de votre plafond déjà consommé."
+    },
+    "budgetAllocation": {
+      "title": "Répartition par poste",
+      "body": "Le détail des dépenses et allocations par poste budgétaire, modifiable et dépliable."
+    },
+    "rdCreateProject": {
+      "title": "Lancer un projet R&D",
+      "body": "Choisissez une pièce de la voiture pour démarrer un nouveau projet de développement."
+    },
+    "rdActiveProjects": {
+      "title": "Projets en cours",
+      "body": "Suivez l'avancement, le coût et les gains attendus de chacun de vos projets R&D actifs."
+    },
+    "rdAeroTable": {
+      "title": "Tableau aérodynamique",
+      "body": "Les statistiques détaillées par pièce : valeur de base, gains, objectif et écart restant."
+    },
+    "performanceAtrTable": {
+      "title": "Tableau de calibration ATR",
+      "body": "Comparez les statistiques de votre voiture à celles de la concurrence, section par section."
+    },
+    "performanceImportScreenshot": {
+      "title": "Import par capture d'écran",
+      "body": "Collez une capture d'écran de vos données ATR : l'IA les extrait et pré-remplit le tableau pour vous."
+    },
+    "performanceDevPlan": {
+      "title": "Plan de développement",
+      "body": "La liste de vos projets de développement en cours et leur impact attendu sur l'ATR."
+    },
+    "stockCoverageChart": {
+      "title": "Couverture du stock",
+      "body": "Comparez visuellement votre stock disponible à la capacité nécessaire pour la saison."
+    },
+    "stockPiecesGrid": {
+      "title": "Détail par pièce",
+      "body": "Ajustez le nombre de pièces en stock, leur durée de vie et leur coût unitaire."
+    },
+    "strategyParams": {
+      "title": "Paramètres de course",
+      "body": "Renseignez le nombre de tours, la perte au stand et les données de dégradation de chaque pneu."
+    },
+    "strategyRanking": {
+      "title": "Classement des stratégies",
+      "body": "Toutes les stratégies de pneus viables, classées par temps total estimé."
+    },
+    "strategyOptimal": {
+      "title": "Stratégie optimale",
+      "body": "La meilleure stratégie calculée pour cette course, avec le détail des arrêts au stand."
+    },
+    "settingsTabs": {
+      "title": "Paramètres",
+      "body": "Personnalisez l'apparence, votre profil, vos données, la navigation et la langue de l'application."
+    },
+    "settingsSaves": {
+      "title": "Sauvegardes",
+      "body": "Créez, renommez, exportez ou importez plusieurs emplacements de sauvegarde de votre partie."
+    }
+  }
+}
