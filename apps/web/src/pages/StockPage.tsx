@@ -109,6 +109,7 @@ export default function StockPage() {
 
       {/* Chart */}
       <motion.div
+        data-tour-id="stock-coverage-chart"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         className="bg-card border border-border rounded-xl p-6 mb-8"
@@ -129,7 +130,7 @@ export default function StockPage() {
       </motion.div>
 
       {/* Pieces Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div data-tour-id="stock-pieces-grid" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {stock.map((item, i) => {
           const lifespan = lifespans[item.piece] ?? item.racesPerPiece;
           const capacity = counts[item.piece] * lifespan;
