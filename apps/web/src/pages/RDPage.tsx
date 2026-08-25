@@ -475,7 +475,7 @@ export default function RDPage() {
     <div>
       <PageHeader title={t("title")} subtitle={t("subtitle")} />
 
-      <div className="flex items-center gap-3 mt-8 mb-6">
+      <div data-tour-id="rd-create-project" className="flex items-center gap-3 mt-8 mb-6">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="primary">{t("createProject")}</Button>
@@ -844,7 +844,7 @@ export default function RDPage() {
             <span className="text-muted-foreground text-lg">{t("noProjects")}</span>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div data-tour-id="rd-active-projects" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {actifs.map((project, i) => {
               const catColor = categoryColors[project.category] ?? "hsl(220, 12%, 50%)";
               return (
@@ -915,7 +915,7 @@ export default function RDPage() {
       })()}
 
       {/* ── Aerodynamic Performance Table ─────────────────────────────────────── */}
-      <div className="mt-12">
+      <div data-tour-id="rd-aero-table" className="mt-12">
         <h2 className="text-sm font-semibold text-foreground mb-4 uppercase tracking-wide">
           {t("aeroPerformance")}
         </h2>
