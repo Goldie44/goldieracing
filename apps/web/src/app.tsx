@@ -20,6 +20,8 @@ import RDPage from './pages/RDPage';
 import StrategyPage from './pages/StrategyPage';
 import SettingsPage from './pages/SettingsPage';
 import WelcomeDialog from './components/WelcomeDialog';
+import { TourProvider } from './lib/TourContext';
+import TourOverlay from './components/TourOverlay';
 
 function App() {
   return (
@@ -30,25 +32,28 @@ function App() {
             <RaceProvider>
               <BudgetProvider>
                 <AtrProvider>
-                  <QueryClientProvider client={queryClientInstance}>
-                    <Router>
-                      <Routes>
-                        <Route element={<Layout />}>
-                          <Route path="/" element={<Dashboard />} />
-                          <Route path="/calendar" element={<CalendarPage />} />
-                          <Route path="/stock" element={<StockPage />} />
-                          <Route path="/performance" element={<PerformancePage />} />
-                          <Route path="/budget" element={<BudgetPage />} />
-                          <Route path="/rd" element={<RDPage />} />
-                          <Route path="/strategy" element={<StrategyPage />} />
-                          <Route path="/settings" element={<SettingsPage />} />
-                          <Route path="*" element={<PageNotFound />} />
-                        </Route>
-                      </Routes>
-                    </Router>
-                    <Toaster />
-                    <WelcomeDialog />
-                  </QueryClientProvider>
+                  <TourProvider>
+                    <QueryClientProvider client={queryClientInstance}>
+                      <Router>
+                        <Routes>
+                          <Route element={<Layout />}>
+                            <Route path="/" element={<Dashboard />} />
+                            <Route path="/calendar" element={<CalendarPage />} />
+                            <Route path="/stock" element={<StockPage />} />
+                            <Route path="/performance" element={<PerformancePage />} />
+                            <Route path="/budget" element={<BudgetPage />} />
+                            <Route path="/rd" element={<RDPage />} />
+                            <Route path="/strategy" element={<StrategyPage />} />
+                            <Route path="/settings" element={<SettingsPage />} />
+                            <Route path="*" element={<PageNotFound />} />
+                          </Route>
+                        </Routes>
+                        <TourOverlay />
+                      </Router>
+                      <Toaster />
+                      <WelcomeDialog />
+                    </QueryClientProvider>
+                  </TourProvider>
                 </AtrProvider>
               </BudgetProvider>
             </RaceProvider>
