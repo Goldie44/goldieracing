@@ -435,7 +435,7 @@ export default function StrategyPage() {
       {/* Paramètres */}
       {/* Stratégie optimale */}
       {best && (
-        <div className="bg-primary/5 border border-primary/20 rounded-xl p-5 mb-6">
+        <div data-tour-id="strategy-optimal" className="bg-primary/5 border border-primary/20 rounded-xl p-5 mb-6">
           <p className="text-xs font-semibold text-primary uppercase tracking-wider mb-3">
             {t("optimalStrategy")}
           </p>
@@ -458,7 +458,7 @@ export default function StrategyPage() {
         </div>
       )}
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+      <div data-tour-id="strategy-params" className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
 
         {/* Colonne gauche : Course, Convertisseur, Classement */}
         <div className="flex flex-col gap-6">
@@ -497,7 +497,7 @@ export default function StrategyPage() {
           />
 
           {/* Classement */}
-          <div className="bg-card border border-border rounded-xl overflow-hidden">
+          <div data-tour-id="strategy-ranking" className="bg-card border border-border rounded-xl overflow-hidden">
             <div className="px-5 py-3 border-b border-border">
               <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
                 {t("ranking", { count: strategies.length })}
