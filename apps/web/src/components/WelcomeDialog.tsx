@@ -15,9 +15,9 @@ import { useBudget } from "@/lib/BudgetContext";
 import { useRace } from "@/lib/RaceContext";
 import { useAtr } from "@/lib/AtrContext";
 import type { SaveSlotData } from "@/components/SaveSlot";
+import { ONBOARDED_KEY } from "@/lib/onboardingKeys";
 
 const SAVES_KEY = "goldie_saves";
-const ONBOARDED_KEY = "goldie-racing:onboarded";
 
 export default function WelcomeDialog() {
   const { t } = useTranslation("welcome");
