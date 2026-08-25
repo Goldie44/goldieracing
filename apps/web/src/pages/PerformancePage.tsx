@@ -312,7 +312,7 @@ export default function PerformancePage() {
       </Dialog>
 
       {/* Development Projects */}
-      <div className="mt-8">
+      <div data-tour-id="performance-dev-plan" className="mt-8">
         <h2 className="text-sm font-semibold text-foreground mb-4 uppercase tracking-wide">
           {t("developmentPlan")}
         </h2>
@@ -395,7 +395,7 @@ export default function PerformancePage() {
         )}
       </div>
 
-      <div className="mt-8">
+      <div data-tour-id="performance-atr-table" className="mt-8">
         <AtrCalTable data={atrData} setData={setAtrData} title={t("calibrationTitle")} />
       </div>
     </div>
@@ -535,6 +535,7 @@ function AtrCalTable({ data, setData, title }: { data: any; setData: any; title?
         <h3 className="text-sm font-semibold">{title}</h3>
         <div className="flex items-center">
           <button
+            data-tour-id="performance-import-screenshot"
             onClick={() => setImportOpen(true)}
             className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-primary transition-colors mr-4"
           >
