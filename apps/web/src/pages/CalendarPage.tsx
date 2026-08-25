@@ -90,7 +90,7 @@ export default function CalendarPage() {
       <PageHeader title={t("title")} subtitle={t("subtitle")} />
       <div className="mb-6 text-sm text-muted-foreground">{t("dragHint")}</div>
 
-      <div className="space-y-3">
+      <div data-tour-id="calendar-list" className="space-y-3">
         {races.map((race, i) => {
           const config = typeConfig[race.type] || typeConfig["Test"];
           const TypeIcon = config.icon;
@@ -98,6 +98,7 @@ export default function CalendarPage() {
           return (
             <motion.div
               key={race.id}
+              data-tour-id={i === 0 ? "calendar-race-card" : undefined}
               draggable
               onDragStart={() => handleDragStart(i)}
               onDragEnd={() => { setDragIndex(null); setDragOverIndex(null); }}
