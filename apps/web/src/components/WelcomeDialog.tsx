@@ -16,6 +16,7 @@ import { useRace } from "@/lib/RaceContext";
 import { useAtr } from "@/lib/AtrContext";
 import type { SaveSlotData } from "@/components/SaveSlot";
 import { ONBOARDED_KEY } from "@/lib/onboardingKeys";
+import { useTour } from "@/lib/TourContext";
 
 const SAVES_KEY = "goldie_saves";
 
@@ -29,6 +30,7 @@ export default function WelcomeDialog() {
   const { sections, totalBudget } = useBudget();
   const { done } = useRace();
   const { atrData } = useAtr();
+  const { start: startTour } = useTour();
 
   const canSubmit = teamName.trim().length > 0 && saveName.trim().length > 0;
 
@@ -57,6 +59,7 @@ export default function WelcomeDialog() {
 
     localStorage.setItem(ONBOARDED_KEY, "true");
     setOpen(false);
+    startTour();
   };
 
   return (
