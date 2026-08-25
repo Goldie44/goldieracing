@@ -26,7 +26,7 @@ export default function SettingsPage() {
       <PageHeader title={t("title")} subtitle={t("subtitle")} />
 
       {/* Tab bar */}
-      <div className="flex gap-1 border-b border-border mb-8 mt-6">
+      <div data-tour-id="settings-tabs" className="flex gap-1 border-b border-border mb-8 mt-6">
         {TABS.map((tab) => (
           <button
             key={tab.id}

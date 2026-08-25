@@ -68,7 +68,9 @@
     "aiVisionTitle": "IA Vision",
     "aiVisionApiKeyLabel": "Clé API IA (Vision)",
     "aiVisionApiKeyPlaceholder": "sk-ant-...",
-    "aiVisionApiKeyHint": "Utilisée pour importer les valeurs du tableau ATR depuis une capture d'écran, sur la page Performance."
+    "aiVisionApiKeyHint": "Utilisée pour importer les valeurs du tableau ATR depuis une capture d'écran, sur la page Performance.",
+    "helpTitle": "Aide",
+    "replayTour": "🔄 Revoir le tutoriel"
   },
   "navigation": {
     "order": "Ordre des pages",
