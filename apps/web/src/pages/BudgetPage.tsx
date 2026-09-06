@@ -89,7 +89,7 @@ export default function BudgetPage() {
       </Dialog>
 
       {/* Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+      <div data-tour-id="budget-stats" className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
         <div className="bg-card border border-border rounded-xl p-5 hover:border-primary/20 transition-colors">
           <div className="flex items-start justify-between mb-3">
             <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">{t("totalCap")}</span>
@@ -125,6 +125,7 @@ export default function BudgetPage() {
 
       {/* Progress Bar */}
       <motion.div
+        data-tour-id="budget-cap-usage"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         className="bg-card border border-border rounded-xl p-6 mb-8"
@@ -174,6 +175,7 @@ export default function BudgetPage() {
 
         {/* Table */}
         <motion.div
+          data-tour-id="budget-allocation"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}

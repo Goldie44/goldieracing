@@ -68,7 +68,9 @@
     "aiVisionTitle": "AI Vision",
     "aiVisionApiKeyLabel": "AI Vision API key",
     "aiVisionApiKeyPlaceholder": "sk-ant-...",
-    "aiVisionApiKeyHint": "Used to import ATR table values from a screenshot, on the Performance page."
+    "aiVisionApiKeyHint": "Used to import ATR table values from a screenshot, on the Performance page.",
+    "helpTitle": "Help",
+    "replayTour": "🔄 Replay the tutorial"
   },
   "navigation": {
     "order": "Page order",

@@ -4,6 +4,7 @@ import { useBudget } from "@/lib/BudgetContext";
 import { useRace } from "@/lib/RaceContext";
 import { useAtr } from "@/lib/AtrContext";
 import { useProfile } from "@/lib/ProfileContext";
+import { useTour } from "@/lib/TourContext";
 import SaveSlot, { type SaveSlotData } from "@/components/SaveSlot";
 import {
   AlertDialog, AlertDialogAction, AlertDialogCancel,
@@ -32,6 +33,7 @@ export default function SettingsData() {
   const { sections, totalBudget, setSections, setTotalBudget, reset: resetBudget } = useBudget();
   const { done, reset: resetRace } = useRace();
   const { atrData, setAtrData, reset: resetAtr } = useAtr();
+  const { start: startTour } = useTour();
   const [slots, setSlots] = useState<SaveSlotData[]>(loadSlots);
   const importRef = useRef<HTMLInputElement>(null);
   const [apiKey, setApiKey] = useState("");
@@ -120,7 +122,7 @@ export default function SettingsData() {
     <div className="flex flex-col gap-8 max-w-xl">
 
       {/* Sauvegardes */}
-      <div>
+      <div data-tour-id="settings-saves">
         <div className="flex items-center justify-between mb-3">
           <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
             {t("data.saves", { count: slots.length, max: MAX_SLOTS })}
@@ -216,6 +218,19 @@ export default function SettingsData() {
           className="w-full px-3 py-2 rounded-lg border border-border bg-background text-sm outline-none focus:border-primary transition-colors"
         />
         <p className="text-xs text-muted-foreground mt-1">{t("data.aiVisionApiKeyHint")}</p>
+      </div>
+
+      {/* Aide */}
+      <div>
+        <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-3">
+          {t("data.helpTitle")}
+        </p>
+        <button
+          onClick={startTour}
+          className="px-4 py-2.5 rounded-lg text-sm font-medium border border-border hover:bg-secondary transition-colors"
+        >
+          {t("data.replayTour")}
+        </button>
       </div>
     </div>
   );

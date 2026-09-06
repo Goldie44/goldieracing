@@ -45,7 +45,7 @@ export default function Layout() {
             </div>
           </div>
         </div>
-        <nav className="flex-1 p-4 space-y-1">
+        <nav data-tour-id="nav-sidebar" className="flex-1 p-4 space-y-1">
           <NavList
             items={orderedItems}
             activePath={location.pathname}
