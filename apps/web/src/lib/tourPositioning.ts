@@ -23,3 +23,10 @@ export function computeTooltipPlacement(rect: Rect, viewportHeight: number): Too
   const spaceBelow = viewportHeight - (rect.top + rect.height);
   return spaceBelow < MIN_SPACE_BELOW ? "top" : "bottom";
 }
+
+const VIEWPORT_MARGIN = 16;
+
+export function clampTooltipTop(desiredTop: number, tooltipHeight: number, viewportHeight: number): number {
+  const maxTop = Math.max(viewportHeight - tooltipHeight - VIEWPORT_MARGIN, VIEWPORT_MARGIN);
+  return Math.min(Math.max(desiredTop, VIEWPORT_MARGIN), maxTop);
+}

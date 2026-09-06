@@ -4,7 +4,11 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import { useTour } from "@/lib/TourContext";
-import { computeSpotlightBox, computeTooltipPlacement, type Rect } from "@/lib/tourPositioning";
+import { clampTooltipTop, computeSpotlightBox, computeTooltipPlacement, type Rect } from "@/lib/tourPositioning";
+
+// No ref to measure the tooltip's real height against, so this is a
+// generous estimate used only to keep the tooltip from drifting off-screen.
+const ESTIMATED_TOOLTIP_HEIGHT = 180;
 
 const LOCATE_TIMEOUT_MS = 4000;
 
@@ -59,7 +63,11 @@ export default function TourOverlay() {
         frame = requestAnimationFrame(locate);
         return;
       }
-      el.scrollIntoView({ block: "center", behavior: "smooth" });
+      // Instant (not "smooth") so the rect read right after reflects the
+      // post-scroll position — a smooth scroll is animated over several
+      // frames, so reading the rect immediately would capture the stale,
+      // pre-scroll position and mis-place the spotlight/tooltip.
+      el.scrollIntoView({ block: "center" });
       const rect = el.getBoundingClientRect();
       setTargetRect({ top: rect.top, left: rect.left, width: rect.width, height: rect.height });
     };
@@ -82,6 +90,11 @@ export default function TourOverlay() {
   const spotlight = computeSpotlightBox(targetRect);
   const placement = computeTooltipPlacement(targetRect, window.innerHeight);
   const isLastStep = stepIndex + 1 === totalSteps;
+  const desiredTop =
+    placement === "bottom"
+      ? spotlight.top + spotlight.height + 12
+      : spotlight.top - 12 - ESTIMATED_TOOLTIP_HEIGHT;
+  const tooltipTop = clampTooltipTop(desiredTop, ESTIMATED_TOOLTIP_HEIGHT, window.innerHeight);
 
   return (
     <>
@@ -98,8 +111,7 @@ export default function TourOverlay() {
         animate={{ opacity: 1, y: 0 }}
         className="fixed z-[102] w-[320px] bg-card border border-border rounded-xl p-4 shadow-xl"
         style={{
-          top: placement === "bottom" ? spotlight.top + spotlight.height + 12 : undefined,
-          bottom: placement === "top" ? window.innerHeight - spotlight.top + 12 : undefined,
+          top: tooltipTop,
           left: Math.min(Math.max(spotlight.left, 16), window.innerWidth - 336),
         }}
       >
