@@ -1,10 +1,12 @@
 // apps/web/src/components/TourOverlay.tsx
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import { useTour } from "@/lib/TourContext";
 import { computeSpotlightBox, computeTooltipPlacement, type Rect } from "@/lib/tourPositioning";
+
+const MAX_LOCATE_ATTEMPTS = 60;
 
 export default function TourOverlay() {
   const { active, currentStep, stepIndex, totalSteps, next, prev, skip } = useTour();
@@ -12,6 +14,14 @@ export default function TourOverlay() {
   const location = useLocation();
   const navigate = useNavigate();
   const [targetRect, setTargetRect] = useState<Rect | null>(null);
+
+  // Kept in a ref so the locate effect below can always call the latest
+  // `next` without needing it in its dependency array (which would restart
+  // the polling loop's attempt count on every TourProvider re-render).
+  const nextRef = useRef(next);
+  useEffect(() => {
+    nextRef.current = next;
+  }, [next]);
 
   // Navigate to the step's page.
   useEffect(() => {
@@ -33,9 +43,18 @@ export default function TourOverlay() {
     }
 
     let frame: number;
+    let attempts = 0;
     const locate = () => {
       const el = document.querySelector(`[data-tour-id="${currentStep.targetId}"]`);
       if (!el) {
+        attempts += 1;
+        if (attempts >= MAX_LOCATE_ATTEMPTS) {
+          // The target never showed up (e.g. a fresh save with no computed
+          // deficits/strategy/races yet) — skip this step instead of
+          // leaving the tour silently stuck with nothing rendered.
+          nextRef.current();
+          return;
+        }
         frame = requestAnimationFrame(locate);
         return;
       }
