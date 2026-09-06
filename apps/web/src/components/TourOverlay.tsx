@@ -6,7 +6,7 @@ import { useTranslation } from "react-i18next";
 import { useTour } from "@/lib/TourContext";
 import { computeSpotlightBox, computeTooltipPlacement, type Rect } from "@/lib/tourPositioning";
 
-const MAX_LOCATE_ATTEMPTS = 60;
+const LOCATE_TIMEOUT_MS = 4000;
 
 export default function TourOverlay() {
   const { active, currentStep, stepIndex, totalSteps, next, prev, skip } = useTour();
@@ -43,15 +43,16 @@ export default function TourOverlay() {
     }
 
     let frame: number;
-    let attempts = 0;
+    const startedAt = performance.now();
     const locate = () => {
       const el = document.querySelector(`[data-tour-id="${currentStep.targetId}"]`);
       if (!el) {
-        attempts += 1;
-        if (attempts >= MAX_LOCATE_ATTEMPTS) {
+        if (performance.now() - startedAt >= LOCATE_TIMEOUT_MS) {
           // The target never showed up (e.g. a fresh save with no computed
           // deficits/strategy/races yet) — skip this step instead of
-          // leaving the tour silently stuck with nothing rendered.
+          // leaving the tour silently stuck with nothing rendered. A wall-clock
+          // timeout (rather than a frame count) avoids false positives when a
+          // page's first render after navigation just takes a bit longer.
           nextRef.current();
           return;
         }
